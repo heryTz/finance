@@ -7,7 +7,8 @@ import { FinanceListLoader } from "./components";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Tag } from "@/entity";
 import { Dot } from "@/components/dot";
-import { humanAmount, humanDate } from "@/app/helper";
+import { bilanGlobal, humanAmount, humanDate } from "@/app/helper";
+import { MiniGlobalBilan } from "@/components/mini-global-bilan";
 
 export default function Finance() {
   const { data, isLoading, error } = useFinances();
@@ -15,6 +16,7 @@ export default function Finance() {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
+        <MiniGlobalBilan {...bilanGlobal(data?.data.results ?? [])} />
         <Block title="Mouvement" actionBar={<Button>Ajouter</Button>}>
           {isLoading ? (
             <FinanceListLoader />
