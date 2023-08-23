@@ -9,6 +9,7 @@ export function Block({ title, actionBar, footer, children }: BlockProps) {
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
+        sx={{ marginBottom: 1 }}
       >
         <BlockTitle>{title}</BlockTitle>
         {actionBar}

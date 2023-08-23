@@ -3,21 +3,26 @@ import { Block } from "@/components/block";
 import { Box, Button, Chip, Grid } from "@mui/material";
 import { useFinances } from "./finance.query";
 import { ErrorSection } from "@/components/error-section";
-import { FinanceListLoader } from "./components";
+import { FinanceListLoader, FinanceSaveDialog } from "./components";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Tag } from "@/entity";
 import { Dot } from "@/components/dot";
 import { bilanGlobal, humanAmount, humanDate } from "@/app/helper";
 import { MiniGlobalBilan } from "@/components/mini-global-bilan";
+import { useState } from "react";
 
 export default function Finance() {
   const { data, isLoading, error } = useFinances();
+  const [openSave, setOpenSave] = useState(false);
 
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <MiniGlobalBilan {...bilanGlobal(data?.data.results ?? [])} />
-        <Block title="Mouvement" actionBar={<Button>Ajouter</Button>}>
+        <Block
+          title="Mouvement"
+          actionBar={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
+        >
           {isLoading ? (
             <FinanceListLoader />
           ) : error ? (
@@ -38,12 +43,19 @@ export default function Finance() {
           )}
         </Block>
       </Grid>
+      {openSave && (
+        <FinanceSaveDialog
+          open
+          onFinish={() => {}}
+          onClose={() => setOpenSave(false)}
+        />
+      )}
     </Grid>
   );
 }
 
 const columns: GridColDef[] = [
-  { field: "label", headerName: "Label", width: 350 },
+  { field: "label", headerName: "Libellé", width: 350 },
   {
     field: "type",
     headerName: "Type",

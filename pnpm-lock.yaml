@@ -26,6 +26,9 @@ dependencies:
   '@mui/x-data-grid':
     specifier: ^6.11.1
     version: 6.11.1(@mui/material@5.14.5)(@mui/system@5.14.5)(react-dom@18.2.0)(react@18.2.0)
+  '@mui/x-date-pickers':
+    specifier: ^6.11.2
+    version: 6.11.2(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/base@5.0.0-beta.11)(@mui/material@5.14.5)(@mui/system@5.14.5)(dayjs@1.11.9)(react-dom@18.2.0)(react@18.2.0)
   '@prisma/client':
     specifier: 5.1.1
     version: 5.1.1(prisma@5.1.1)
@@ -532,6 +535,60 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       reselect: 4.1.8
+    dev: false
+
+  /@mui/x-date-pickers@6.11.2(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/base@5.0.0-beta.11)(@mui/material@5.14.5)(@mui/system@5.14.5)(dayjs@1.11.9)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-AOmXtnnAhjlku03oqRMOG1oJkxazBTz06A6a0iRz+1sUyBWbqz5kKH9eYUYQC4Tv3j2EciRpwyns5xwX3wpc1A==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      '@emotion/react': ^11.9.0
+      '@emotion/styled': ^11.8.1
+      '@mui/base': ^5.0.0-alpha.87
+      '@mui/material': ^5.8.6
+      '@mui/system': ^5.8.0
+      date-fns: ^2.25.0
+      date-fns-jalali: ^2.13.0-0
+      dayjs: ^1.10.7
+      luxon: ^3.0.2
+      moment: ^2.29.4
+      moment-hijri: ^2.1.2
+      moment-jalaali: ^0.7.4 || ^0.8.0 || ^0.9.0 || ^0.10.0
+      react: ^17.0.0 || ^18.0.0
+      react-dom: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/react':
+        optional: true
+      '@emotion/styled':
+        optional: true
+      date-fns:
+        optional: true
+      date-fns-jalali:
+        optional: true
+      dayjs:
+        optional: true
+      luxon:
+        optional: true
+      moment:
+        optional: true
+      moment-hijri:
+        optional: true
+      moment-jalaali:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.10
+      '@emotion/react': 11.11.1(@types/react@18.2.20)(react@18.2.0)
+      '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.20)(react@18.2.0)
+      '@mui/base': 5.0.0-beta.11(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)
+      '@mui/material': 5.14.5(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)
+      '@mui/system': 5.14.5(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.20)(react@18.2.0)
+      '@mui/utils': 5.14.5(react@18.2.0)
+      '@types/react-transition-group': 4.4.6
+      clsx: 2.0.0
+      dayjs: 1.11.9
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-transition-group: 4.4.5(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /@next/env@13.4.16:
