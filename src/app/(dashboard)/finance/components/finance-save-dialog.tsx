@@ -12,55 +12,135 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Tag } from "@prisma/client";
+import { useFinanceSaveStore } from "../finance-store";
+import { Controller, useForm } from "react-hook-form";
+import dayjs, { Dayjs } from "dayjs";
+import { useTags } from "../../tag/tag-query";
+import { useFinanceSave } from "../finance-query";
 
-export function FinanceSaveDialog({
-  open,
-  onClose,
-  onFinish,
-}: FinanceSaveDialogProps) {
-  const tags: Tag[] = [
-    { id: "x1", name: "tag1", createdAt: new Date(), updatedAt: null },
-    { id: "x2", name: "tag2", createdAt: new Date(), updatedAt: null },
-  ];
+type FormData = {
+  label: string;
+  type: FinanceType;
+  amount: string;
+  tags: string[];
+  createdAt: Dayjs;
+};
+
+export function FinanceSaveDialog() {
+  const { open, onClose, onFinish } = useFinanceSaveStore();
+  const { data: tags, isLoading: tagsLoading } = useTags();
+  const { mutate, isLoading: saveLoading } = useFinanceSave();
+  const { control, formState, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      label: "",
+      amount: "",
+      tags: [],
+      type: FinanceType.depense,
+      createdAt: dayjs(),
+    },
+  });
+  const { isValid } = formState;
+
+  const onSubmit = handleSubmit((data) => {
+    mutate(
+      {
+        ...data,
+        amount: +data.amount,
+        createdAt: data.createdAt.toISOString(),
+      },
+      { onSuccess: () => onFinish() }
+    );
+  });
+
+  if (!open) return null;
 
   return (
     <Dialog open={open} keepMounted maxWidth="sm" fullWidth>
       <DialogTitle>Ajout</DialogTitle>
       <DialogContent>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField label="Libellé" />
-          <TextField select label="Type">
-            <MenuItem value={FinanceType.revenue}>Revenue</MenuItem>
-            <MenuItem value={FinanceType.depense}>Dépense</MenuItem>
-          </TextField>
-          <TextField label="Montant" type="number" />
-          <Autocomplete
-            multiple
-            freeSolo
-            options={tags}
-            getOptionLabel={(option) =>
-              typeof option === "string" ? option : option.name
-            }
-            defaultValue={[tags[0]]}
-            filterSelectedOptions
-            renderInput={(params) => <TextField {...params} label="Tags" />}
+          <Controller
+            control={control}
+            name="label"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                label="Libellé"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
           />
-          <DatePicker label="Date de création" />
+          <Controller
+            control={control}
+            name="type"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                select
+                label="Type"
+                value={field.value}
+                onChange={field.onChange}
+              >
+                <MenuItem value={FinanceType.revenue}>Revenue</MenuItem>
+                <MenuItem value={FinanceType.depense}>Dépense</MenuItem>
+              </TextField>
+            )}
+          />
+          <Controller
+            control={control}
+            name="amount"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <TextField
+                label="Montant"
+                type="number"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="tags"
+            render={({ field }) => (
+              <Autocomplete
+                multiple
+                freeSolo
+                loading={tagsLoading}
+                options={tags?.data.results.map((el) => el.name) ?? []}
+                getOptionLabel={(option) => option}
+                filterSelectedOptions
+                renderInput={(params) => <TextField {...params} label="Tags" />}
+                value={field.value}
+                onChange={(_, value) => field.onChange(value)}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="createdAt"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <DatePicker
+                label="Date de création"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={onClose}>
-          Annuler
+        <Button onClick={onClose}>Annuler</Button>
+        <Button
+          variant="contained"
+          disabled={!isValid || saveLoading}
+          onClick={onSubmit}
+        >
+          Sauvegarder
         </Button>
-        <Button onClick={() => {}}>Sauvegarder</Button>
       </DialogActions>
     </Dialog>
   );
 }
-
-type FinanceSaveDialogProps = {
-  open: boolean;
-  onClose: () => void;
-  onFinish: () => void;
-};

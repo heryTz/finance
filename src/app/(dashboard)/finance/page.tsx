@@ -1,19 +1,25 @@
 "use client";
 import { Block } from "@/components/block";
 import { Box, Button, Chip, Grid } from "@mui/material";
-import { useFinances } from "./finance.query";
+import { useFinances } from "./finance-query";
 import { ErrorSection } from "@/components/error-section";
 import { FinanceListLoader, FinanceSaveDialog } from "./components";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Tag } from "@/entity";
 import { Dot } from "@/components/dot";
 import { bilanGlobal, humanAmount, humanDate } from "@/app/helper";
 import { MiniGlobalBilan } from "@/components/mini-global-bilan";
-import { useState } from "react";
+import { useFinanceSaveStore } from "./finance-store";
+import { Tag } from "@prisma/client";
+import { useEffect } from "react";
 
 export default function Finance() {
-  const { data, isLoading, error } = useFinances();
-  const [openSave, setOpenSave] = useState(false);
+  const { data, isLoading, error, refetch } = useFinances();
+  const { onOpen, finishReloader } = useFinanceSaveStore();
+
+  useEffect(() => {
+    if (finishReloader) refetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [finishReloader]);
 
   return (
     <Grid container spacing={3}>
@@ -21,7 +27,7 @@ export default function Finance() {
         <MiniGlobalBilan {...bilanGlobal(data?.data.results ?? [])} />
         <Block
           title="Mouvement"
-          actionBar={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
+          actionBar={<Button onClick={onOpen}>Ajouter</Button>}
         >
           {isLoading ? (
             <FinanceListLoader />
@@ -43,13 +49,7 @@ export default function Finance() {
           )}
         </Block>
       </Grid>
-      {openSave && (
-        <FinanceSaveDialog
-          open
-          onFinish={() => {}}
-          onClose={() => setOpenSave(false)}
-        />
-      )}
+      <FinanceSaveDialog />
     </Grid>
   );
 }
