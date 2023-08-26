@@ -7,6 +7,7 @@ type FinanceSaveState = {
   onClose: () => void;
   onOpen: () => void;
   onFinish: () => void;
+  onUpdate: (id: string) => void;
 };
 
 export const useFinanceSaveStore = create<FinanceSaveState>((set) => ({

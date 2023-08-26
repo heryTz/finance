@@ -1,27 +1,21 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { FinanceType, FinanceWithTag } from "@/entity";
 import { PrismaClient, Tag } from "@prisma/client";
+import { notFound } from "next/navigation";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
-  const finances = await prisma.finance.findMany({
-    where: { User: { email: session?.user?.email! } },
-    orderBy: { createdAt: "desc" },
+export async function GET(request: Request, params: { id: string }) {
+  const finance = await prisma.finance.findUnique({
+    where: { id: params.id },
     include: { tags: true },
   });
-  return NextResponse.json<GetFinanceResponse>({ results: finances });
+  if (!finance) notFound();
+  return NextResponse.json<FinanceWithTag>(finance);
 }
 
-export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { email: session?.user?.email! },
-  });
-  const input = (await request.json()) as SaveFinanceInput;
+export async function PUT(request: Request, params: { id: string }) {
+  const input = (await request.json()) as UpdateFinanceInput;
 
   let tags: Tag[] = [];
   if (input.tags.length) {
@@ -39,30 +33,36 @@ export async function POST(request: Request) {
     });
   }
 
-  const finance = await prisma.finance.create({
+  const finance = await prisma.finance.update({
+    where: { id: params.id },
     data: {
       amount: input.amount,
       label: input.label,
       type: input.type,
       createdAt: input.createdAt,
       tags: { connect: tags.map((el) => ({ id: el.id })) },
-      userId: user.id,
     },
     include: {
       tags: true,
     },
   });
+
   return NextResponse.json<FinanceWithTag>(finance);
 }
 
-export type GetFinanceResponse = {
-  results: FinanceWithTag[];
-};
+export async function DELETE(request: Request, params: { id: string }) {
+  await prisma.finance.delete({ where: { id: params.id } });
+  return NextResponse.json<DeleteFinanceResponse>({ message: "ok" });
+}
 
-export type SaveFinanceInput = {
+export type UpdateFinanceInput = {
   label: string;
   type: FinanceType;
   tags: string[];
   amount: number;
   createdAt: string;
+};
+
+export type DeleteFinanceResponse = {
+  message: string;
 };

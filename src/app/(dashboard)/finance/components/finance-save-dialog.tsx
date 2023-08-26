@@ -17,6 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import dayjs, { Dayjs } from "dayjs";
 import { useTags } from "../../tag/tag-query";
 import { useFinanceSave } from "../finance-query";
+import { useEffect } from "react";
 
 type FormData = {
   label: string;
@@ -27,7 +28,7 @@ type FormData = {
 };
 
 export function FinanceSaveDialog() {
-  const { open, onClose, onFinish } = useFinanceSaveStore();
+  const { open, onClose, onFinish, idToEdit } = useFinanceSaveStore();
   const { data: tags, isLoading: tagsLoading } = useTags();
   const { mutate, isLoading: saveLoading } = useFinanceSave();
   const { control, formState, handleSubmit } = useForm<FormData>({
@@ -40,6 +41,10 @@ export function FinanceSaveDialog() {
     },
   });
   const { isValid } = formState;
+
+  useEffect(() => {
+    // if (idToEdit)
+  }, [idToEdit]);
 
   const onSubmit = handleSubmit((data) => {
     mutate(
