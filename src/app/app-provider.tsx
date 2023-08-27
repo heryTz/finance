@@ -5,15 +5,18 @@ import { PropsWithChildren } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { SnackbarProvider } from "notistack";
 
 const queryClient = new QueryClient();
 
 export function AppProvider({ children, session }: AppProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <SessionProvider session={session}>{children}</SessionProvider>
-      </LocalizationProvider>
+      <SnackbarProvider maxSnack={3}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <SessionProvider session={session}>{children}</SessionProvider>
+        </LocalizationProvider>
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }

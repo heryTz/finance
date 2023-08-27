@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -16,8 +17,13 @@ import { useFinanceSaveStore } from "../finance-store";
 import { Controller, useForm } from "react-hook-form";
 import dayjs, { Dayjs } from "dayjs";
 import { useTags } from "../../tag/tag-query";
-import { useFinanceSave } from "../finance-query";
+import {
+  useFinanceById,
+  useFinanceSave,
+  useFinanceUpdate,
+} from "../finance-query";
 import { useEffect } from "react";
+import { enqueueSnackbar } from "notistack";
 
 type FormData = {
   label: string;
@@ -30,8 +36,11 @@ type FormData = {
 export function FinanceSaveDialog() {
   const { open, onClose, onFinish, idToEdit } = useFinanceSaveStore();
   const { data: tags, isLoading: tagsLoading } = useTags();
-  const { mutate, isLoading: saveLoading } = useFinanceSave();
-  const { control, formState, handleSubmit } = useForm<FormData>({
+  const { data: financeData, isLoading: financeLoading } =
+    useFinanceById(idToEdit);
+  const { mutate: create, isLoading: saveLoading } = useFinanceSave();
+  const { mutate: update, isLoading: updateLoading } = useFinanceUpdate();
+  const { control, formState, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
       label: "",
       amount: "",
@@ -43,18 +52,45 @@ export function FinanceSaveDialog() {
   const { isValid } = formState;
 
   useEffect(() => {
-    // if (idToEdit)
-  }, [idToEdit]);
+    if (financeData?.data) {
+      const data = financeData.data;
+      reset({
+        label: data.label,
+        amount: data.amount.toString(),
+        createdAt: dayjs(data.createdAt),
+        tags: data.tags.map((el) => el.name),
+        type: data.type as FinanceType,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [financeData]);
 
   const onSubmit = handleSubmit((data) => {
-    mutate(
-      {
-        ...data,
-        amount: +data.amount,
-        createdAt: data.createdAt.toISOString(),
-      },
-      { onSuccess: () => onFinish() }
-    );
+    const input = {
+      ...data,
+      amount: +data.amount,
+      createdAt: data.createdAt.toISOString(),
+    };
+    if (idToEdit) {
+      update(
+        { ...input, id: idToEdit },
+        {
+          onSuccess: () => {
+            enqueueSnackbar("Modification effectué avec succès", {
+              variant: "success",
+            });
+            onFinish();
+          },
+        }
+      );
+    } else {
+      create(input, {
+        onSuccess: () => {
+          enqueueSnackbar("Ajout effectué avec succès", { variant: "success" });
+          onFinish();
+        },
+      });
+    }
   });
 
   if (!open) return null;
@@ -62,90 +98,109 @@ export function FinanceSaveDialog() {
   return (
     <Dialog open={open} keepMounted maxWidth="sm" fullWidth>
       <DialogTitle>Ajout</DialogTitle>
-      <DialogContent>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <Controller
-            control={control}
-            name="label"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextField
-                label="Libellé"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="type"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextField
-                select
-                label="Type"
-                value={field.value}
-                onChange={field.onChange}
-              >
-                <MenuItem value={FinanceType.revenue}>Revenue</MenuItem>
-                <MenuItem value={FinanceType.depense}>Dépense</MenuItem>
-              </TextField>
-            )}
-          />
-          <Controller
-            control={control}
-            name="amount"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextField
-                label="Montant"
-                type="number"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="tags"
-            render={({ field }) => (
-              <Autocomplete
-                multiple
-                freeSolo
-                loading={tagsLoading}
-                options={tags?.data.results.map((el) => el.name) ?? []}
-                getOptionLabel={(option) => option}
-                filterSelectedOptions
-                renderInput={(params) => <TextField {...params} label="Tags" />}
-                value={field.value}
-                onChange={(_, value) => field.onChange(value)}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="createdAt"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <DatePicker
-                label="Date de création"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Annuler</Button>
-        <Button
-          variant="contained"
-          disabled={!isValid || saveLoading}
-          onClick={onSubmit}
+      {idToEdit && financeLoading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "200px",
+          }}
         >
-          Sauvegarder
-        </Button>
-      </DialogActions>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <DialogContent>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Controller
+                control={control}
+                name="label"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    label="Libellé"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="type"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    select
+                    label="Type"
+                    value={field.value}
+                    onChange={field.onChange}
+                  >
+                    <MenuItem value={FinanceType.revenue}>Revenue</MenuItem>
+                    <MenuItem value={FinanceType.depense}>Dépense</MenuItem>
+                  </TextField>
+                )}
+              />
+              <Controller
+                control={control}
+                name="amount"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <TextField
+                    label="Montant"
+                    type="number"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="tags"
+                render={({ field }) => (
+                  <Autocomplete
+                    multiple
+                    freeSolo
+                    loading={tagsLoading}
+                    options={tags?.data.results.map((el) => el.name) ?? []}
+                    getOptionLabel={(option) => option}
+                    filterSelectedOptions
+                    renderInput={(params) => (
+                      <TextField {...params} label="Tags" />
+                    )}
+                    value={field.value}
+                    onChange={(_, value) => field.onChange(value)}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="createdAt"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <DatePicker
+                    label="Date de création"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onClose}>Annuler</Button>
+            <Button
+              variant="contained"
+              disabled={
+                !isValid || saveLoading || financeLoading || updateLoading
+              }
+              onClick={onSubmit}
+            >
+              Sauvegarder
+            </Button>
+          </DialogActions>
+        </>
+      )}
     </Dialog>
   );
 }

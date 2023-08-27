@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request, params: { id: string }) {
+export async function GET(request: Request, { params }: IdParams) {
   const finance = await prisma.finance.findUnique({
     where: { id: params.id },
     include: { tags: true },
@@ -14,46 +14,59 @@ export async function GET(request: Request, params: { id: string }) {
   return NextResponse.json<FinanceWithTag>(finance);
 }
 
-export async function PUT(request: Request, params: { id: string }) {
+export async function PUT(request: Request, { params }: IdParams) {
   const input = (await request.json()) as UpdateFinanceInput;
+  const finance = await prisma.finance.findUnique({
+    where: { id: params.id },
+    include: { tags: true },
+  });
+  if (!finance) notFound();
 
-  let tags: Tag[] = [];
-  if (input.tags.length) {
-    await Promise.all(
-      input.tags.map((el) =>
-        prisma.tag.upsert({
-          create: { name: el },
-          update: {},
-          where: { name: el },
-        })
-      )
-    );
-    tags = await prisma.tag.findMany({
-      where: { name: { in: input.tags } },
-    });
+  const tagToConnect: Tag[] = [];
+  const tagToDisconnect: Tag[] = [];
+
+  for (const tag of finance.tags) {
+    if (input.tags.includes(tag.name)) tagToConnect.push(tag);
+    else tagToDisconnect.push(tag);
   }
 
-  const finance = await prisma.finance.update({
+  for (const tag of input.tags) {
+    if (!finance.tags.some((el) => el.name === tag)) {
+      const newTag = await prisma.tag.upsert({
+        where: { name: tag },
+        create: { name: tag },
+        update: {},
+      });
+      tagToConnect.push(newTag);
+    }
+  }
+
+  const financeUpdated = await prisma.finance.update({
     where: { id: params.id },
     data: {
       amount: input.amount,
       label: input.label,
       type: input.type,
       createdAt: input.createdAt,
-      tags: { connect: tags.map((el) => ({ id: el.id })) },
+      tags: {
+        connect: tagToConnect.map((el) => ({ id: el.id })),
+        disconnect: tagToDisconnect.map((el) => ({ id: el.id })),
+      },
     },
     include: {
       tags: true,
     },
   });
 
-  return NextResponse.json<FinanceWithTag>(finance);
+  return NextResponse.json<FinanceWithTag>(financeUpdated);
 }
 
-export async function DELETE(request: Request, params: { id: string }) {
+export async function DELETE(request: Request, { params }: IdParams) {
   await prisma.finance.delete({ where: { id: params.id } });
   return NextResponse.json<DeleteFinanceResponse>({ message: "ok" });
 }
+
+type IdParams = { params: { id: string } };
 
 export type UpdateFinanceInput = {
   label: string;
