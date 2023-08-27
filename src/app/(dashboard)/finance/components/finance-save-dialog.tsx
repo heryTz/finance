@@ -93,7 +93,9 @@ export function FinanceSaveDialog() {
     }
   });
 
-  if (!open) return null;
+  const onCancel = () => {
+    onClose();
+  };
 
   return (
     <Dialog open={open} keepMounted maxWidth="sm" fullWidth>
@@ -188,7 +190,7 @@ export function FinanceSaveDialog() {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={onClose}>Annuler</Button>
+            <Button onClick={onCancel}>Annuler</Button>
             <Button
               variant="contained"
               disabled={

@@ -3,7 +3,7 @@ import { Block } from "@/components/block";
 import { Button, Grid } from "@mui/material";
 import { useFinances } from "./finance-query";
 import { ErrorSection } from "@/components/error-section";
-import { FinanceListLoader, FinanceSaveDialog } from "./components";
+import { FinanceListLoader, FinanceSave } from "./components";
 import { DataGrid } from "@mui/x-data-grid";
 import { bilanGlobal } from "@/app/helper";
 import { MiniGlobalBilan } from "@/components/mini-global-bilan";
@@ -52,7 +52,7 @@ export default function Finance() {
           )}
         </Block>
       </Grid>
-      <FinanceSaveDialog />
+      <FinanceSave />
     </Grid>
   );
 }

@@ -12,7 +12,10 @@ const queryClient = new QueryClient();
 export function AppProvider({ children, session }: AppProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider maxSnack={3}>
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <SessionProvider session={session}>{children}</SessionProvider>
         </LocalizationProvider>

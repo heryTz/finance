@@ -15,7 +15,7 @@ export const useFinanceSaveStore = create<FinanceSaveState>((set) => ({
   finishReloader: 0,
   idToEdit: null,
   onOpen: () => set({ open: true }),
-  onClose: () => set({ open: false }),
+  onClose: () => set({ open: false, idToEdit: null }),
   onFinish: () =>
     set((state) => ({
       open: false,
