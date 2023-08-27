@@ -4,10 +4,11 @@ import { Delete, Edit } from "@mui/icons-material";
 import { Box, Chip, IconButton } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { Tag } from "@prisma/client";
-import { useFinanceSaveStore } from "./finance-store";
+import { useFinanceDeleteStore, useFinanceSaveStore } from "./finance-store";
 
 export function useColumnDefs() {
-  const { onUpdate } = useFinanceSaveStore();
+  const onUpdate = useFinanceSaveStore((state) => state.onUpdate);
+  const onDelete = useFinanceDeleteStore((state) => state.onDelete);
 
   const columns: GridColDef[] = [
     { field: "label", headerName: "Libellé", width: 350 },
@@ -59,7 +60,12 @@ export function useColumnDefs() {
           <IconButton size="small" onClick={() => onUpdate(params.row.id)}>
             <Edit />
           </IconButton>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            onClick={() =>
+              onDelete({ id: params.row.id, label: params.row.label })
+            }
+          >
             <Delete />
           </IconButton>
         </Box>

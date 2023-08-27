@@ -3,23 +3,26 @@ import { Block } from "@/components/block";
 import { Button, Grid } from "@mui/material";
 import { useFinances } from "./finance-query";
 import { ErrorSection } from "@/components/error-section";
-import { FinanceListLoader, FinanceSave } from "./components";
+import { FinanceDelete, FinanceListLoader, FinanceSave } from "./components";
 import { DataGrid } from "@mui/x-data-grid";
 import { bilanGlobal } from "@/app/helper";
 import { MiniGlobalBilan } from "@/components/mini-global-bilan";
-import { useFinanceSaveStore } from "./finance-store";
+import { useFinanceDeleteStore, useFinanceSaveStore } from "./finance-store";
 import { useEffect } from "react";
 import { useColumnDefs } from "./finance-util";
 
 export default function Finance() {
   const { data, isLoading, error, refetch } = useFinances();
-  const { onOpen, finishReloader } = useFinanceSaveStore();
+  const { onOpen, reloader } = useFinanceSaveStore();
+  const reloaderDelete = useFinanceDeleteStore(
+    (state) => state.reloader
+  );
   const { columns } = useColumnDefs();
 
   useEffect(() => {
-    if (finishReloader) refetch();
+    if (reloader || reloaderDelete) refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finishReloader]);
+  }, [reloader, reloaderDelete]);
 
   return (
     <Grid container spacing={3}>
@@ -53,6 +56,7 @@ export default function Finance() {
         </Block>
       </Grid>
       <FinanceSave />
+      <FinanceDelete />
     </Grid>
   );
 }

@@ -5,7 +5,6 @@ import {
 } from "@/app/api/v1/finances/route";
 import { httpClient } from "@/app/helper";
 import { FinanceWithTag } from "@/entity";
-import { AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
 
 export function useFinances() {

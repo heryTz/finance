@@ -33,7 +33,7 @@ type FormData = {
   createdAt: Dayjs;
 };
 
-export function FinanceSaveDialog() {
+export function FinanceSaveModal() {
   const { open, onClose, onFinish, idToEdit } = useFinanceSaveStore();
   const { data: tags, isLoading: tagsLoading } = useTags();
   const { data: financeData, isLoading: financeLoading } =
