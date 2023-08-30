@@ -1,8 +1,7 @@
-import { PrismaClient, Tag } from "@prisma/client";
+import { Tag } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { apiGuard } from "@/app/guards/api-guard";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/app/helper/prisma";
 
 export async function GET() {
   const { session, resp } = await apiGuard();

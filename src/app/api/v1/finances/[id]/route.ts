@@ -1,10 +1,9 @@
 import { apiGuard } from "@/app/guards/api-guard";
+import { prisma } from "@/app/helper/prisma";
 import { FinanceType, FinanceWithTag } from "@/entity";
-import { PrismaClient, Tag } from "@prisma/client";
+import { Tag } from "@prisma/client";
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function GET(request: Request, { params }: IdParams) {
   const { resp } = await apiGuard();
