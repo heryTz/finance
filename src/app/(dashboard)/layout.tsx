@@ -10,6 +10,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
   styled,
@@ -20,10 +22,11 @@ import {
   AccountCircle,
   ChevronLeft,
   Dashboard,
-  Menu,
+  Menu as MenuIcon,
 } from "@mui/icons-material";
 import Link from "next/link";
 import { AdminGuard } from "../guards/admin-guard";
+import { signOut } from "next-auth/react";
 
 const drawerWidth: number = 240;
 
@@ -76,10 +79,14 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function Component({ children }: PropsWithChildren<{}>) {
+  const [anchorUser, setAnchorUser] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(true);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const openUserMenu = Boolean(anchorUser);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -95,7 +102,7 @@ function Component({ children }: PropsWithChildren<{}>) {
               ...(open && { display: "none" }),
             }}
           >
-            <Menu />
+            <MenuIcon />
           </IconButton>
           <Typography
             component="h1"
@@ -106,9 +113,31 @@ function Component({ children }: PropsWithChildren<{}>) {
           >
             Dashboard
           </Typography>
-          <IconButton color="inherit">
+          <IconButton
+            color="inherit"
+            id="user-menu-button"
+            aria-controls={openUserMenu ? "user-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={openUserMenu ? "true" : undefined}
+            onClick={(e) => setAnchorUser(e.currentTarget)}
+          >
             <AccountCircle />
           </IconButton>
+          {anchorUser && (
+            <Menu
+              id="user-menu"
+              anchorEl={anchorUser}
+              open={open}
+              onClose={() => setAnchorUser(null)}
+              MenuListProps={{
+                "aria-labelledby": "user-menu-button",
+              }}
+            >
+              <MenuItem key={"signout"} onClick={() => signOut()}>
+                Déconnexion
+              </MenuItem>
+            </Menu>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
