@@ -1,13 +1,15 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { apiGuard } from "@/app/guards/api-guard";
 import { FinanceType, FinanceWithTag } from "@/entity";
 import { PrismaClient, Tag } from "@prisma/client";
-import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: Request, { params }: IdParams) {
+  const { resp } = await apiGuard();
+  if (resp) return resp;
+
   const finance = await prisma.finance.findUnique({
     where: { id: params.id },
     include: { tags: true },
@@ -17,7 +19,9 @@ export async function GET(request: Request, { params }: IdParams) {
 }
 
 export async function PUT(request: Request, { params }: IdParams) {
-  const session = await getServerSession(authOptions);
+  const { session, resp } = await apiGuard();
+  if (resp) return resp;
+
   const user = await prisma.user.findUniqueOrThrow({
     where: { email: session?.user?.email! },
   });
@@ -68,6 +72,9 @@ export async function PUT(request: Request, { params }: IdParams) {
 }
 
 export async function DELETE(request: Request, { params }: IdParams) {
+  const { resp } = await apiGuard();
+  if (resp) return resp;
+
   await prisma.finance.delete({ where: { id: params.id } });
   return NextResponse.json<DeleteFinanceResponse>({ message: "ok" });
 }

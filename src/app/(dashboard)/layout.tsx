@@ -1,6 +1,5 @@
 "use client";
 import { PropsWithChildren, useState } from "react";
-import { AdminGuard } from "../guards";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import {
   Box,
@@ -24,6 +23,7 @@ import {
   Menu,
 } from "@mui/icons-material";
 import Link from "next/link";
+import { AdminGuard } from "../guards/admin-guard";
 
 const drawerWidth: number = 240;
 

@@ -1,13 +1,14 @@
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { FinanceType, FinanceWithTag } from "@/entity";
 import { PrismaClient, Tag } from "@prisma/client";
+import { apiGuard } from "@/app/guards/api-guard";
 
 const prisma = new PrismaClient();
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  const { session, resp } = await apiGuard();
+  if (resp) return resp;
+
   const finances = await prisma.finance.findMany({
     where: { User: { email: session?.user?.email! } },
     orderBy: { createdAt: "desc" },
@@ -17,7 +18,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
+  const { session, resp } = await apiGuard();
+  if (resp) return resp;
+
   const user = await prisma.user.findUniqueOrThrow({
     where: { email: session?.user?.email! },
   });
