@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     await Promise.all(
       input.tags.map((el) =>
         prisma.tag.upsert({
-          create: { name: el },
+          create: { name: el, userId: user.id },
           update: {},
           where: { name: el },
         })

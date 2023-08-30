@@ -1,5 +1,7 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { FinanceType, FinanceWithTag } from "@/entity";
 import { PrismaClient, Tag } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 
@@ -15,6 +17,10 @@ export async function GET(request: Request, { params }: IdParams) {
 }
 
 export async function PUT(request: Request, { params }: IdParams) {
+  const session = await getServerSession(authOptions);
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { email: session?.user?.email! },
+  });
   const input = (await request.json()) as UpdateFinanceInput;
   const finance = await prisma.finance.findUnique({
     where: { id: params.id },
@@ -34,7 +40,7 @@ export async function PUT(request: Request, { params }: IdParams) {
     if (!finance.tags.some((el) => el.name === tag)) {
       const newTag = await prisma.tag.upsert({
         where: { name: tag },
-        create: { name: tag },
+        create: { name: tag, userId: user.id },
         update: {},
       });
       tagToConnect.push(newTag);

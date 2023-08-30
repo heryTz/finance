@@ -41,11 +41,12 @@ model User {
   email         String    @unique
   name          String?
   emailVerified DateTime?
-  finances     Finance[]
+  finances      Finance[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
   Account       Account[]
   Session       Session[]
+  Tag           Tag[]
 }
 
 model VerificationToken {
@@ -72,6 +73,8 @@ model Tag {
   id        String    @id @default(cuid())
   name      String    @unique
   finnances Finance[]
+  User      User      @relation(fields: [userId], references: [id])
+  userId    String    @default("iztvu9ziqfcozg14gmpskwwk")
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 }
