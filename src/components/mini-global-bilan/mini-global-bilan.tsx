@@ -7,7 +7,7 @@ export function MiniGlobalBilan({ revenue, depense }: MiniGlobalBilanProps) {
       sx={{ display: "flex", gap: 3, marginBottom: 2, alignItems: "center" }}
     >
       <Box sx={{ display: "flex", gap: 1 }}>
-        <Typography>Revenue:</Typography>
+        <Typography>Revenu:</Typography>
         <Typography color={"green"}>{humanAmount(revenue)}</Typography>
       </Box>
       <Box sx={{ display: "flex", gap: 1 }}>
