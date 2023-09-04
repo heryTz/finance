@@ -138,7 +138,7 @@ export function FinanceSaveModal() {
                     value={field.value}
                     onChange={field.onChange}
                   >
-                    <MenuItem value={FinanceType.revenue}>Revenue</MenuItem>
+                    <MenuItem value={FinanceType.revenue}>Revenu</MenuItem>
                     <MenuItem value={FinanceType.depense}>Dépense</MenuItem>
                   </TextField>
                 )}
