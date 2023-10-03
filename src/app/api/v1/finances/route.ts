@@ -1,17 +1,26 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { FinanceType, FinanceWithTag } from "@/entity";
 import { Tag } from "@prisma/client";
 import { apiGuard } from "@/app/guards/api-guard";
 import { prisma } from "@/app/helper/prisma";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const { session, resp } = await apiGuard();
   if (resp) return resp;
 
+  const query = req.nextUrl.searchParams;
+  const q = query.get("q");
+  const distinct = query.get("distinct") === "true";
+  console.log({ distinct, a: typeof distinct });
+
   const finances = await prisma.finance.findMany({
-    where: { User: { email: session?.user?.email! } },
+    where: {
+      User: { email: session?.user?.email! },
+      ...(q ? { label: { contains: q } } : {}),
+    },
     orderBy: { createdAt: "desc" },
     include: { tags: true },
+    distinct: distinct ? ["label"] : undefined,
   });
   return NextResponse.json<GetFinanceResponse>({ results: finances });
 }
@@ -56,6 +65,11 @@ export async function POST(request: Request) {
   });
   return NextResponse.json<FinanceWithTag>(finance);
 }
+
+export type GetFinanceQuery = {
+  q?: string;
+  distinct?: boolean;
+};
 
 export type GetFinanceResponse = {
   results: FinanceWithTag[];

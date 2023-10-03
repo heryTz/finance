@@ -1,5 +1,6 @@
 import { UpdateFinanceInput } from "@/app/api/v1/finances/[id]/route";
 import {
+  GetFinanceQuery,
   GetFinanceResponse,
   SaveFinanceInput,
 } from "@/app/api/v1/finances/route";
@@ -7,10 +8,13 @@ import { httpClient } from "@/app/helper";
 import { FinanceWithTag } from "@/entity";
 import { useMutation, useQuery } from "react-query";
 
-export function useFinances() {
-  return useQuery("finance", () =>
-    httpClient.get<GetFinanceResponse>(`/finances`)
-  );
+export function useFinances({ q, distinct }: GetFinanceQuery = {}) {
+  return useQuery(["finance", q, distinct], ({ queryKey }) => {
+    const [_, q, distinct] = queryKey;
+    return httpClient.get<GetFinanceResponse>(`/finances`, {
+      params: { q, distinct },
+    });
+  });
 }
 
 export function useFinanceSave() {

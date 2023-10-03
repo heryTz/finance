@@ -14,9 +14,7 @@ import { useColumnDefs } from "./finance-util";
 export default function Finance() {
   const { data, isLoading, error, refetch } = useFinances();
   const { onOpen, reloader } = useFinanceSaveStore();
-  const reloaderDelete = useFinanceDeleteStore(
-    (state) => state.reloader
-  );
+  const reloaderDelete = useFinanceDeleteStore((state) => state.reloader);
   const { columns } = useColumnDefs();
 
   useEffect(() => {

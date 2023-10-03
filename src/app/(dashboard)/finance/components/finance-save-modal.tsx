@@ -21,6 +21,7 @@ import {
   useFinanceById,
   useFinanceSave,
   useFinanceUpdate,
+  useFinances,
 } from "../finance-query";
 import { useEffect } from "react";
 import { enqueueSnackbar } from "notistack";
@@ -40,6 +41,9 @@ export function FinanceSaveModal() {
     useFinanceById(idToEdit);
   const { mutate: create, isLoading: saveLoading } = useFinanceSave();
   const { mutate: update, isLoading: updateLoading } = useFinanceUpdate();
+  const { data: existFinance, isLoading: existFinanceLoading } = useFinances({
+    distinct: true,
+  });
   const { control, formState, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
       label: "",
@@ -120,10 +124,18 @@ export function FinanceSaveModal() {
                 name="label"
                 rules={{ required: true }}
                 render={({ field }) => (
-                  <TextField
-                    label="Libellé"
+                  <Autocomplete
+                    freeSolo
+                    loading={existFinanceLoading}
+                    options={
+                      existFinance?.data.results.map((el) => el.label) ?? []
+                    }
+                    getOptionLabel={(option) => option}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Libellé" />
+                    )}
                     value={field.value}
-                    onChange={field.onChange}
+                    onInputChange={(_, value) => field.onChange(value)}
                   />
                 )}
               />
