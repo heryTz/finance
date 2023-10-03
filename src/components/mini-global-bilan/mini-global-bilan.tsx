@@ -1,10 +1,13 @@
 import { humanAmount } from "@/app/helper";
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 export function MiniGlobalBilan({ revenue, depense }: MiniGlobalBilanProps) {
   return (
-    <Box
-      sx={{ display: "flex", gap: 3, marginBottom: 2, alignItems: "center" }}
+    <Stack
+      sx={{ marginBottom: 2 }}
+      spacing={{ xs: 2, md: 3 }}
+      direction={{ xs: "column", md: "row" }}
+      alignItems={{ xs: "flex-start", md: "center" }}
     >
       <Box sx={{ display: "flex", gap: 1 }}>
         <Typography>Revenu:</Typography>
@@ -20,7 +23,7 @@ export function MiniGlobalBilan({ revenue, depense }: MiniGlobalBilanProps) {
           {humanAmount(revenue - depense)}
         </Typography>
       </Box>
-    </Box>
+    </Stack>
   );
 }
 
