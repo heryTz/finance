@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
   const query = req.nextUrl.searchParams;
   const q = query.get("q");
   const distinct = query.get("distinct") === "true";
-  console.log({ distinct, a: typeof distinct });
 
   const finances = await prisma.finance.findMany({
     where: {
