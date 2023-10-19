@@ -1,11 +1,12 @@
-import { UpdateFinanceInput } from "@/app/api/v1/finances/[id]/route";
-import {
+import type { UpdateFinanceInput } from "@/app/api/v1/finances/[id]/route";
+import type { FinanceAnalytics } from "@/app/api/v1/finances/analytics/route";
+import type {
   GetFinanceQuery,
   GetFinanceResponse,
   SaveFinanceInput,
 } from "@/app/api/v1/finances/route";
 import { httpClient } from "@/app/helper";
-import { FinanceWithTag } from "@/entity";
+import type { FinanceWithTag } from "@/entity";
 import { useMutation, useQuery } from "react-query";
 
 export function useFinances({ q, distinct }: GetFinanceQuery = {}) {
@@ -43,4 +44,11 @@ export function useFinanceDelete() {
   return useMutation("finance.delete", (id: string) =>
     httpClient.delete<FinanceWithTag>(`/finances/${id}`)
   );
+}
+
+export function useFinanceAnalytics() {
+  return useQuery({
+    queryKey: "finance.analytics",
+    queryFn: () => httpClient.get<FinanceAnalytics>(`/finances/analytics`),
+  });
 }
