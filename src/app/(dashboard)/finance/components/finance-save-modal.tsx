@@ -44,15 +44,16 @@ export function FinanceSaveModal() {
   const { data: existFinance, isLoading: existFinanceLoading } = useFinances({
     distinct: true,
   });
-  const { control, formState, handleSubmit, reset } = useForm<FormData>({
-    defaultValues: {
-      label: "",
-      amount: "",
-      tags: [],
-      type: FinanceType.depense,
-      createdAt: dayjs(),
-    },
-  });
+  const { control, formState, handleSubmit, reset, setValue } =
+    useForm<FormData>({
+      defaultValues: {
+        label: "",
+        amount: "",
+        tags: [],
+        type: FinanceType.depense,
+        createdAt: dayjs(),
+      },
+    });
   const { isValid } = formState;
 
   useEffect(() => {
@@ -135,7 +136,18 @@ export function FinanceSaveModal() {
                       <TextField {...params} label="Libellé" />
                     )}
                     value={field.value}
-                    onInputChange={(_, value) => field.onChange(value)}
+                    onInputChange={(_, value) => {
+                      field.onChange(value);
+                      const item = existFinance?.data?.results.find(
+                        (el) => el.label === value
+                      );
+                      if (item) {
+                        setValue(
+                          "tags",
+                          item.tags.map((el) => el.name)
+                        );
+                      }
+                    }}
                   />
                 )}
               />
