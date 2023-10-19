@@ -21,5 +21,6 @@ jobs:
           ssh -p${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cd ~/finance/app && \
             git pull origin main && \
+            pnpm install && \
             pnpm build && \
             pm2 restart finance"
