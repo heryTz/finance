@@ -1,41 +1,9 @@
 "use client";
 
-import {
-  Chart,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
+import { LineChart } from "@/components/chart";
 import { useFinanceAnalytics } from "./finance/finance-query";
-import { CircularProgress } from "@mui/material";
-
-Chart.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "bottom" as const,
-    },
-    title: {
-      display: true,
-      text: "Dépense-Revenu par mois",
-    },
-  },
-};
+import { CircularProgress, Stack } from "@mui/material";
+import { runningSum, sum } from "../helper";
 
 const labels = [
   "Janvier",
@@ -52,33 +20,41 @@ const labels = [
   "Décembre",
 ];
 
-const defaultDatasets = [
-  {
-    borderColor: "rgb(53, 162, 235)",
-    backgroundColor: "rgba(53, 162, 235, 0.5)",
-  },
-  {
-    borderColor: "rgb(255, 99, 132)",
-    backgroundColor: "rgba(255, 99, 132, 0.5)",
-  },
-];
-
 export default function Dashboard() {
   const { data, isLoading, isError, error } = useFinanceAnalytics();
 
   if (isLoading || !data) return <CircularProgress />;
   if (isError && error) return <>{error}</>;
 
+  const incomeDataset = data.data.datasets.find((el) => el.label === "Revenu")!;
+  const expenseDataset = data.data.datasets.find(
+    (el) => el.label === "Dépense"
+  )!;
+  const incomeEvo: number[] = runningSum(incomeDataset.data);
+  const expenseEvo: number[] = runningSum(expenseDataset.data);
+  const profitEvo: number[] = incomeEvo.reduce((acc, cur, index) => {
+    acc.push(incomeEvo[index] - expenseEvo[index]);
+    return acc;
+  }, [] as number[]);
+
   return (
-    <Line
-      options={options}
-      data={{
-        labels,
-        datasets: data.data.datasets.map((el, index) => ({
-          ...defaultDatasets[index % defaultDatasets.length],
-          ...el,
-        })),
-      }}
-    />
+    <Stack gap={4}>
+      <LineChart
+        minWidth="900px"
+        title="Dépense-Revenu par mois"
+        labels={labels}
+        datasets={data.data.datasets}
+      />
+      <LineChart
+        minWidth="900px"
+        title="Bénéfice"
+        labels={labels}
+        datasets={[
+          { label: "Revenu", data: incomeEvo },
+          { label: "Dépense", data: expenseEvo },
+          { label: "Bénéfice", data: profitEvo },
+        ]}
+      />
+    </Stack>
   );
 }
