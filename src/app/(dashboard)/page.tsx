@@ -29,7 +29,7 @@ export default function Dashboard() {
     <Stack gap={4}>
       <LineChart
         minWidth="900px"
-        title="Dépense-Revenu par mois"
+        title="Dépense-Revenu par mois et évolution du bénéfice"
         labels={labels}
         datasets={data.data.datasets}
       />

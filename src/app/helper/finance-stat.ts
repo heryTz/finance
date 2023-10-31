@@ -13,3 +13,18 @@ export function bilanGlobal(finances: Finance[]) {
       .reduce((prev, acc) => prev + acc, 0),
   };
 }
+
+export function profitEvo(income: number[], expense: number[]) {
+  const profit: number[] = [];
+
+  income.forEach((el, i) => {
+    if (i === 0) {
+      profit.push(el - expense[i]);
+    } else {
+      const curProfit = income[i] - expense[i];
+      profit.push(profit[i - 1] + curProfit);
+    }
+  });
+
+  return profit;
+}

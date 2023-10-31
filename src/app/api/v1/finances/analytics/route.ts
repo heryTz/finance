@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { profitEvo } from "@/app/helper";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
@@ -17,6 +18,7 @@ export async function GET() {
       User: {
         email: session?.user?.email!,
       },
+      // wtf! why this not working
       // createdAt: {
       //   lte: dayjs().endOf("year").toDate(),
       //   gte: dayjs().startOf("year").toDate(),
@@ -25,12 +27,12 @@ export async function GET() {
   });
 
   const monthsOfYear = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  const depense: number[] = [];
-  const revenu: number[] = [];
+  const expense: number[] = [];
+  const income: number[] = [];
 
   for (const months of monthsOfYear) {
-    depense[months] = 0;
-    revenu[months] = 0;
+    expense[months] = 0;
+    income[months] = 0;
     const monthDayjs = dayjs().startOf("year").add(months, "month");
     for (const finance of finances) {
       const createdAtDayjs = dayjs(finance.createdAt);
@@ -39,22 +41,42 @@ export async function GET() {
         createdAtDayjs.isSameOrBefore(monthDayjs.endOf("month"))
       ) {
         if (finance.type === FinanceType.depense) {
-          depense[months] = depense[months] + finance.amount.toNumber();
+          expense[months] = expense[months] + finance.amount.toNumber();
         } else {
-          revenu[months] = revenu[months] + finance.amount.toNumber();
+          income[months] = income[months] + finance.amount.toNumber();
         }
       }
     }
   }
 
+  let prevExpenseTotal = 0;
+  let prevIncomeTotal = 0;
+  for (const finance of finances) {
+    const isBeforeOfCurYear = dayjs(finance.createdAt).isSameOrBefore(
+      dayjs().add(-1, "year").endOf("year")
+    );
+    if (!isBeforeOfCurYear) continue;
+    if (finance.type === FinanceType.depense) {
+      prevExpenseTotal += finance.amount.toNumber();
+    } else {
+      prevIncomeTotal += finance.amount.toNumber();
+    }
+  }
+
+  // January expense and income are the sum of prev year expense and income
+  income[0] += prevIncomeTotal;
+  expense[0] += prevExpenseTotal;
+  const profit = profitEvo(income, expense);
+
   return NextResponse.json<FinanceAnalytics>({
     datasets: [
-      { label: "Revenu", data: revenu },
-      { label: "Dépense", data: depense },
+      { label: "Revenu", data: income },
+      { label: "Dépense", data: expense },
+      { label: "Bénéfice", data: profit },
     ],
   });
 }
 
 export type FinanceAnalytics = {
-  datasets: { label: "Dépense" | "Revenu"; data: number[] }[];
+  datasets: { label: "Dépense" | "Revenu" | "Bénéfice"; data: number[] }[];
 };
