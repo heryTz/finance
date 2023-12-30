@@ -18,11 +18,10 @@ export async function GET() {
       User: {
         email: session?.user?.email!,
       },
-      // wtf! why this not working
-      // createdAt: {
-      //   lte: dayjs().endOf("year").toDate(),
-      //   gte: dayjs().startOf("year").toDate(),
-      // },
+      createdAt: {
+        lte: dayjs().endOf("year").toDate(),
+        gte: dayjs().startOf("year").toDate(),
+      },
     },
   });
 
@@ -49,23 +48,24 @@ export async function GET() {
     }
   }
 
-  let prevExpenseTotal = 0;
-  let prevIncomeTotal = 0;
-  for (const finance of finances) {
-    const isBeforeOfCurYear = dayjs(finance.createdAt).isSameOrBefore(
-      dayjs().add(-1, "year").endOf("year")
-    );
-    if (!isBeforeOfCurYear) continue;
-    if (finance.type === FinanceType.depense) {
-      prevExpenseTotal += finance.amount.toNumber();
-    } else {
-      prevIncomeTotal += finance.amount.toNumber();
-    }
-  }
+  const prevExpense = await prisma.finance.aggregate({
+    where: {
+      type: FinanceType.depense,
+      createdAt: { lte: dayjs().add(-1, "year").endOf("year").toDate() },
+    },
+    _sum: { amount: true }
+  });
 
-  // January expense and income are the sum of prev year expense and income
-  income[0] += prevIncomeTotal;
-  expense[0] += prevExpenseTotal;
+  const prevIncome = await prisma.finance.aggregate({
+    where: {
+      type: FinanceType.revenue,
+      createdAt: { lte: dayjs().add(-1, "year").endOf("year").toDate() },
+    },
+    _sum: { amount: true }
+  });
+
+  expense[0] += prevExpense._sum.amount?.toNumber() ?? 0
+  income[0] += prevIncome._sum.amount?.toNumber() ?? 0
   const profit = profitEvo(income, expense);
 
   return NextResponse.json<FinanceAnalytics>({
