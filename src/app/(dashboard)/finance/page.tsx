@@ -5,7 +5,6 @@ import { useFinances } from "./finance-query";
 import { ErrorSection } from "@/components/error-section";
 import { FinanceDelete, FinanceListLoader, FinanceSave } from "./components";
 import { DataGrid } from "@mui/x-data-grid";
-import { bilanGlobal } from "@/app/helper";
 import { MiniGlobalBilan } from "@/components/mini-global-bilan";
 import { useFinanceDeleteStore, useFinanceSaveStore } from "./finance-store";
 import { useEffect } from "react";
