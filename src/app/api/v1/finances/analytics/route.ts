@@ -48,24 +48,16 @@ export async function GET() {
     }
   }
 
-  const prevExpense = await prisma.finance.aggregate({
+  const prevAmount = await prisma.finance.groupBy({
+    by: ["type"],
     where: {
-      type: FinanceType.depense,
       createdAt: { lte: dayjs().add(-1, "year").endOf("year").toDate() },
     },
-    _sum: { amount: true }
+    _sum: { amount: true },
   });
 
-  const prevIncome = await prisma.finance.aggregate({
-    where: {
-      type: FinanceType.revenue,
-      createdAt: { lte: dayjs().add(-1, "year").endOf("year").toDate() },
-    },
-    _sum: { amount: true }
-  });
-
-  expense[0] += prevExpense._sum.amount?.toNumber() ?? 0
-  income[0] += prevIncome._sum.amount?.toNumber() ?? 0
+  expense[0] += prevAmount.find(el => el.type === FinanceType.depense)?._sum.amount?.toNumber() ?? 0;
+  income[0] += prevAmount.find(el => el.type === FinanceType.revenue)?._sum.amount?.toNumber() ?? 0;
   const profit = profitEvo(income, expense);
 
   return NextResponse.json<FinanceAnalytics>({

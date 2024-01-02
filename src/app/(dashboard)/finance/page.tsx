@@ -22,10 +22,15 @@ export default function Finance() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reloader, reloaderDelete]);
 
+  const stats = data?.data?.stats;
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <MiniGlobalBilan {...bilanGlobal(data?.data.results ?? [])} />
+        <MiniGlobalBilan
+          expense={stats?.expense ?? 0}
+          income={stats?.income ?? 0}
+        />
         <Block
           title="Mouvement"
           actionBar={<Button onClick={onOpen}>Ajouter</Button>}

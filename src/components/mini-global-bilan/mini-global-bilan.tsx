@@ -1,7 +1,7 @@
 import { humanAmount } from "@/app/helper";
 import { Box, Stack, Typography } from "@mui/material";
 
-export function MiniGlobalBilan({ revenue, depense }: MiniGlobalBilanProps) {
+export function MiniGlobalBilan({ income, expense }: MiniGlobalBilanProps) {
   return (
     <Stack
       sx={{ marginBottom: 2 }}
@@ -11,16 +11,16 @@ export function MiniGlobalBilan({ revenue, depense }: MiniGlobalBilanProps) {
     >
       <Box sx={{ display: "flex", gap: 1 }}>
         <Typography>Revenu:</Typography>
-        <Typography color={"green"}>{humanAmount(revenue)}</Typography>
+        <Typography color={"green"}>{humanAmount(income)}</Typography>
       </Box>
       <Box sx={{ display: "flex", gap: 1 }}>
         <Typography>Dépense:</Typography>
-        <Typography color={"red"}>{humanAmount(depense)}</Typography>
+        <Typography color={"red"}>{humanAmount(expense)}</Typography>
       </Box>
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Typography>Reste:</Typography>
         <Typography sx={{ backgroundColor: "yellow", padding: "2px" }}>
-          {humanAmount(revenue - depense)}
+          {humanAmount(income - expense)}
         </Typography>
       </Box>
     </Stack>
@@ -28,6 +28,6 @@ export function MiniGlobalBilan({ revenue, depense }: MiniGlobalBilanProps) {
 }
 
 type MiniGlobalBilanProps = {
-  revenue: number;
-  depense: number;
+  expense: number;
+  income: number;
 };

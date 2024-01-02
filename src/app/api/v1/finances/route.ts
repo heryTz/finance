@@ -21,7 +21,21 @@ export async function GET(req: NextRequest) {
     include: { tags: true },
     distinct: distinct ? ["label"] : undefined,
   });
-  return NextResponse.json<GetFinanceResponse>({ results: finances });
+
+  const amounts = await prisma.finance.groupBy({
+    by: ["type"],
+    _sum: { amount: true },
+  });
+
+  return NextResponse.json<GetFinanceResponse>({
+    results: finances,
+    stats: {
+      expense:
+        amounts.find((el) => el.type === FinanceType.depense)?._sum.amount?.toNumber() ?? 0,
+      income:
+        amounts.find((el) => el.type === FinanceType.revenue)?._sum.amount?.toNumber() ?? 0,
+    },
+  });
 }
 
 export async function POST(request: Request) {
@@ -72,6 +86,10 @@ export type GetFinanceQuery = {
 
 export type GetFinanceResponse = {
   results: FinanceWithTag[];
+  stats: {
+    income: number;
+    expense: number;
+  };
 };
 
 export type SaveFinanceInput = {
