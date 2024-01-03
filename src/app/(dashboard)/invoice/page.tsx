@@ -4,6 +4,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { ConfigListing } from "./components/config/configListing";
+import { ClientListing } from "./client/clientListing";
 
 enum InvoiceTab {
   invoice = 1,
@@ -40,7 +41,7 @@ export default function InvoicePage() {
         Item One
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        Item Two
+        <ClientListing />
       </TabPanel>
       <TabPanel value={tab} index={2}>
         <ConfigListing />

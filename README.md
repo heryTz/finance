@@ -6,3 +6,7 @@ A simple application to manage your budget. You can see the demo with the inform
 - mail: test-test@yopmail.fr
 
 ![](https://github.com/heryTz/finance/blob/main/demo.gif)
+
+## TODO
+
+[] Make code base consistent

@@ -96,8 +96,8 @@ model Client {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   Invoice   Invoice[]
-  Owner     User      @relation(fields: [userId], references: [id])
-  userId    String
+  Owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId    String
 }
 
 model InvoiceConfig {
@@ -112,12 +112,12 @@ model InvoiceConfig {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   Owner     User      @relation(fields: [ownerId], references: [id])
-  ownerId    String
+  ownerId   String
 }
 
 model Order {
   id           String    @id @default(cuid())
-  name         String    @unique
+  name         String
   qte          Int
   price        Decimal
   deviseSuffix String
@@ -125,7 +125,7 @@ model Order {
   updatedAt    DateTime? @updatedAt
   invoice      Invoice   @relation(fields: [invoiceId], references: [id])
   Owner        User      @relation(fields: [ownerId], references: [id])
-  ownerId       String
+  ownerId      String
   invoiceId    String
 }
 
@@ -136,7 +136,7 @@ model Invoice {
   owner     User      @relation(fields: [ownerId], references: [id])
   client    Client    @relation(fields: [clientId], references: [id])
   clientId  String
-  ownerId    String
+  ownerId   String
   orders    Order[]
   tva       Int?
 }
