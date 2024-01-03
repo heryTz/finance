@@ -9,15 +9,17 @@ export function useColumnDefs() {
 
   const columns: GridColDef[] = [
     { field: "name", headerName: "Nom", width: 400 },
-    { field: "email", headerName: "Email" },
+    { field: "email", headerName: "Email", width: 250  },
     {
       field: "createdAt",
       headerName: "Création",
+      width: 150,
       renderCell: (params) => humanDate(params.value),
     },
     {
       field: "action",
       headerName: "Action",
+      width: 100,
       renderCell: (params) => (
         <TableAction
           onUpdate={() => onUpdate(params.row.id)}
