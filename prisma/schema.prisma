@@ -37,16 +37,20 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String          @id @default(cuid())
+  email         String          @unique
   name          String?
   emailVerified DateTime?
   finances      Finance[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime?       @updatedAt
   Account       Account[]
   Session       Session[]
   Tag           Tag[]
+  Client        Client[]
+  Invoice       Invoice[]
+  InvoiceConfig InvoiceConfig[]
+  Order         Order[]
 }
 
 model VerificationToken {
@@ -72,9 +76,67 @@ model Finance {
 model Tag {
   id        String    @id @default(cuid())
   name      String    @unique
-  finances Finance[]
+  finances  Finance[]
   User      User      @relation(fields: [userId], references: [id])
   userId    String    @default("iztvu9ziqfcozg14gmpskwwk")
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+model Client {
+  id        String    @id @default(cuid())
+  ref       Int       @unique
+  name      String
+  email     String
+  phone     String?
+  address   String
+  siren     String?
+  ape       String?
+  nif       String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Invoice   Invoice[]
+  Owner     User      @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model InvoiceConfig {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  address   String
+  siren     String?
+  ape       String?
+  nif       String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId    String
+}
+
+model Order {
+  id           String    @id @default(cuid())
+  name         String    @unique
+  qte          Int
+  price        Decimal
+  deviseSuffix String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
+  invoice      Invoice   @relation(fields: [invoiceId], references: [id])
+  Owner        User      @relation(fields: [ownerId], references: [id])
+  ownerId       String
+  invoiceId    String
+}
+
+model Invoice {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  owner     User      @relation(fields: [ownerId], references: [id])
+  client    Client    @relation(fields: [clientId], references: [id])
+  clientId  String
+  ownerId    String
+  orders    Order[]
+  tva       Int?
 }

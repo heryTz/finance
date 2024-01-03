@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material";
 
-export function FinanceListLoader() {
+export function Loader() {
   return (
     <div
       style={{
