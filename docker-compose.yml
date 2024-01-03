@@ -8,4 +8,4 @@ services:
       - "8025:8025"
 
 volumes:
-  rh06:
+  finance:
