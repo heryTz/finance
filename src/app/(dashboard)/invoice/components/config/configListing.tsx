@@ -40,7 +40,7 @@ export function ConfigListing() {
           <ErrorSection />
         ) : (
           <Stack direction={"column"} gap={3}>
-            <Stack direction={"column"} gap={1}>
+            <Stack direction={"column"} gap={2}>
               <Typography>Prestataire</Typography>
               <Grid container spacing={2}>
                 <Grid item lg={6} style={{ width: "100%" }}>
