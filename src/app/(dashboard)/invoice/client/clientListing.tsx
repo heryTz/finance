@@ -1,3 +1,4 @@
+"use client";
 import { Block } from "@/components/block";
 import { Button } from "@mui/material";
 import { Loader } from "@/components/loader";
@@ -10,7 +11,7 @@ import { useGetInvoiceClient } from "./client-query";
 import { ClientSave } from "./client-save";
 import { ClientDelete } from "./client-delete";
 
-export function ClientListing() {
+export default function ClientListing() {
   const { data, isLoading, error, refetch } = useGetInvoiceClient();
   const { onOpen, reloader } = useClientSaveStore();
   const reloaderDelete = useClientDeleteStore((state) => state.reloader);

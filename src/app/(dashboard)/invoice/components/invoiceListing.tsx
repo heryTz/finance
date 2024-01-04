@@ -1,8 +1,9 @@
+"use client";
 import { Block } from "@/components/block";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 
-export function InvoiceListing() {
+export default function InvoiceListing() {
   const { push } = useRouter();
 
   return (

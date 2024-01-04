@@ -1,3 +1,4 @@
+"use client";
 import { Block } from "@/components/block";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { useInvoiceConfig, useInvoiceConfigSave } from "./config-query";
@@ -11,7 +12,7 @@ import { useEffect } from "react";
 
 type FormValue = SaveInvoiceConfigInput;
 
-export function ConfigListing() {
+export default function ConfigListing() {
   const { back } = useRouter();
   const { data, isLoading, error } = useInvoiceConfig();
   const { mutateAsync, isLoading: saveLoading } = useInvoiceConfigSave();
