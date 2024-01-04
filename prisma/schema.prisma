@@ -119,7 +119,7 @@ model Product {
   id        String    @id @default(cuid())
   name      String
   qte       Int
-  price     Decimal
+  price     Int
   currency  String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
