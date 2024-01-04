@@ -8,8 +8,9 @@ export function useColumnDefs() {
   const onDelete = useClientDeleteStore((state) => state.onDelete);
 
   const columns: GridColDef[] = [
+    { field: "ref", headerName: "Ref", width: 100 },
     { field: "name", headerName: "Nom", width: 400 },
-    { field: "email", headerName: "Email", width: 250  },
+    { field: "email", headerName: "Email", width: 250 },
     {
       field: "createdAt",
       headerName: "Création",
