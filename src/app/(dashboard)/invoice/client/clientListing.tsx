@@ -24,7 +24,7 @@ export function ClientListing() {
   return (
     <>
       <Block
-        title="Votre client"
+        title="Mes clients"
         actionBar={<Button onClick={onOpen}>Ajouter</Button>}
       >
         {!data || isLoading ? (

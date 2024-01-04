@@ -32,7 +32,7 @@ export function ConfigListing() {
   });
 
   return (
-    <Block title="Configuration de votre facture">
+    <Block title="Configuration de mes factures">
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {isLoading || !config ? (
           <Loader />
