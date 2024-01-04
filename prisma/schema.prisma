@@ -50,7 +50,7 @@ model User {
   Client        Client[]
   Invoice       Invoice[]
   InvoiceConfig InvoiceConfig[]
-  Order         Order[]
+  Products      Product[]
 }
 
 model VerificationToken {
@@ -97,7 +97,7 @@ model Client {
   updatedAt DateTime? @updatedAt
   Invoice   Invoice[]
   Owner     User      @relation(fields: [ownerId], references: [id])
-  ownerId    String
+  ownerId   String
 }
 
 model InvoiceConfig {
@@ -115,18 +115,18 @@ model InvoiceConfig {
   ownerId   String
 }
 
-model Order {
-  id           String    @id @default(cuid())
-  name         String
-  qte          Int
-  price        Decimal
-  deviseSuffix String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt
-  invoice      Invoice   @relation(fields: [invoiceId], references: [id])
-  Owner        User      @relation(fields: [ownerId], references: [id])
-  ownerId      String
-  invoiceId    String
+model Product {
+  id        String    @id @default(cuid())
+  name      String
+  qte       Int
+  price     Decimal
+  currency  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Invoice   Invoice   @relation(fields: [invoiceId], references: [id])
+  Owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+  invoiceId String
 }
 
 model Invoice {
@@ -134,9 +134,9 @@ model Invoice {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   owner     User      @relation(fields: [ownerId], references: [id])
-  client    Client    @relation(fields: [clientId], references: [id])
+  Client    Client    @relation(fields: [clientId], references: [id])
   clientId  String
   ownerId   String
-  orders    Order[]
+  Products  Product[]
   tva       Int?
 }

@@ -1,10 +1,11 @@
 "use client";
-import { Box, Paper, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { ConfigListing } from "./config/configListing";
 import { ClientListing } from "./client/clientListing";
+import { InvoiceListing } from "./components/invoiceListing";
 
 enum InvoiceTab {
   invoice = 1,
@@ -38,7 +39,7 @@ export default function InvoicePage() {
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
-        Item One
+        <InvoiceListing />
       </TabPanel>
       <TabPanel value={tab} index={1}>
         <ClientListing />
