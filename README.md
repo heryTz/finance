@@ -11,3 +11,4 @@ A simple application to manage your budget. You can see the demo with the inform
 
 - [ ] Make code base consistent
 - [ ] Use server action and server component if possible
+- [ ] Improve ```apiGuard``` by throw Exception when unauthorized
