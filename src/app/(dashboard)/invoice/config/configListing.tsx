@@ -1,6 +1,6 @@
 import { Block } from "@/components/block";
 import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
-import { useInvoiceConfig, useInvoiceConfigSave } from "../../invoice-query";
+import { useInvoiceConfig, useInvoiceConfigSave } from "./config-query";
 import { Loader } from "@/components/loader";
 import { ErrorSection } from "@/components/error-section";
 import { SaveInvoiceConfigInput } from "@/app/api/v1/invoice/config/route";

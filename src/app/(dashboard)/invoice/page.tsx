@@ -3,7 +3,7 @@ import { Box, Paper, Tab, Tabs } from "@mui/material";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
-import { ConfigListing } from "./components/config/configListing";
+import { ConfigListing } from "./config/configListing";
 import { ClientListing } from "./client/clientListing";
 
 enum InvoiceTab {
