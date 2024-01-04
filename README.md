@@ -9,5 +9,5 @@ A simple application to manage your budget. You can see the demo with the inform
 
 ## TODO
 
-[] Make code base consistent
-[] Use server action and server component if possible
+- [ ] Make code base consistent
+- [ ] Use server action and server component if possible
