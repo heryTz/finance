@@ -79,6 +79,25 @@ export function InvoiceSaveForm({ clients, products }: InvoiceSaveFormProps) {
             label="TVA (%)"
             {...register("tva", { valueAsNumber: true })}
           />
+          <Controller
+            control={control}
+            name={`currency`}
+            render={({ field }) => (
+              <TextField
+                select
+                fullWidth
+                label="Devise *"
+                value={field.value}
+                onChange={field.onChange}
+              >
+                {CURRENCY.map((el) => (
+                  <MenuItem key={el} value={el}>
+                    {el}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
           <Typography>Produits</Typography>
           <Stack direction={"column"} gap={2}>
             {productsField.fields.map((field, index) => (
@@ -128,25 +147,6 @@ export function InvoiceSaveForm({ clients, products }: InvoiceSaveFormProps) {
                     valueAsNumber: true,
                   })}
                 />
-                <Controller
-                  control={control}
-                  name={`products.${index}.currency`}
-                  render={({ field: fieldCur }) => (
-                    <TextField
-                      select
-                      label="Devise *"
-                      style={{ width: 100 }}
-                      value={fieldCur.value}
-                      onChange={fieldCur.onChange}
-                    >
-                      {CURRENCY.map((el) => (
-                        <MenuItem key={el} value={el}>
-                          {el}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
               </Stack>
             ))}
 
@@ -159,7 +159,6 @@ export function InvoiceSaveForm({ clients, products }: InvoiceSaveFormProps) {
                   name: "",
                   price: 0,
                   qte: 1,
-                  currency: "Ar",
                 })
               }
             >

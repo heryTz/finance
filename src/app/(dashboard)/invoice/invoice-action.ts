@@ -10,11 +10,20 @@ export async function createInvoice(input: CreateInvoiceInput) {
   const { user, resp } = await apiGuard();
   if (resp) throw new UnauthorizedException();
 
+  const lastInvoice = await prisma.invoice.findFirst({
+    where: { clientId: input.client },
+    orderBy: { ref: "desc" },
+  });
+  console.log({ lastInvoice });
+  const lastRef = lastInvoice?.ref ?? 0;
+
   const invoice = await prisma.invoice.create({
     data: {
       ownerId: user!.id,
       clientId: input.client,
       tva: input.tva || 0,
+      ref: lastRef + 1,
+      currency: input.currency,
     },
   });
 

@@ -120,7 +120,6 @@ model Product {
   name      String
   qte       Int
   price     Int
-  currency  String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   Invoice   Invoice   @relation(fields: [invoiceId], references: [id])
@@ -139,4 +138,8 @@ model Invoice {
   ownerId   String
   Products  Product[]
   tva       Int?
+  ref       Int
+  currency  String
+
+  @@unique([ref, clientId])
 }
