@@ -14,7 +14,6 @@ export async function createInvoice(input: CreateInvoiceInput) {
     where: { clientId: input.client },
     orderBy: { ref: "desc" },
   });
-  console.log({ lastInvoice });
   const lastRef = lastInvoice?.ref ?? 0;
 
   const invoice = await prisma.invoice.create({
