@@ -5,7 +5,6 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./globals.css";
 import type { Metadata } from "next";
-import Head from "next/head";
 import { AppProvider } from "./app-provider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
@@ -25,7 +24,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -40,7 +39,7 @@ export default async function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-      </Head>
+      </head>
       <body>
         <CssBaseline />
         <AppProvider session={session}>{children}</AppProvider>
