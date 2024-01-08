@@ -39,7 +39,7 @@ export function InvoiceTab({ tabs }: InvoiceTabProps) {
 }
 
 type InvoiceTabProps = {
-  tabs: { index: 0 | 1 | 2; title: string; component: ReactNode }[];
+  tabs: { index: 0 | 1 | 2 | 3; title: string; component: ReactNode }[];
 };
 
 function TabPanel(props: PropsWithChildren<{ value: number; index: number }>) {

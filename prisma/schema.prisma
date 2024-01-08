@@ -51,6 +51,7 @@ model User {
   Invoice       Invoice[]
   InvoiceConfig InvoiceConfig[]
   Products      Product[]
+  PaymentMode   PaymentMode[]
 }
 
 model VerificationToken {
@@ -128,18 +129,32 @@ model Product {
   invoiceId String
 }
 
+model PaymentMode {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  accountName String?
+  iban        String?
+  Owner       User      @relation(fields: [onwerId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  onwerId      String
+  Invoice     Invoice[]
+}
+
 model Invoice {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  owner     User      @relation(fields: [ownerId], references: [id])
-  Client    Client    @relation(fields: [clientId], references: [id])
-  clientId  String
-  ownerId   String
-  Products  Product[]
-  tva       Int?
-  ref       Int
-  currency  String
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime?   @updatedAt
+  owner         User        @relation(fields: [ownerId], references: [id])
+  Client        Client      @relation(fields: [clientId], references: [id])
+  clientId      String
+  ownerId       String
+  Products      Product[]
+  tva           Int?
+  ref           Int
+  currency      String
+  Payment       PaymentMode @relation(fields: [paymentModeId], references: [id])
+  paymentModeId String
 
   @@unique([ref, clientId])
 }
