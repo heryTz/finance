@@ -101,7 +101,9 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
           >
             <Typography variant="h5" sx={{ textAlign: "center" }}>
               Facture n° {invoice.ref} le{" "}
-              <span contentEditable="true">{dayjs().format("DD/MM/YYYY")}</span>
+              <span contentEditable="true" suppressContentEditableWarning>
+                {dayjs().format("DD/MM/YYYY")}
+              </span>
             </Typography>
             <Divider />
             <Stack direction={"row"} gap={4} justifyContent={"space-between"}>
