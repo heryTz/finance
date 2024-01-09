@@ -7,8 +7,8 @@ import { humanAmount, humanDate } from "@/app/helper";
 import { TableAction } from "@/components/table-action";
 import { useRouter } from "next/navigation";
 import { Product } from "@prisma/client";
-import { Box, Stack, Tooltip } from "@mui/material";
-import { Info } from "@mui/icons-material";
+import { Box, IconButton, Stack, Tooltip } from "@mui/material";
+import { Download, Info } from "@mui/icons-material";
 
 export function useColumnDefs() {
   const { push } = useRouter();
@@ -82,7 +82,7 @@ export function useColumnDefs() {
     {
       field: "action",
       headerName: "Action",
-      width: 100,
+      width: 150,
       renderCell: (params) => (
         <TableAction
           onUpdate={() => push(`/invoice/${params.row.id}/edit`)}
@@ -91,6 +91,14 @@ export function useColumnDefs() {
               id: params.row.id,
               label: `No ${params.row.ref}`,
             })
+          }
+          buttons={
+            <IconButton
+              size="small"
+              onClick={() => push(`/invoice/${params.row.id}/document`)}
+            >
+              <Download />
+            </IconButton>
           }
         />
       ),

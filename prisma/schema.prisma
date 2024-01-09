@@ -150,7 +150,7 @@ model Invoice {
   clientId      String
   ownerId       String
   Products      Product[]
-  tva           Int?
+  tva           Int         @default(0)
   ref           String
   currency      String
   Payment       PaymentMode @relation(fields: [paymentModeId], references: [id])
