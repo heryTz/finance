@@ -18,6 +18,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Loader } from "@/components/loader";
+import { revalidatePath } from "next/cache";
 
 type FormValue = {
   name: string;

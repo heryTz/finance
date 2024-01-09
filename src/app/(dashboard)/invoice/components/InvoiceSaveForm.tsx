@@ -1,7 +1,7 @@
 "use client";
 import { Block } from "@/components/block";
 import { GetClients } from "../client/client-service";
-import { GetProducts } from "../invoice-service";
+import { GetInvoiceById, GetProducts } from "../invoice-service";
 import {
   Autocomplete,
   Button,
@@ -12,8 +12,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { createInvoice } from "../invoice-action";
-import { CURRENCY } from "../invoice-util";
+import { createInvoice, updateInvoice } from "../invoice-action";
+import { CURRENCY, Currency } from "../invoice-util";
 import { Add, Delete } from "@mui/icons-material";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,14 +27,18 @@ export function InvoiceSaveForm({
   clients,
   products,
   paymentsMode,
+  invoice,
 }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
   const { register, formState, control, handleSubmit } =
     useForm<CreateInvoiceInput>({
       defaultValues: {
-        tva: 0,
-        products: [],
+        tva: invoice?.tva ?? 0,
+        products: invoice?.Products ?? [],
+        clientId: invoice?.clientId,
+        currency: invoice?.currency as Currency,
+        paymentModeId: invoice?.paymentModeId,
       },
       resolver: zodResolver(createInvoiceSchema),
     });
@@ -50,7 +54,8 @@ export function InvoiceSaveForm({
   const onSubmit = handleSubmit(async (data) => {
     startTransition(async () => {
       try {
-        await createInvoice(data);
+        if (invoice) await updateInvoice(invoice.id, data);
+        else await createInvoice(data);
       } catch (error: any) {
         enqueueSnackbar({
           message: error?.message ?? "Une erreur est survenue.",
@@ -61,12 +66,18 @@ export function InvoiceSaveForm({
   });
 
   return (
-    <Block title="Créer une facture">
+    <Block
+      title={
+        invoice
+          ? `Modification de la facture No ${invoice.ref}`
+          : "Créer une facture"
+      }
+    >
       <Stack direction={"column"} gap={3} sx={{ mt: 2 }}>
         <Stack direction={"column"} gap={2}>
           <Controller
             control={control}
-            name="client"
+            name="clientId"
             render={({ field }) => (
               <Autocomplete
                 value={clientOptions.find((el) => el.id === field.value)}
@@ -105,7 +116,7 @@ export function InvoiceSaveForm({
           />
           <Controller
             control={control}
-            name="paymentMode"
+            name="paymentModeId"
             render={({ field }) => (
               <Autocomplete
                 value={paymentsMode.find((el) => el.id === field.value)}
@@ -207,4 +218,5 @@ type InvoiceSaveFormProps = {
   clients: GetClients;
   products: GetProducts;
   paymentsMode: GetPaymentsMode["results"];
+  invoice?: GetInvoiceById;
 };

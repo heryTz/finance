@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import { useClientDeleteStore } from "./client-store";
 import { useDeleteInvoiceClient } from "./client-query";
+import { revalidatePath } from "next/cache";
 
 export function ClientDelete() {
   const { open, onClose, itemToDelete, onFinish } = useClientDeleteStore();

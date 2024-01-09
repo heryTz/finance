@@ -16,3 +16,12 @@ export async function getInvoices() {
 }
 
 export type GetInvoices = Awaited<ReturnType<typeof getInvoices>>;
+
+export async function getInvoiceById(id: string) {
+  return await prisma.invoice.findFirst({
+    where: { id },
+    include: { Products: true },
+  });
+}
+
+export type GetInvoiceById = Awaited<ReturnType<typeof getInvoiceById>>;

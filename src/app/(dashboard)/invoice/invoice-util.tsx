@@ -1,4 +1,5 @@
 export const CURRENCY = ["Ar", "EUR"] as const;
+export type Currency = (typeof CURRENCY)[number];
 
 import { GridColDef } from "@mui/x-data-grid";
 import { useInvoiceDeleteStore } from "./invoice-store";
