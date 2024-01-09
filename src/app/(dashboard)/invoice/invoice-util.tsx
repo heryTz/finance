@@ -87,7 +87,10 @@ export function useColumnDefs() {
         <TableAction
           onUpdate={() => push(`/invoice/${params.row.id}/edit`)}
           onDelete={() =>
-            onDelete({ id: params.row.id, label: params.row.name })
+            onDelete({
+              id: params.row.id,
+              label: `No ${params.row.ref}`,
+            })
           }
         />
       ),

@@ -62,3 +62,11 @@ export async function updateInvoice(id: string, input: CreateInvoiceInput) {
   revalidatePath("/invoice");
   redirect("/invoice");
 }
+
+export async function deleteInvoice(id: string) {
+  const { resp } = await apiGuard();
+  if (resp) throw new UnauthorizedException();
+
+  await prisma.invoice.delete({ where: { id } });
+  revalidatePath("/invoice");
+}

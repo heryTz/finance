@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { GetInvoices } from "../invoice-service";
 import { DataGrid } from "@mui/x-data-grid";
 import { useColumnDefs } from "../invoice-util";
+import { InvoiceDelete } from "./invoice-delete";
 
 export default function InvoiceListing({ invoices }: InvoiceListingProps) {
   const { push } = useRouter();
@@ -29,6 +30,7 @@ export default function InvoiceListing({ invoices }: InvoiceListingProps) {
           },
         }}
       />
+      <InvoiceDelete />
     </Block>
   );
 }

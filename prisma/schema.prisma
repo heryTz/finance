@@ -123,7 +123,7 @@ model Product {
   price     Int
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-  Invoice   Invoice   @relation(fields: [invoiceId], references: [id])
+  Invoice   Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   Owner     User      @relation(fields: [ownerId], references: [id])
   ownerId   String
   invoiceId String
@@ -137,7 +137,7 @@ model PaymentMode {
   Owner       User      @relation(fields: [onwerId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
-  onwerId      String
+  onwerId     String
   Invoice     Invoice[]
 }
 
