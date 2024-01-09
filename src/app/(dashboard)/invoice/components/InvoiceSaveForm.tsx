@@ -21,8 +21,13 @@ import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-action-dto";
 import { useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
+import { GetPaymentsMode } from "../payments-mode/payments-service";
 
-export function InvoiceSaveForm({ clients, products }: InvoiceSaveFormProps) {
+export function InvoiceSaveForm({
+  clients,
+  products,
+  paymentsMode,
+}: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
   const { register, formState, control, handleSubmit } =
@@ -98,6 +103,22 @@ export function InvoiceSaveForm({ clients, products }: InvoiceSaveFormProps) {
               </TextField>
             )}
           />
+          <Controller
+            control={control}
+            name="paymentMode"
+            render={({ field }) => (
+              <Autocomplete
+                value={paymentsMode.find((el) => el.id === field.value)}
+                onChange={(_, v) => field.onChange(v?.id)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Mode de paiement *" />
+                )}
+                options={paymentsMode}
+                isOptionEqualToValue={(o, v) => o.id === v.id}
+                getOptionLabel={(o) => o.name}
+              />
+            )}
+          />
           <Typography>Produits</Typography>
           <Stack direction={"column"} gap={2}>
             {productsField.fields.map((field, index) => (
@@ -133,7 +154,7 @@ export function InvoiceSaveForm({ clients, products }: InvoiceSaveFormProps) {
                 />
                 <TextField
                   type="number"
-                  label="Prix *"
+                  label="Prix unitaire *"
                   style={{ width: 200 }}
                   {...register(`products.${index}.price`, {
                     valueAsNumber: true,
@@ -185,4 +206,5 @@ export function InvoiceSaveForm({ clients, products }: InvoiceSaveFormProps) {
 type InvoiceSaveFormProps = {
   clients: GetClients;
   products: GetProducts;
+  paymentsMode: GetPaymentsMode["results"];
 };

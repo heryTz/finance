@@ -23,6 +23,7 @@ export async function createInvoice(input: CreateInvoiceInput) {
       tva: input.tva || 0,
       ref: lastRef + 1,
       currency: input.currency,
+      paymentModeId: input.paymentMode,
     },
   });
 
