@@ -37,16 +37,21 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String        @id @default(cuid())
+  email         String        @unique
   name          String?
   emailVerified DateTime?
   finances      Finance[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
   Account       Account[]
   Session       Session[]
   Tag           Tag[]
+  Client        Client[]
+  Invoice       Invoice[]
+  Provider      Provider[]
+  Products      Product[]
+  PaymentMode   PaymentMode[]
 }
 
 model VerificationToken {
@@ -72,9 +77,84 @@ model Finance {
 model Tag {
   id        String    @id @default(cuid())
   name      String    @unique
-  finances Finance[]
+  finances  Finance[]
   User      User      @relation(fields: [userId], references: [id])
   userId    String    @default("iztvu9ziqfcozg14gmpskwwk")
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+model Client {
+  id        String    @id @default(cuid())
+  ref       String    @unique
+  name      String
+  email     String
+  phone     String?
+  address   String
+  siren     String?
+  ape       String?
+  nif       String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Invoice   Invoice[]
+  Owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+}
+
+model Provider {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  address   String
+  siren     String?
+  ape       String?
+  nif       String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+}
+
+model Product {
+  id        String    @id @default(cuid())
+  name      String
+  qte       Int
+  price     Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Invoice   Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  Owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String
+  invoiceId String
+}
+
+model PaymentMode {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  accountName String?
+  iban        String?
+  Owner       User      @relation(fields: [onwerId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  onwerId     String
+  Invoice     Invoice[]
+}
+
+model Invoice {
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime?   @updatedAt
+  owner         User        @relation(fields: [ownerId], references: [id])
+  Client        Client      @relation(fields: [clientId], references: [id])
+  clientId      String
+  ownerId       String
+  Products      Product[]
+  tva           Int         @default(0)
+  ref           String
+  currency      String
+  Payment       PaymentMode @relation(fields: [paymentModeId], references: [id])
+  paymentModeId String
+
+  @@unique([ref, clientId])
 }

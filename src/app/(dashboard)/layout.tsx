@@ -27,6 +27,7 @@ import {
   ChevronLeft,
   Dashboard,
   Menu as MenuIcon,
+  Wallet,
 } from "@mui/icons-material";
 import Link from "next/link";
 import { AdminGuard } from "../guards/admin-guard";
@@ -103,6 +104,7 @@ function Component({ children }: PropsWithChildren<{}>) {
   const menus = [
     { label: "Dashboard", href: "/", icon: <Dashboard /> },
     { label: "Finance", href: "/finance", icon: <AccountBalance /> },
+    { label: "Facture", href: "/invoice", icon: <Wallet /> },
   ];
   const tabsIndex = menus.findIndex((el) => el.href === pathname);
 

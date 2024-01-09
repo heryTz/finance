@@ -1,8 +1,16 @@
 # FINANCE
 
-A simple application to manage your budget. You can see the demo with the information below.
+⚠️ The aim of this project is to experiment with the new features of NextJS.
 
-- demo: https://finance.devlogger.net
-- mail: test-test@yopmail.fr
+A simple application to manage your budget and invoice. You can see the demo with the information below.
 
-![](https://github.com/heryTz/finance/blob/main/demo.gif)
+- demo: <https://finance.herynirintsoa.com>
+- mail: <test-test@yopmail.fr>
+
+![Finance demo](https://github.com/heryTz/finance/blob/main/demo.gif)
+
+## TODO
+
+- [ ] Make code base consistent
+- [ ] Use server action and server component if possible
+- [ ] Improve ```apiGuard``` by throw Exception when unauthorized

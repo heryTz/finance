@@ -3,12 +3,13 @@ import { Block } from "@/components/block";
 import { Button, Grid } from "@mui/material";
 import { useFinances } from "./finance-query";
 import { ErrorSection } from "@/components/error-section";
-import { FinanceDelete, FinanceListLoader, FinanceSave } from "./components";
+import { FinanceDelete, FinanceSave } from "./components";
 import { DataGrid } from "@mui/x-data-grid";
 import { MiniGlobalBilan } from "@/components/mini-global-bilan";
 import { useFinanceDeleteStore, useFinanceSaveStore } from "./finance-store";
 import { useEffect } from "react";
 import { useColumnDefs } from "./finance-util";
+import { Loader } from "@/components/loader";
 
 export default function Finance() {
   const { data, isLoading, error, refetch } = useFinances();
@@ -35,7 +36,7 @@ export default function Finance() {
           actionBar={<Button onClick={onOpen}>Ajouter</Button>}
         >
           {isLoading ? (
-            <FinanceListLoader />
+            <Loader />
           ) : error ? (
             <ErrorSection />
           ) : (
