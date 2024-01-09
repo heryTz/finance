@@ -237,7 +237,15 @@ function PartenaireShip(props: {
       <Stack direction={"column"} gap={1}>
         {props.data.map((el) => (
           <Typography key={el.label} sx={{ fontSize: 12 }}>
-            <strong>{el.label}:</strong> {el.value}
+            <strong
+              style={{
+                width: 70,
+                display: "inline-block",
+              }}
+            >
+              {el.label}:
+            </strong>{" "}
+            {el.value}
           </Typography>
         ))}
       </Stack>
