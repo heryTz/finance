@@ -1,6 +1,4 @@
-import { apiGuard } from "@/app/guards/api-guard";
 import { prisma } from "@/app/helper/prisma";
-import { UnauthorizedException } from "@/util/http";
 
 export async function getProducts() {
   const products = await prisma.product.findMany({ orderBy: { name: "asc" } });
@@ -27,14 +25,3 @@ export async function getInvoiceById(id: string) {
 }
 
 export type GetInvoiceById = Awaited<ReturnType<typeof getInvoiceById>>;
-
-export async function getInvoiceConfig() {
-  const { user, resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
-
-  return await prisma.invoiceConfig.findFirstOrThrow({
-    where: { ownerId: user!.id },
-  });
-}
-
-export type GetInvoiceConfig = Awaited<ReturnType<typeof getInvoiceConfig>>;

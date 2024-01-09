@@ -1,9 +1,9 @@
 import { apiGuard } from "@/app/guards/api-guard";
 import { prisma } from "@/app/helper/prisma";
-import { InvoiceConfig } from "@prisma/client";
+import { Provider } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export type SaveInvoiceConfigInput = {
+export type SaveProviderInput = {
   name: string;
   email: string;
   phone: string | null;
@@ -17,36 +17,36 @@ export async function POST(request: Request) {
   const { user, resp } = await apiGuard();
   if (resp) return resp;
 
-  const input = (await request.json()) as SaveInvoiceConfigInput;
+  const input = (await request.json()) as SaveProviderInput;
 
   const data = { ...input, ownerId: user!.id };
-  const existConfig = await prisma.invoiceConfig.findFirst({
+  const existConfig = await prisma.provider.findFirst({
     where: { ownerId: user!.id },
   });
 
-  let config: InvoiceConfig;
+  let provider: Provider;
   if (existConfig) {
-    config = await prisma.invoiceConfig.update({
+    provider = await prisma.provider.update({
       where: { id: existConfig.id },
       data,
     });
   } else {
-    config = await prisma.invoiceConfig.create({ data });
+    provider = await prisma.provider.create({ data });
   }
 
-  return NextResponse.json(config);
+  return NextResponse.json(provider);
 }
 
 export async function GET() {
   const { user, resp } = await apiGuard();
   if (resp) return resp;
 
-  const config = await prisma.invoiceConfig.findFirst({
+  const provider = await prisma.provider.findFirst({
     where: { ownerId: user!.id },
   });
 
-  if (!config) {
-    const newConfig = await prisma.invoiceConfig.create({
+  if (!provider) {
+    const newProvider = await prisma.provider.create({
       data: {
         ownerId: user!.id,
         address: "",
@@ -54,8 +54,8 @@ export async function GET() {
         name: "",
       },
     });
-    return NextResponse.json(newConfig);
+    return NextResponse.json(newProvider);
   }
 
-  return NextResponse.json(config);
+  return NextResponse.json(provider);
 }

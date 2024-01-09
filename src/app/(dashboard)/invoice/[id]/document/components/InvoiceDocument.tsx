@@ -23,11 +23,12 @@ import {
 } from "@mui/material";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { GetInvoiceById, GetInvoiceConfig } from "../../../invoice-service";
+import { GetInvoiceById } from "../../../invoice-service";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { getProvider } from "../../../provider/provider-service";
 
-export function InvoiceDocument({ invoice, config }: InvoiceDocumentProps) {
+export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   const defaultFilename = `${invoice.ref}_${dayjs().format(
     "DDMMYYYY"
   )}_${invoice.Client.name.replace(" ", "-")}.pdf`;
@@ -46,17 +47,17 @@ export function InvoiceDocument({ invoice, config }: InvoiceDocumentProps) {
       }
     }
     pdf.save(filename);
-    setOpenSave(false)
+    setOpenSave(false);
   };
 
-  const provider = [
-    { label: "Nom", value: config.name.toUpperCase() },
-    { label: "Adresse", value: config.address },
-    { label: "Email", value: config.email },
-    { label: "Tel", value: config.phone },
-    { label: "NIF", value: config.nif },
-    { label: "SIREN", value: config.siren },
-    { label: "APE", value: config.ape },
+  const providerData = [
+    { label: "Nom", value: provider.name.toUpperCase() },
+    { label: "Adresse", value: provider.address },
+    { label: "Email", value: provider.email },
+    { label: "Tel", value: provider.phone },
+    { label: "NIF", value: provider.nif },
+    { label: "SIREN", value: provider.siren },
+    { label: "APE", value: provider.ape },
   ];
 
   const client = [
@@ -106,7 +107,7 @@ export function InvoiceDocument({ invoice, config }: InvoiceDocumentProps) {
             <Stack direction={"row"} gap={4} justifyContent={"space-between"}>
               <PartenaireShip
                 title="Prestataire"
-                data={provider.filter((el) => !!el.value) as any}
+                data={providerData.filter((el) => !!el.value) as any}
               />
               <PartenaireShip
                 title="Client"
@@ -277,5 +278,5 @@ function DescriptionResume(props: {
 
 type InvoiceDocumentProps = {
   invoice: NonNullable<GetInvoiceById>;
-  config: GetInvoiceConfig;
+  provider: getProvider;
 };
