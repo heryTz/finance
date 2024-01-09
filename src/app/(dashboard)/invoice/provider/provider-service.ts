@@ -11,4 +11,4 @@ export async function getProvider() {
   });
 }
 
-export type getProvider = Awaited<ReturnType<typeof getProvider>>;
+export type GetProvider = Awaited<ReturnType<typeof getProvider>>;

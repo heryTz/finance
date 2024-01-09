@@ -26,7 +26,7 @@ import jsPDF from "jspdf";
 import { GetInvoiceById } from "../../../invoice-service";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { getProvider } from "../../../provider/provider-service";
+import { GetProvider } from "../../../provider/provider-service";
 
 export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   const defaultFilename = `${invoice.ref}_${dayjs().format(
@@ -286,5 +286,5 @@ function DescriptionResume(props: {
 
 type InvoiceDocumentProps = {
   invoice: NonNullable<GetInvoiceById>;
-  provider: getProvider;
+  provider: GetProvider;
 };
