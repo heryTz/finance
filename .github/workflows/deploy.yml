@@ -22,5 +22,7 @@ jobs:
             cd ~/finance/app && \
             git pull origin main && \
             pnpm install && \
+            npx prisma generate && \
+            npx prisma migrate dev && \
             pnpm build && \
             pm2 restart finance"
