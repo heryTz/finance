@@ -12,16 +12,17 @@ export async function createInvoice(input: CreateInvoiceInput) {
   if (resp) throw new UnauthorizedException();
 
   const { products, ...data } = input;
-  const lastInvoice = await prisma.invoice.findFirst({
+  const nbInvoice = await prisma.invoice.count({
     where: { clientId: data.clientId },
-    orderBy: { ref: "desc" },
   });
-  const lastRef = lastInvoice?.ref ?? 0;
+  const client = await prisma.client.findFirstOrThrow({
+    where: { id: data.clientId },
+  });
 
   const invoice = await prisma.invoice.create({
     data: {
       ownerId: user!.id,
-      ref: lastRef + 1,
+      ref: `${client.ref}-${nbInvoice + 1}`,
       ...data,
     },
   });

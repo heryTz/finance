@@ -86,7 +86,7 @@ model Tag {
 
 model Client {
   id        String    @id @default(cuid())
-  ref       Int       @unique
+  ref       String    @unique
   name      String
   email     String
   phone     String?
@@ -151,7 +151,7 @@ model Invoice {
   ownerId       String
   Products      Product[]
   tva           Int?
-  ref           Int
+  ref           String
   currency      String
   Payment       PaymentMode @relation(fields: [paymentModeId], references: [id])
   paymentModeId String

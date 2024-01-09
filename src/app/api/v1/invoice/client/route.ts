@@ -11,7 +11,9 @@ export async function GET() {
   const { user, resp } = await apiGuard();
   if (resp) return resp;
 
-  const clients = await prisma.client.findMany({ where: { ownerId: user!.id } });
+  const clients = await prisma.client.findMany({
+    where: { ownerId: user!.id },
+  });
 
   return NextResponse.json<GetClientResponse>({ results: clients });
 }
@@ -31,13 +33,12 @@ export async function POST(request: Request) {
   if (resp) return resp;
 
   const input = (await request.json()) as SaveInvoiceClientInput;
-  const lastClient = await prisma.client.findFirst({
-    orderBy: { createdAt: "desc" },
+  const nbClient = await prisma.client.count({
+    where: { ownerId: user!.id },
   });
-  const lastRef = lastClient?.ref ?? 0;
 
   const newClient = await prisma.client.create({
-    data: { ...input, ref: lastRef + 1, ownerId: user!.id },
+    data: { ...input, ref: `C${nbClient + 1}`, ownerId: user!.id },
   });
 
   return NextResponse.json(newClient);
