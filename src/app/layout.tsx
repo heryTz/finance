@@ -7,8 +7,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { AppProvider } from "./app-provider";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import { CssBaseline } from "@mui/material";
+import { authOptions } from "./api/auth/[...nextauth]/options";
 
 export const metadata: Metadata = {
   title: "FINANCE",
