@@ -1,9 +1,9 @@
 import { ConfirmationModal } from "@/components/modal";
 import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
-import { useInvoiceDeleteStore } from "../invoice-store";
+import { useInvoiceDeleteStore } from "./invoice-store";
 import { useTransition } from "react";
-import { deleteInvoice } from "../invoice-action";
+import { deleteInvoice } from "./invoice-action";
 
 export function InvoiceDelete() {
   const { open, onClose, itemToDelete, onFinish } = useInvoiceDeleteStore();

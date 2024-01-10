@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { GetInvoiceById } from "../../../invoice-service";
+import { GetInvoiceById } from "../../../(index)/invoice-service";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { GetProvider } from "../../../provider/provider-service";

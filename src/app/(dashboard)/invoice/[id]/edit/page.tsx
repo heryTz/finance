@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { getInvoiceById, getProducts } from "../../invoice-service";
+import { getInvoiceById, getProducts } from "../../(index)/invoice-service";
 import { getClients } from "../../client/client-service";
 import { getPaymentsMode } from "../../payments-mode/payments-service";
-import { InvoiceSaveForm } from "../../components/invoice-save-form";
+import { InvoiceSaveForm } from "../../(index)/invoice-save-form";
 
 export default async function EditInvoice({ params }: EditInvoiceProps) {
   const invoice = await getInvoiceById(params.id);

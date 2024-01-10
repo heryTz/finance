@@ -1,6 +1,6 @@
 import { getClients } from "../client/client-service";
-import { InvoiceSaveForm } from "../components/invoice-save-form";
-import { getProducts } from "../invoice-service";
+import { InvoiceSaveForm } from "../(index)/invoice-save-form";
+import { getProducts } from "../(index)/invoice-service";
 import { getPaymentsMode } from "../payments-mode/payments-service";
 
 export default async function NewInvoice() {

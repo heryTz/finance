@@ -1,7 +1,7 @@
 "use client";
 import { Block } from "@/components/block";
 import { GetClients } from "../client/client-service";
-import { GetInvoiceById, GetProducts } from "../invoice-service";
+import { GetInvoiceById, GetProducts } from "./invoice-service";
 import {
   Autocomplete,
   Button,
@@ -12,13 +12,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { createInvoice, updateInvoice } from "../invoice-action";
-import { CURRENCY, Currency } from "../invoice-util";
+import { createInvoice, updateInvoice } from "./invoice-action";
+import { CURRENCY, Currency } from "./invoice-util";
 import { Add, Delete } from "@mui/icons-material";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-action-dto";
+import { CreateInvoiceInput, createInvoiceSchema } from "./invoice-action-dto";
 import { useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
 import { GetPaymentsMode } from "../payments-mode/payments-service";

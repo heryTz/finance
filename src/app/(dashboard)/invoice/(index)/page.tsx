@@ -1,10 +1,10 @@
-import ProviderSetup from "./provider/provider-setup";
-import ClientListing from "./client/client-listing";
-import InvoiceListing from "./components/invoice-listing";
+import ProviderSetup from "../provider/provider-setup";
+import ClientListing from "../client/client-listing";
 import { getInvoices } from "./invoice-service";
-import { InvoiceTab } from "./components/invoice-tab";
-import PaymentsModeListing from "./payments-mode/payments-mode-listing";
-import { getPaymentsMode } from "./payments-mode/payments-service";
+import { InvoiceTab } from "./invoice-tab";
+import PaymentsModeListing from "../payments-mode/payments-mode-listing";
+import { getPaymentsMode } from "../payments-mode/payments-service";
+import InvoiceListing from "./invoice-listing";
 
 // 🥵 WFT! make "ClientListing", "InvoiceLising", "ProviderSetup" as default export solve this problem
 // Element type is invalid. Received a promise that resolves to: undefined. Lazy element type must resolve to a class or function.
