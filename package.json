@@ -27,7 +27,6 @@
     "dayjs": "^1.11.10",
     "eslint": "8.47.0",
     "eslint-config-next": "14.0.4",
-    "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "next": "14.0.4",
     "next-auth": "^4.24.5",

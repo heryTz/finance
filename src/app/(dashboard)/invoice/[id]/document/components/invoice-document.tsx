@@ -21,7 +21,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { GetInvoiceById } from "../../../(index)/invoice-service";
 import dayjs from "dayjs";
@@ -36,18 +35,18 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   const [openSave, setOpenSave] = useState(false);
 
   const print = async () => {
-    const pages = document.querySelectorAll<HTMLDivElement>(".invoice-pdf");
+    const content = document.querySelector<HTMLDivElement>(".invoice-pdf")!;
     const pdf = new jsPDF();
-    for (let i = 0; i < pages.length; i++) {
-      const canvas = await html2canvas(pages[i]);
-      const imgData = canvas.toDataURL("image/png");
-      pdf.addImage(imgData, "JPEG", 0, 0, 0, 0);
-      if (i !== pages.length - 1) {
-        pdf.addPage();
-      }
-    }
-    pdf.save(filename);
-    setOpenSave(false);
+    pdf.html(content, {
+      callback(doc) {
+        doc.save(filename);
+        setOpenSave(false);
+      },
+      x: 5,
+      y: 5,
+      width: 180,
+      windowWidth: 675,
+    });
   };
 
   const providerData = [
