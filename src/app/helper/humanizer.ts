@@ -1,7 +1,10 @@
 import dayjs from "dayjs";
 
 export function humanAmount(nb: number) {
-  return Intl.NumberFormat().format(nb);
+  return Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(nb);
 }
 
 export function humanDate(date: Date | string | null) {
