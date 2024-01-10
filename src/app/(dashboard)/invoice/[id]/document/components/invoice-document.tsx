@@ -140,30 +140,32 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
                       </TableCell>
                       <TableCell align="right">{el.qte}</TableCell>
                       <TableCell align="right">
-                        {humanAmount(el.price)} Ar
+                        {humanAmount(el.price)} {invoice.currency}
                       </TableCell>
                       <TableCell align="right">
-                        {humanAmount(el.price)} Ar
+                        {humanAmount(el.price)} {invoice.currency}
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-            <Box maxWidth={"300px"} marginLeft={"auto"}>
+            <Box maxWidth={"400px"} marginLeft={"auto"} width={"100%"}>
               <DescriptionResume
                 label="Total HT"
-                value={`${humanAmount(sumProductsHT)} Ar`}
+                value={`${humanAmount(sumProductsHT)} ${invoice.currency}`}
               />
               <Divider />
               <DescriptionResume
                 label={`TVA à ${invoice.tva}%`}
-                value={`${tvaAmount} Ar`}
+                value={`${tvaAmount} ${invoice.currency}`}
               />
               <Divider />
               <DescriptionResume
                 label="Total TTC"
-                value={`${humanAmount(sumProductsHT + tvaAmount)} Ar`}
+                value={`${humanAmount(sumProductsHT + tvaAmount)} ${
+                  invoice.currency
+                }`}
                 accent
               />
             </Box>
