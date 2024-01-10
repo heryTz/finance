@@ -1,7 +1,10 @@
 import { prisma } from "@/app/helper/prisma";
 
 export async function getProducts() {
-  const products = await prisma.product.findMany({ orderBy: { name: "asc" } });
+  const products = await prisma.product.findMany({
+    orderBy: { name: "asc" },
+    distinct: ["name"],
+  });
   return { results: products };
 }
 
