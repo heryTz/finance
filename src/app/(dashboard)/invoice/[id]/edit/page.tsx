@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getInvoiceById, getProducts } from "../../invoice-service";
 import { getClients } from "../../client/client-service";
 import { getPaymentsMode } from "../../payments-mode/payments-service";
-import { InvoiceSaveForm } from "../../components/InvoiceSaveForm";
+import { InvoiceSaveForm } from "../../components/invoice-save-form";
 
 export default async function EditInvoice({ params }: EditInvoiceProps) {
   const invoice = await getInvoiceById(params.id);

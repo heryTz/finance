@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getInvoiceById } from "../../invoice-service";
-import { InvoiceDocument } from "./components/InvoiceDocument";
+import { InvoiceDocument } from "./components/invoice-document";
 import { getProvider } from "../../provider/provider-service";
 
 export default async function InvoiceDocumentPage({

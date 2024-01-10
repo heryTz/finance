@@ -1,8 +1,8 @@
 import ProviderSetup from "./provider/provider-setup";
-import ClientListing from "./client/clientListing";
-import InvoiceListing from "./components/invoiceListing";
+import ClientListing from "./client/client-listing";
+import InvoiceListing from "./components/invoice-listing";
 import { getInvoices } from "./invoice-service";
-import { InvoiceTab } from "./components/InvoiceTab";
+import { InvoiceTab } from "./components/invoice-tab";
 import PaymentsModeListing from "./payments-mode/payments-mode-listing";
 import { getPaymentsMode } from "./payments-mode/payments-service";
 

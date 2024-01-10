@@ -1,5 +1,5 @@
 import { getClients } from "../client/client-service";
-import { InvoiceSaveForm } from "../components/InvoiceSaveForm";
+import { InvoiceSaveForm } from "../components/invoice-save-form";
 import { getProducts } from "../invoice-service";
 import { getPaymentsMode } from "../payments-mode/payments-service";
 
