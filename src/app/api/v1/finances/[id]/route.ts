@@ -51,7 +51,7 @@ export async function PUT(request: Request, { params }: IdParams) {
   }
 
   const financeUpdated = await prisma.finance.update({
-    where: { id: params.id },
+    where: { id: params.id, userId: user!.id },
     data: {
       amount: input.amount,
       label: input.label,
@@ -71,10 +71,10 @@ export async function PUT(request: Request, { params }: IdParams) {
 }
 
 export async function DELETE(request: Request, { params }: IdParams) {
-  const { resp } = await apiGuard();
+  const { resp, user } = await apiGuard();
   if (resp) return resp;
 
-  await prisma.finance.delete({ where: { id: params.id } });
+  await prisma.finance.delete({ where: { id: params.id, userId: user!.id } });
   return NextResponse.json<DeleteFinanceResponse>({ message: "ok" });
 }
 

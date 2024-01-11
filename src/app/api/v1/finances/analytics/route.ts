@@ -10,14 +10,12 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 export async function GET() {
-  const { session, resp } = await apiGuard();
+  const { resp, user } = await apiGuard();
   if (resp) return resp;
 
   const finances = await prisma.finance.findMany({
     where: {
-      User: {
-        email: session?.user?.email!,
-      },
+      userId: user!.id,
       createdAt: {
         lte: dayjs().endOf("year").toDate(),
         gte: dayjs().startOf("year").toDate(),
@@ -51,13 +49,20 @@ export async function GET() {
   const prevAmount = await prisma.finance.groupBy({
     by: ["type"],
     where: {
+      userId: user!.id,
       createdAt: { lte: dayjs().add(-1, "year").endOf("year").toDate() },
     },
     _sum: { amount: true },
   });
 
-  expense[0] += prevAmount.find(el => el.type === FinanceType.depense)?._sum.amount?.toNumber() ?? 0;
-  income[0] += prevAmount.find(el => el.type === FinanceType.revenue)?._sum.amount?.toNumber() ?? 0;
+  expense[0] +=
+    prevAmount
+      .find((el) => el.type === FinanceType.depense)
+      ?._sum.amount?.toNumber() ?? 0;
+  income[0] +=
+    prevAmount
+      .find((el) => el.type === FinanceType.revenue)
+      ?._sum.amount?.toNumber() ?? 0;
   const profit = profitEvo(income, expense);
 
   return NextResponse.json<FinanceAnalytics>({

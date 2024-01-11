@@ -5,7 +5,7 @@ import { apiGuard } from "@/app/guards/api-guard";
 import { prisma } from "@/app/helper/prisma";
 
 export async function GET(req: NextRequest) {
-  const { session, resp } = await apiGuard();
+  const { resp, user } = await apiGuard();
   if (resp) return resp;
 
   const query = req.nextUrl.searchParams;
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   const finances = await prisma.finance.findMany({
     where: {
-      User: { email: session?.user?.email! },
+      userId: user!.id,
       ...(q ? { label: { contains: q } } : {}),
     },
     orderBy: { createdAt: "desc" },
@@ -25,26 +25,30 @@ export async function GET(req: NextRequest) {
   const amounts = await prisma.finance.groupBy({
     by: ["type"],
     _sum: { amount: true },
+    where: {
+      userId: user!.id,
+    },
   });
 
   return NextResponse.json<GetFinanceResponse>({
     results: finances,
     stats: {
       expense:
-        amounts.find((el) => el.type === FinanceType.depense)?._sum.amount?.toNumber() ?? 0,
+        amounts
+          .find((el) => el.type === FinanceType.depense)
+          ?._sum.amount?.toNumber() ?? 0,
       income:
-        amounts.find((el) => el.type === FinanceType.revenue)?._sum.amount?.toNumber() ?? 0,
+        amounts
+          .find((el) => el.type === FinanceType.revenue)
+          ?._sum.amount?.toNumber() ?? 0,
     },
   });
 }
 
 export async function POST(request: Request) {
-  const { session, resp } = await apiGuard();
+  const { resp, user } = await apiGuard();
   if (resp) return resp;
 
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { email: session?.user?.email! },
-  });
   const input = (await request.json()) as SaveFinanceInput;
 
   let tags: Tag[] = [];
@@ -52,7 +56,7 @@ export async function POST(request: Request) {
     await Promise.all(
       input.tags.map((el) =>
         prisma.tag.upsert({
-          create: { name: el, userId: user.id },
+          create: { name: el, userId: user!.id },
           update: {},
           where: { name: el },
         })
@@ -70,7 +74,7 @@ export async function POST(request: Request) {
       type: input.type,
       createdAt: input.createdAt,
       tags: { connect: tags.map((el) => ({ id: el.id })) },
-      userId: user.id,
+      userId: user!.id,
     },
     include: {
       tags: true,

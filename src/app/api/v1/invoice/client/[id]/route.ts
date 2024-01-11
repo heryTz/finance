@@ -20,7 +20,7 @@ export async function PUT(request: Request, { params }: IdParams) {
 
   const input = (await request.json()) as UpdateInvoiceClientInput;
   const client = await prisma.client.update({
-    where: { id: params.id },
+    where: { id: params.id, ownerId: user!.id },
     data: input,
   });
 
@@ -28,15 +28,19 @@ export async function PUT(request: Request, { params }: IdParams) {
 }
 
 export async function DELETE(request: Request, { params }: IdParams) {
-  const { resp } = await apiGuard();
+  const { resp, user } = await apiGuard();
   if (resp) return resp;
-  const client = await prisma.client.delete({ where: { id: params.id } });
+  const client = await prisma.client.delete({
+    where: { id: params.id, ownerId: user!.id },
+  });
   return NextResponse.json(client);
 }
 
 export async function GET(request: Request, { params }: IdParams) {
-  const { resp } = await apiGuard();
+  const { resp, user } = await apiGuard();
   if (resp) return resp;
-  const client = await prisma.client.findFirstOrThrow({ where: { id: params.id } });
+  const client = await prisma.client.findFirstOrThrow({
+    where: { id: params.id, ownerId: user!.id },
+  });
   return NextResponse.json(client);
 }
