@@ -18,7 +18,7 @@ export async function GET() {
   return NextResponse.json<GetClientResponse>({ results: clients });
 }
 
-export type SaveInvoiceClientInput = {
+export type InvoiceSaveClientInput = {
   name: string;
   email: string;
   phone: string | null;
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   const { user, resp } = await apiGuard();
   if (resp) return resp;
 
-  const input = (await request.json()) as SaveInvoiceClientInput;
+  const input = (await request.json()) as InvoiceSaveClientInput;
   const nbClient = await prisma.client.count({
     where: { ownerId: user!.id },
   });

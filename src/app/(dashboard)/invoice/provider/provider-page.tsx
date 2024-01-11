@@ -12,7 +12,7 @@ import { useEffect } from "react";
 
 type FormValue = SaveProviderInput;
 
-export default function ProviderSetup() {
+export default function ProviderPage() {
   const { back } = useRouter();
   const { data, isLoading, error } = useGetProvider();
   const { mutateAsync, isLoading: saveLoading } = useSaveProvider();

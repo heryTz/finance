@@ -1,12 +1,12 @@
 import { ConfirmationModal } from "@/components/modal";
 import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
-import { useClientDeleteStore } from "./client-store";
-import { useDeleteInvoiceClient } from "./client-query";
+import { useClientDeleteStore } from "../client-store";
+import { useInvoiceDeleteClient } from "../client-query";
 
 export function ClientDelete() {
   const { open, onClose, itemToDelete, onFinish } = useClientDeleteStore();
-  const { mutateAsync, isLoading } = useDeleteInvoiceClient(
+  const { mutateAsync, isLoading } = useInvoiceDeleteClient(
     itemToDelete?.id ?? null
   );
 

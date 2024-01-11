@@ -2,7 +2,7 @@ export const CURRENCY = ["Ar", "EUR"] as const;
 export type Currency = (typeof CURRENCY)[number];
 
 import { GridColDef } from "@mui/x-data-grid";
-import { useInvoiceDeleteStore } from "./invoice-store";
+import { useInvoiceDeleteStore } from "./invoic-store";
 import { humanAmount, humanDate } from "@/app/helper";
 import { TableAction } from "@/components/table-action";
 import { useRouter } from "next/navigation";

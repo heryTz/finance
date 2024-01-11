@@ -3,8 +3,8 @@ import {
   useCreateInvoiceClient,
   useGetByIdInvoiceClient,
   usePutInvoiceClient,
-} from "./client-query";
-import { useClientSaveStore } from "./client-store";
+} from "../client-query";
+import { useClientSaveStore } from "../client-store";
 import { useEffect } from "react";
 import { enqueueSnackbar } from "notistack";
 import {

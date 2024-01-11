@@ -13,13 +13,13 @@ import {
   TextField,
 } from "@mui/material";
 import { Loader } from "@/components/loader";
-import { usePaymentsModeSaveStore } from "./payments-mode-store";
-import { useGetPaymentsMode } from "./payments-mode-query";
+import { usePaymentsModeSaveStore } from "../payment-mode-store";
+import { useGetPaymentsMode } from "../payment-mode-query";
 import {
   CreatePaymentModeInput,
   createPaymentModeSchema,
-} from "./payments-mode-action-dto";
-import { createPaymentMode, updatePaymentMode } from "./payments-mode-action";
+} from "../payment-mode-dto";
+import { createPaymentMode, updatePaymentMode } from "../payment-mode-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type FormValue = CreatePaymentModeInput;

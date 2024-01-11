@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/app/helper/prisma";
-import { CreateInvoiceInput } from "./invoice-action-dto";
+import { CreateInvoiceInput } from "./invoice-dto";
 import { apiGuard } from "@/app/guards/api-guard";
 import { UnauthorizedException } from "@/util/http";
 import { redirect } from "next/navigation";
