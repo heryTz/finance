@@ -42,7 +42,7 @@ export async function PUT(request: Request, { params }: IdParams) {
   for (const tag of input.tags) {
     if (!finance.tags.some((el) => el.name === tag)) {
       const newTag = await prisma.tag.upsert({
-        where: { name: tag },
+        where: { name_userId: { name: tag, userId: user!.id } },
         create: { name: tag, userId: user.id },
         update: {},
       });

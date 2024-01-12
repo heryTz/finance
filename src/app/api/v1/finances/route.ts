@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         prisma.tag.upsert({
           create: { name: el, userId: user!.id },
           update: {},
-          where: { name: el },
+          where: { name_userId: { name: el, userId: user!.id } },
         })
       )
     );

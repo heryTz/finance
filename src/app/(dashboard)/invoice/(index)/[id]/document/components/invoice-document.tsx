@@ -22,10 +22,10 @@ import {
   useTheme,
 } from "@mui/material";
 import jsPDF from "jspdf";
-import { GetInvoiceById } from "../../../(index)/invoice-service";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { GetProvider } from "../../../provider/provider-service";
+import { GetInvoiceById } from "../../../invoice-service";
+import { GetProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
 
 export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   const defaultFilename = `${invoice.ref}_${dayjs().format(
