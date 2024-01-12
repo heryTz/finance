@@ -1,5 +1,5 @@
 import { SaveProviderInput } from "@/app/api/v1/invoice/provider/route";
-import { httpClient } from "@/app/helper";
+import { httpClient } from "@/lib";
 import { Provider } from "@prisma/client";
 import { useMutation, useQuery } from "react-query";
 

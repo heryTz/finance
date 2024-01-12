@@ -1,6 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { useClientDeleteStore, useClientSaveStore } from "./client-store";
-import { humanDate } from "@/app/helper";
+import { humanDate } from "@/lib";
 import { TableAction } from "@/components/table-action";
 
 export function useColumnDefs() {

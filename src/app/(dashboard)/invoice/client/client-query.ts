@@ -3,7 +3,7 @@ import {
   GetClientResponse,
   InvoiceSaveClientInput,
 } from "@/app/api/v1/invoice/client/route";
-import { httpClient } from "@/app/helper";
+import { httpClient } from "@/lib";
 import { Client } from "@prisma/client";
 import { useMutation, useQuery } from "react-query";
 

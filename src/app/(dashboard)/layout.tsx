@@ -30,7 +30,7 @@ import {
   Wallet,
 } from "@mui/icons-material";
 import Link from "next/link";
-import { AdminGuard } from "../guards/admin-guard";
+import { AdminGuard } from "../../lib/admin-guard";
 import { signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 

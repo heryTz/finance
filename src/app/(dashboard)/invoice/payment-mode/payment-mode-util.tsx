@@ -3,7 +3,7 @@ import {
   usePaymentsModeDeleteStore,
   usePaymentsModeSaveStore,
 } from "./payment-mode-store";
-import { humanDate } from "@/app/helper";
+import { humanDate } from "@/lib";
 import { TableAction } from "@/components/table-action";
 
 export function useColumnDefs() {

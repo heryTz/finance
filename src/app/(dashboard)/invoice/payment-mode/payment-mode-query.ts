@@ -1,4 +1,4 @@
-import { httpClient } from "@/app/helper";
+import { httpClient } from "@/lib";
 import { PaymentMode } from "@prisma/client";
 import { useQuery } from "react-query";
 

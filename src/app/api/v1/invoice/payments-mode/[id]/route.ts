@@ -1,5 +1,5 @@
-import { apiGuard } from "@/app/guards/api-guard";
-import { prisma } from "@/app/helper/prisma";
+import { apiGuard } from "@/lib/api-guard";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 type IdParams = { params: { id: string } };

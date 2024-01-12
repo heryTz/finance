@@ -1,5 +1,5 @@
 import { GetTagResponse } from "@/app/api/v1/tags/route";
-import { httpClient } from "@/app/helper";
+import { httpClient } from "@/lib";
 import { useQuery } from "react-query";
 
 export function useTags() {

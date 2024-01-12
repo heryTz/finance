@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FinanceType, FinanceWithTag } from "@/entity";
 import { Tag } from "@prisma/client";
-import { apiGuard } from "@/app/guards/api-guard";
-import { prisma } from "@/app/helper/prisma";
+import { apiGuard } from "@/lib/api-guard";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const { resp, user } = await apiGuard();

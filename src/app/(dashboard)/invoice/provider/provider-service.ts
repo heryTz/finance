@@ -1,6 +1,6 @@
-import { apiGuard } from "@/app/guards/api-guard";
-import { prisma } from "@/app/helper/prisma";
-import { UnauthorizedException } from "@/util/http";
+import { apiGuard } from "@/lib/api-guard";
+import { prisma } from "@/lib/prisma";
+import { UnauthorizedException } from "@/lib/exception";
 
 export async function getProvider() {
   const { user, resp } = await apiGuard();

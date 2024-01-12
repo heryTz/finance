@@ -3,7 +3,7 @@ export type Currency = (typeof CURRENCY)[number];
 
 import { GridColDef } from "@mui/x-data-grid";
 import { useInvoiceDeleteStore } from "./invoic-store";
-import { humanAmount, humanDate } from "@/app/helper";
+import { humanAmount, humanDate } from "@/lib";
 import { TableAction } from "@/components/table-action";
 import { useRouter } from "next/navigation";
 import { Product } from "@prisma/client";

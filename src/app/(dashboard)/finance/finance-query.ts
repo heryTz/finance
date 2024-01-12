@@ -5,7 +5,7 @@ import type {
   GetFinanceResponse,
   SaveFinanceInput,
 } from "@/app/api/v1/finances/route";
-import { httpClient } from "@/app/helper";
+import { httpClient } from "@/lib";
 import type { FinanceWithTag } from "@/entity";
 import { useMutation, useQuery } from "react-query";
 

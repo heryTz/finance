@@ -1,8 +1,8 @@
 "use server";
 
-import { prisma } from "@/app/helper/prisma";
-import { apiGuard } from "@/app/guards/api-guard";
-import { UnauthorizedException } from "@/util/http";
+import { prisma } from "@/lib/prisma";
+import { apiGuard } from "@/lib/api-guard";
+import { UnauthorizedException } from "@/lib/exception";
 import { CreatePaymentModeInput } from "./payment-mode-dto";
 import { revalidatePath } from "next/cache";
 

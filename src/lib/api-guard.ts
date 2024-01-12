@@ -1,8 +1,8 @@
 import { Session, getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { prisma } from "../helper/prisma";
+import { prisma } from "./prisma";
 import { User } from "@prisma/client";
-import { authOptions } from "../api/auth/[...nextauth]/options";
+import { authOptions } from "../app/api/auth/[...nextauth]/options";
 
 // TODO: to improve
 export async function apiGuard(): Promise<{

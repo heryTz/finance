@@ -1,4 +1,4 @@
-import { humanAmount } from "@/app/helper";
+import { humanAmount } from "@/lib";
 import { Box, Stack, Typography } from "@mui/material";
 
 export function MiniGlobalBilan({ income, expense }: MiniGlobalBilanProps) {

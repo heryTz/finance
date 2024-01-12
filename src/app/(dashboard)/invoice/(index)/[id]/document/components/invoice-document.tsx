@@ -1,6 +1,6 @@
 "use client";
 
-import { humanAmount } from "@/app/helper";
+import { humanAmount } from "@/lib";
 import {
   Box,
   Button,
