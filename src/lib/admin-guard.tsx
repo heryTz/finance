@@ -1,4 +1,5 @@
 "use client";
+import { Loader } from "@/components/loader";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -13,7 +14,7 @@ export function AdminGuard({ children }: AdminGuardProps) {
     },
   });
 
-  if (status === "loading") return "Loading...";
+  if (status === "loading") return <Loader />;
 
   return <>{children}</>;
 }
