@@ -3,46 +3,30 @@ import { FinanceType, FinanceWithTag } from "@/entity";
 import { Tag } from "@prisma/client";
 import { apiGuard } from "@/lib/api-guard";
 import { prisma } from "@/lib/prisma";
+import { getFinances } from "@/app/(dashboard)/finance/finance-service";
+import { z } from "zod";
+import { getFinancesQuerySchema } from "@/app/(dashboard)/finance/finance-dto";
 
 export async function GET(req: NextRequest) {
   const { resp, user } = await apiGuard();
   if (resp) return resp;
 
-  const query = req.nextUrl.searchParams;
-  const q = query.get("q");
-  const distinct = query.get("distinct") === "true";
+  const searchParams = req.nextUrl.searchParams;
 
-  const finances = await prisma.finance.findMany({
-    where: {
-      userId: user!.id,
-      ...(q ? { label: { contains: q } } : {}),
-    },
-    orderBy: { createdAt: "desc" },
-    include: { tags: true },
-    distinct: distinct ? ["label"] : undefined,
-  });
+  try {
+    const query = getFinancesQuerySchema.parse({
+      q: searchParams.get("q"),
+      distinct: searchParams.get("distinct"),
+    });
 
-  const amounts = await prisma.finance.groupBy({
-    by: ["type"],
-    _sum: { amount: true },
-    where: {
-      userId: user!.id,
-    },
-  });
-
-  return NextResponse.json<GetFinanceResponse>({
-    results: finances,
-    stats: {
-      expense:
-        amounts
-          .find((el) => el.type === FinanceType.depense)
-          ?._sum.amount?.toNumber() ?? 0,
-      income:
-        amounts
-          .find((el) => el.type === FinanceType.revenue)
-          ?._sum.amount?.toNumber() ?? 0,
-    },
-  });
+    const finances = await getFinances(user!.id, query);
+    return NextResponse.json(finances);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return new Response(JSON.stringify(error.issues), { status: 400 });
+    }
+    return new Response(null, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
