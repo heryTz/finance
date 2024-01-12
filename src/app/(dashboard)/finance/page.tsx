@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { useColumnDefs } from "./finance-util";
 import { Loader } from "@/components/loader";
 
-export default function Finance() {
+export default function FinancePage() {
   const { data, isLoading, error, refetch } = useFinances();
   const { onOpen, reloader } = useFinanceSaveStore();
   const reloaderDelete = useFinanceDeleteStore((state) => state.reloader);

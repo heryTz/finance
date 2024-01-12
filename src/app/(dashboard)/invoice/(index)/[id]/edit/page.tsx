@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
-import { getInvoiceById, getProducts } from "../../(index)/invoice-service";
-import { getClients } from "../../client/client-service";
-import { getPaymentsMode } from "../../payments-mode/payments-service";
-import { InvoiceSave } from "../../(index)/components/invoice-save-form";
+import { getInvoiceById, getProducts } from "../../invoice-service";
+import { getClients } from "../../../client/client-service";
+import { getPaymentsMode } from "../../../payment-mode/payment-service";
+import { InvoiceSave } from "../../components/invoice-save";
 
-export default async function EditInvoice({ params }: EditInvoiceProps) {
+export default async function InvoiceEditPage({
+  params,
+}: InvoiceEditPageProps) {
   const invoice = await getInvoiceById(params.id);
   if (!invoice) notFound();
 
@@ -22,6 +24,6 @@ export default async function EditInvoice({ params }: EditInvoiceProps) {
   );
 }
 
-type EditInvoiceProps = {
+type InvoiceEditPageProps = {
   params: { id: string };
 };

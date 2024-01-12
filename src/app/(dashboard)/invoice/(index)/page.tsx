@@ -2,7 +2,7 @@ import ProviderSetup from "../provider/provider-page";
 import ClientListing from "../client/client-page";
 import { getInvoices } from "./invoice-service";
 import { InvoiceTab } from "./components/invoice-tab";
-import PaymentsModeListing from "../payment-mode/payment-mode-page";
+import PaymentModePage from "../payment-mode/payment-mode-page";
 import { getPaymentsMode } from "../payment-mode/payment-service";
 import InvoiceList from "./components/invoice-list";
 
@@ -26,7 +26,7 @@ export default async function InvoicePage() {
         {
           index: 3,
           title: "Mode de paiement",
-          component: <PaymentsModeListing paymentsMode={paymentsMode} />,
+          component: <PaymentModePage paymentsMode={paymentsMode} />,
         },
       ]}
     />

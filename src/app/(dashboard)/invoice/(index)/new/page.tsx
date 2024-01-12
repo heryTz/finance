@@ -4,7 +4,7 @@ import { InvoiceSave } from "../components/invoice-save";
 import { getProducts } from "../invoice-service";
 
 
-export default async function NewInvoice() {
+export default async function InvoiceNewPage() {
   const clients = await getClients();
   const products = await getProducts();
   const paymentsMode = await getPaymentsMode();
