@@ -1,5 +1,5 @@
 import { ClientSaveModal } from "./client-save-modal";
-import { useClientSaveStore } from "./client-store";
+import { useClientSaveStore } from "../client-store";
 
 export function ClientSave() {
   const open = useClientSaveStore((state) => state.open);

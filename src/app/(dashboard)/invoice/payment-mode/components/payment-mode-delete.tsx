@@ -1,17 +1,18 @@
 import { ConfirmationModal } from "@/components/modal";
 import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
-import { useInvoiceDeleteStore } from "./invoice-store";
+import { usePaymentsModeDeleteStore } from "../payment-mode-store";
 import { useTransition } from "react";
-import { deleteInvoice } from "./invoice-action";
+import { deletePaymentMode } from "../payment-mode-action";
 
-export function InvoiceDelete() {
-  const { open, onClose, itemToDelete, onFinish } = useInvoiceDeleteStore();
+export function PaymentsModeDelete() {
   const [isPending, startTransition] = useTransition();
+  const { open, onClose, itemToDelete, onFinish } =
+    usePaymentsModeDeleteStore();
 
   const onSubmit = () => {
     startTransition(async () => {
-      await deleteInvoice(itemToDelete!.id);
+      await deletePaymentMode(itemToDelete!.id);
       enqueueSnackbar("Suppression effectué avec succès", {
         variant: "success",
       });
@@ -27,8 +28,8 @@ export function InvoiceDelete() {
       title="Confirmation"
       content={
         <Typography>
-          Voulez-vous supprimer la facture <strong>{itemToDelete.label}</strong>{" "}
-          ?
+          Voulez-vous supprimer la mode de paiement{" "}
+          <strong>{itemToDelete.label}</strong> ?
         </Typography>
       }
       onSubmit={onSubmit}

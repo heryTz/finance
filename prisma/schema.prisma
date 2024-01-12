@@ -76,17 +76,19 @@ model Finance {
 
 model Tag {
   id        String    @id @default(cuid())
-  name      String    @unique
+  name      String
   finances  Finance[]
   User      User      @relation(fields: [userId], references: [id])
   userId    String    @default("iztvu9ziqfcozg14gmpskwwk")
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@unique([name, userId])
 }
 
 model Client {
   id        String    @id @default(cuid())
-  ref       String    @unique
+  ref       String
   name      String
   email     String
   phone     String?
@@ -99,6 +101,8 @@ model Client {
   Invoice   Invoice[]
   Owner     User      @relation(fields: [ownerId], references: [id])
   ownerId   String
+
+  @@unique([ref, ownerId])
 }
 
 model Provider {
@@ -131,7 +135,7 @@ model Product {
 
 model PaymentMode {
   id          String    @id @default(cuid())
-  name        String    @unique
+  name        String
   accountName String?
   iban        String?
   Owner       User      @relation(fields: [onwerId], references: [id])
@@ -139,6 +143,8 @@ model PaymentMode {
   updatedAt   DateTime? @updatedAt
   onwerId     String
   Invoice     Invoice[]
+
+  @@unique([name, onwerId])
 }
 
 model Invoice {

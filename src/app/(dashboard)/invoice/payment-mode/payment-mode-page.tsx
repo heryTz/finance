@@ -1,14 +1,14 @@
 "use client";
-import { GetPaymentsMode } from "./payments-service";
-import { useColumnDefs } from "./payments-mode-util";
+import { GetPaymentsMode } from "./payment-service";
+import { useColumnDefs } from "./payment-mode-util";
 import { Block } from "@/components/block";
 import { Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { PaymentsModeSave } from "./payments-mode-save";
-import { PaymentsModeDelete } from "./payments-mode-delete";
-import { usePaymentsModeSaveStore } from "./payments-mode-store";
+import { PaymentsModeSave } from "./components/payment-mode-save";
+import { PaymentsModeDelete } from "./components/payment-mode-delete";
+import { usePaymentsModeSaveStore } from "./payment-mode-store";
 
-export default function PaymentsModeListing({
+export default function PaymentModePage({
   paymentsMode,
 }: PaymentsModeProps) {
   const { columns } = useColumnDefs();

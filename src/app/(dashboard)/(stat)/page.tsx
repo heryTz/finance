@@ -1,7 +1,7 @@
 "use client";
 
 import { LineChart } from "@/components/chart";
-import { useFinanceAnalytics } from "./finance/finance-query";
+import { useFinanceAnalytics } from "../finance/finance-query";
 import { CircularProgress, Stack } from "@mui/material";
 
 const labels = [
@@ -19,7 +19,7 @@ const labels = [
   "Décembre",
 ];
 
-export default function Dashboard() {
+export default function StatPage() {
   const { data, isLoading, isError, error } = useFinanceAnalytics();
 
   if (isLoading || !data) return <CircularProgress />;

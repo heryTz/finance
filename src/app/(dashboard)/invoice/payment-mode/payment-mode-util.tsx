@@ -2,7 +2,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import {
   usePaymentsModeDeleteStore,
   usePaymentsModeSaveStore,
-} from "./payments-mode-store";
+} from "./payment-mode-store";
 import { humanDate } from "@/app/helper";
 import { TableAction } from "@/components/table-action";
 

@@ -1,14 +1,14 @@
 import { UpdateInvoiceClientInput } from "@/app/api/v1/invoice/client/[id]/route";
 import {
   GetClientResponse,
-  SaveInvoiceClientInput,
+  InvoiceSaveClientInput,
 } from "@/app/api/v1/invoice/client/route";
 import { httpClient } from "@/app/helper";
 import { Client } from "@prisma/client";
 import { useMutation, useQuery } from "react-query";
 
 export function useCreateInvoiceClient() {
-  return useMutation("invoice.client.create", (data: SaveInvoiceClientInput) =>
+  return useMutation("invoice.client.create", (data: InvoiceSaveClientInput) =>
     httpClient.post<Client>("/invoice/client", data)
   );
 }
@@ -35,7 +35,7 @@ export function usePutInvoiceClient(id: string | null) {
   );
 }
 
-export function useDeleteInvoiceClient(id: string | null) {
+export function useInvoiceDeleteClient(id: string | null) {
   return useMutation(["invoice.client.delete", id], () =>
     httpClient.delete<Client>(`/invoice/client/${id}`)
   );

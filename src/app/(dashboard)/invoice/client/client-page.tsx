@@ -8,10 +8,10 @@ import { useColumnDefs } from "./client-util";
 import { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetInvoiceClient } from "./client-query";
-import { ClientSave } from "./client-save";
-import { ClientDelete } from "./client-delete";
+import { ClientSave } from "./components/client-save";
+import { ClientDelete } from "./components/client-delete";
 
-export default function ClientListing() {
+export default function ClientPage() {
   const { data, isLoading, error, refetch } = useGetInvoiceClient();
   const { onOpen, reloader } = useClientSaveStore();
   const reloaderDelete = useClientDeleteStore((state) => state.reloader);

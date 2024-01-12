@@ -1,5 +1,5 @@
-import { PaymentsModeSaveModal } from "./payments-mode-save-modal";
-import { usePaymentsModeSaveStore } from "./payments-mode-store";
+import { PaymentsModeSaveModal } from "./payment-mode-save-modal";
+import { usePaymentsModeSaveStore } from "../payment-mode-store";
 
 export function PaymentsModeSave() {
   const open = usePaymentsModeSaveStore((state) => state.open);

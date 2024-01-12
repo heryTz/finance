@@ -3,7 +3,7 @@
 import { prisma } from "@/app/helper/prisma";
 import { apiGuard } from "@/app/guards/api-guard";
 import { UnauthorizedException } from "@/util/http";
-import { CreatePaymentModeInput } from "./payments-mode-action-dto";
+import { CreatePaymentModeInput } from "./payment-mode-dto";
 import { revalidatePath } from "next/cache";
 
 export async function createPaymentMode(input: CreatePaymentModeInput) {
