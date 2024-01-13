@@ -1,27 +1,12 @@
-import { Session, getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "./prisma";
+import { getServerSession } from "next-auth";
 import { User } from "@prisma/client";
 import { authOptions } from "../app/api/auth/[...nextauth]/options";
+import { UnauthorizedException } from "./exception";
 
-// TODO: to improve
-export async function apiGuard(): Promise<{
-  session: Session;
-  resp: NextResponse | null;
-  user: User | null;
-}> {
+export async function apiGuard() {
   const session = await getServerSession(authOptions);
   if (!session) {
-    return {
-      session: null as any,
-      resp: NextResponse.json({ message: "unauthorized" }, { status: 401 }),
-      user: null,
-    };
+    throw new UnauthorizedException();
   }
-
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { email: session?.user?.email! },
-  });
-
-  return { session, resp: null, user };
+  return { session, user: session.user as User };
 }

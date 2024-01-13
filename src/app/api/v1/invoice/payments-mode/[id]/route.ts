@@ -1,14 +1,14 @@
 import { apiGuard } from "@/lib/api-guard";
 import { prisma } from "@/lib/prisma";
+import { weh } from "@/lib/with-error-handler";
 import { NextResponse } from "next/server";
 
 type IdParams = { params: { id: string } };
 
-export async function GET(request: Request, { params }: IdParams) {
-  const { resp, user } = await apiGuard();
-  if (resp) return resp;
+export const GET = weh(async (_, { params }: IdParams) => {
+  const { user } = await apiGuard();
   const mode = await prisma.paymentMode.findFirstOrThrow({
     where: { id: params.id, onwerId: user!.id },
   });
   return NextResponse.json(mode);
-}
+});

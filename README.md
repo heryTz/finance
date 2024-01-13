@@ -33,4 +33,4 @@ docker compose up
 
 - [ ] Make code base consistent
 - [ ] Use server action and server component if possible
-- [ ] Improve ```apiGuard``` by throw Exception when unauthorized
+- [x] Improve ```apiGuard``` by throw Exception when unauthorized

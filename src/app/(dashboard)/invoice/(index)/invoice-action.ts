@@ -3,13 +3,11 @@
 import { prisma } from "@/lib/prisma";
 import { CreateInvoiceInput } from "./invoice-dto";
 import { apiGuard } from "@/lib/api-guard";
-import { UnauthorizedException } from "@/lib/exception";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export async function createInvoice(input: CreateInvoiceInput) {
-  const { user, resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
+  const { user } = await apiGuard();
 
   const { products, ...data } = input;
   const nbInvoice = await prisma.invoice.count({
@@ -40,8 +38,7 @@ export async function createInvoice(input: CreateInvoiceInput) {
 }
 
 export async function updateInvoice(id: string, input: CreateInvoiceInput) {
-  const { user, resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
+  const { user } = await apiGuard();
 
   const { products, ...data } = input;
   // make it sample for now
@@ -65,9 +62,7 @@ export async function updateInvoice(id: string, input: CreateInvoiceInput) {
 }
 
 export async function deleteInvoice(id: string) {
-  const { resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
-
+  await apiGuard();
   await prisma.invoice.delete({ where: { id } });
   revalidatePath("/invoice");
 }

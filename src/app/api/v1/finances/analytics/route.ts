@@ -6,12 +6,12 @@ import { NextResponse } from "next/server";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { profitEvo } from "@/lib";
+import { weh } from "@/lib/with-error-handler";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-export async function GET() {
-  const { resp, user } = await apiGuard();
-  if (resp) return resp;
+export const GET = weh(async () => {
+  const { user } = await apiGuard();
 
   const finances = await prisma.finance.findMany({
     where: {
@@ -72,7 +72,7 @@ export async function GET() {
       { label: "Bénéfice", data: profit },
     ],
   });
-}
+});
 
 export type FinanceAnalytics = {
   datasets: { label: "Dépense" | "Revenu" | "Bénéfice"; data: number[] }[];

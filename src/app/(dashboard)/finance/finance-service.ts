@@ -43,6 +43,8 @@ export async function getFinances(userId: string, query: GetFinancesQuery) {
   };
 }
 
+export type GetFinances = Awaited<ReturnType<typeof getFinances>>;
+
 export async function createFinance(userId: string, input: CreateFinanceInput) {
   let tags: Tag[] = [];
   if (input.tags.length) {

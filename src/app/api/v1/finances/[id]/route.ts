@@ -4,26 +4,21 @@ import { FinanceType, FinanceWithTag } from "@/entity";
 import { Tag } from "@prisma/client";
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
+import { weh } from "@/lib/with-error-handler";
 
-export async function GET(request: Request, { params }: IdParams) {
-  const { resp } = await apiGuard();
-  if (resp) return resp;
-
+export const GET = weh(async (_, { params }: IdParams) => {
+  const { user } = await apiGuard();
   const finance = await prisma.finance.findUnique({
-    where: { id: params.id },
+    where: { id: params.id, userId: user.id },
     include: { tags: true },
   });
   if (!finance) notFound();
   return NextResponse.json<FinanceWithTag>(finance);
-}
+});
 
-export async function PUT(request: Request, { params }: IdParams) {
-  const { session, resp } = await apiGuard();
-  if (resp) return resp;
+export const PUT = weh(async (request: Request, { params }: IdParams) => {
+  const { user } = await apiGuard();
 
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { email: session?.user?.email! },
-  });
   const input = (await request.json()) as UpdateFinanceInput;
   const finance = await prisma.finance.findUnique({
     where: { id: params.id },
@@ -42,7 +37,7 @@ export async function PUT(request: Request, { params }: IdParams) {
   for (const tag of input.tags) {
     if (!finance.tags.some((el) => el.name === tag)) {
       const newTag = await prisma.tag.upsert({
-        where: { name_userId: { name: tag, userId: user!.id } },
+        where: { name_userId: { name: tag, userId: user.id } },
         create: { name: tag, userId: user.id },
         update: {},
       });
@@ -51,7 +46,7 @@ export async function PUT(request: Request, { params }: IdParams) {
   }
 
   const financeUpdated = await prisma.finance.update({
-    where: { id: params.id, userId: user!.id },
+    where: { id: params.id, userId: user.id },
     data: {
       amount: input.amount,
       label: input.label,
@@ -68,15 +63,13 @@ export async function PUT(request: Request, { params }: IdParams) {
   });
 
   return NextResponse.json<FinanceWithTag>(financeUpdated);
-}
+});
 
-export async function DELETE(request: Request, { params }: IdParams) {
-  const { resp, user } = await apiGuard();
-  if (resp) return resp;
-
-  await prisma.finance.delete({ where: { id: params.id, userId: user!.id } });
+export const DELETE = weh(async (_, { params }: IdParams) => {
+  const { user } = await apiGuard();
+  await prisma.finance.delete({ where: { id: params.id, userId: user.id } });
   return NextResponse.json<DeleteFinanceResponse>({ message: "ok" });
-}
+});
 
 type IdParams = { params: { id: string } };
 

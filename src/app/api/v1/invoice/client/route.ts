@@ -1,5 +1,6 @@
 import { apiGuard } from "@/lib/api-guard";
 import { prisma } from "@/lib/prisma";
+import { weh } from "@/lib/with-error-handler";
 import { Client } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -7,16 +8,15 @@ export type GetClientResponse = {
   results: Client[];
 };
 
-export async function GET() {
-  const { user, resp } = await apiGuard();
-  if (resp) return resp;
+export const GET = weh(async () => {
+  const { user } = await apiGuard();
 
   const clients = await prisma.client.findMany({
-    where: { ownerId: user!.id },
+    where: { ownerId: user.id },
   });
 
   return NextResponse.json<GetClientResponse>({ results: clients });
-}
+});
 
 export type InvoiceSaveClientInput = {
   name: string;
@@ -28,18 +28,17 @@ export type InvoiceSaveClientInput = {
   nif: string | null;
 };
 
-export async function POST(request: Request) {
-  const { user, resp } = await apiGuard();
-  if (resp) return resp;
+export const POST = weh(async (request: Request) => {
+  const { user } = await apiGuard();
 
   const input = (await request.json()) as InvoiceSaveClientInput;
   const nbClient = await prisma.client.count({
-    where: { ownerId: user!.id },
+    where: { ownerId: user.id },
   });
 
   const newClient = await prisma.client.create({
-    data: { ...input, ref: `C${nbClient + 1}`, ownerId: user!.id },
+    data: { ...input, ref: `C${nbClient + 1}`, ownerId: user.id },
   });
 
   return NextResponse.json(newClient);
-}
+});

@@ -1,7 +1,7 @@
-import { GetTagResponse } from "@/app/api/v1/tags/route";
 import { httpClient } from "@/lib";
 import { useQuery } from "react-query";
+import type { GetTags } from "./tag-service";
 
 export function useTags() {
-  return useQuery("tags", () => httpClient.get<GetTagResponse>("/tags"));
+  return useQuery("tags", () => httpClient.get<GetTags>("/tags"));
 }

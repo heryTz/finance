@@ -42,7 +42,7 @@ export function FinanceSaveModal() {
   const { mutate: create, isLoading: saveLoading } = useFinanceSave();
   const { mutate: update, isLoading: updateLoading } = useFinanceUpdate();
   const { data: existFinance, isLoading: existFinanceLoading } = useFinances({
-    distinct: true,
+    distinct: "true",
   });
   const { control, formState, handleSubmit, reset, setValue } =
     useForm<FormData>({
