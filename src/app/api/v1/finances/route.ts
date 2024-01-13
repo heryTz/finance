@@ -3,9 +3,15 @@ import { FinanceType, FinanceWithTag } from "@/entity";
 import { Tag } from "@prisma/client";
 import { apiGuard } from "@/lib/api-guard";
 import { prisma } from "@/lib/prisma";
-import { getFinances } from "@/app/(dashboard)/finance/finance-service";
+import {
+  createFinance,
+  getFinances,
+} from "@/app/(dashboard)/finance/finance-service";
 import { z } from "zod";
-import { getFinancesQuerySchema } from "@/app/(dashboard)/finance/finance-dto";
+import {
+  createFinanceInputSchema,
+  getFinancesQuerySchema,
+} from "@/app/(dashboard)/finance/finance-dto";
 
 export async function GET(req: NextRequest) {
   const { resp, user } = await apiGuard();
@@ -33,38 +39,16 @@ export async function POST(request: Request) {
   const { resp, user } = await apiGuard();
   if (resp) return resp;
 
-  const input = (await request.json()) as SaveFinanceInput;
-
-  let tags: Tag[] = [];
-  if (input.tags.length) {
-    await Promise.all(
-      input.tags.map((el) =>
-        prisma.tag.upsert({
-          create: { name: el, userId: user!.id },
-          update: {},
-          where: { name_userId: { name: el, userId: user!.id } },
-        })
-      )
-    );
-    tags = await prisma.tag.findMany({
-      where: { name: { in: input.tags } },
-    });
+  try {
+    const input = createFinanceInputSchema.parse(await request.json());
+    const finance = await createFinance(user!.id, input);
+    return NextResponse.json(finance);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return new Response(JSON.stringify(error.issues), { status: 400 });
+    }
+    return new Response(null, { status: 500 });
   }
-
-  const finance = await prisma.finance.create({
-    data: {
-      amount: input.amount,
-      label: input.label,
-      type: input.type,
-      createdAt: input.createdAt,
-      tags: { connect: tags.map((el) => ({ id: el.id })) },
-      userId: user!.id,
-    },
-    include: {
-      tags: true,
-    },
-  });
-  return NextResponse.json<FinanceWithTag>(finance);
 }
 
 export type GetFinanceQuery = {
