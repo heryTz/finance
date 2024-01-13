@@ -19,7 +19,7 @@ export async function createInvoice(input: CreateInvoiceInput) {
 
   const invoice = await prisma.invoice.create({
     data: {
-      ownerId: user!.id,
+      ownerId: user.id,
       ref: `${client.ref}-${nbInvoice + 1}`,
       ...data,
     },
@@ -28,7 +28,7 @@ export async function createInvoice(input: CreateInvoiceInput) {
   await Promise.all(
     products.map((el) =>
       prisma.product.create({
-        data: { ...el, ownerId: user!.id, invoiceId: invoice.id },
+        data: { ...el, ownerId: user.id, invoiceId: invoice.id },
       })
     )
   );
@@ -52,7 +52,7 @@ export async function updateInvoice(id: string, input: CreateInvoiceInput) {
   await Promise.all(
     products.map((el) =>
       prisma.product.create({
-        data: { ...el, ownerId: user!.id, invoiceId: id },
+        data: { ...el, ownerId: user.id, invoiceId: id },
       })
     )
   );

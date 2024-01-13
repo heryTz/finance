@@ -6,5 +6,5 @@ import { getTags } from "@/app/(dashboard)/tag/tag-service";
 export const GET = weh(async () => {
   const { user } = await apiGuard();
   const tags = await getTags(user.id);
-  return NextResponse.json({ results: tags });
+  return NextResponse.json(tags);
 });
