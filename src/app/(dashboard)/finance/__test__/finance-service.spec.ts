@@ -1,27 +1,11 @@
-import { prisma } from "@/lib/prisma";
 import { createUser } from "../../user/user-service";
-import { User } from "@prisma/client";
 import { createFinance, getFinances } from "../finance-service";
 import { CreateFinanceInput } from "../finance-dto";
 import { FinanceType } from "@/entity";
 
-let user1: User;
-let user2: User;
-
-beforeAll(async () => {
-  user1 = await createUser({ email: "user1@example.com" });
-  user2 = await createUser({ email: "user2@example.com" });
-});
-
-afterAll(async () => {
-  await prisma.finance.deleteMany();
-  await prisma.tag.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.$disconnect();
-});
-
 describe("finance service", () => {
   it("create finance", async () => {
+    const user1 = await createUser({ email: "user1@example.com" });
     const input: CreateFinanceInput = {
       label: "Income 1",
       amount: 1000,
@@ -38,6 +22,8 @@ describe("finance service", () => {
   });
 
   it("cannot see other user's finance", async () => {
+    const user1 = await createUser({ email: "user1@example.com" });
+    const user2 = await createUser({ email: "user2@example.com" });
     await createFinance(user1.id, {
       label: "Income 2",
       amount: 1000,

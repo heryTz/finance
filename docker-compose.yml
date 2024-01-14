@@ -1,6 +1,25 @@
 version: "3.8"
 
 services:
+  db:
+    image: postgres:16.1-alpine
+    restart: always
+    container_name: finance-db
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - ./init-dev.sql:/docker-entrypoint-initdb.d/init.sql
+      - finance_db:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
   mailhog:
     image: mailhog/mailhog
     ports:
@@ -8,4 +27,4 @@ services:
       - "8025:8025"
 
 volumes:
-  finance:
+  finance_db:
