@@ -17,12 +17,14 @@ async function run() {
     .prepare(`SELECT * FROM PaymentMode`)
     .all();
   const provider: any[] = await db.prepare(`SELECT * FROM Provider`).all();
+  const client: any[] = await db.prepare(`SELECT * FROM Client`).all();
   const invoice: any[] = await db.prepare(`SELECT * FROM Invoice`).all();
   const product: any[] = await db.prepare(`SELECT * FROM Product`).all();
 
   await prisma.product.deleteMany();
   await prisma.invoice.deleteMany();
   await prisma.provider.deleteMany();
+  await prisma.client.deleteMany();
   await prisma.paymentMode.deleteMany();
   await prisma.tag.deleteMany();
   await prisma.finance.deleteMany();
@@ -68,12 +70,16 @@ async function run() {
     })),
   });
 
-  console.log({
-    provider: provider.map((el) => el.id),
-    invoice: invoice.map((el) => el.clientId),
-  });
   await prisma.provider.createMany({
     data: provider.map((el) => ({
+      ...el,
+      createdAt: new Date(el.createdAt),
+      updatedAt: new Date(el.updatedAt),
+    })),
+  });
+
+  await prisma.client.createMany({
+    data: client.map((el) => ({
       ...el,
       createdAt: new Date(el.createdAt),
       updatedAt: new Date(el.updatedAt),
