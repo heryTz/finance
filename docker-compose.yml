@@ -22,6 +22,9 @@ services:
   #     - ./.env:/app/.env
   #   ports:
   #     - 3000:3000
+  #   depends_on:
+  #     - db
+  #     - mailhog
 
   db:
     image: postgres:16.1-alpine
