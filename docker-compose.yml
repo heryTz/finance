@@ -1,10 +1,32 @@
 version: "3.8"
 
 services:
+  # Uncomment if you to app dev mode in docker
+  # app:
+  #   image: finance-app
+  #   container_name: app
+  #   build:
+  #     target: dev
+  #     context: .
+  #   working_dir: /app
+  #   volumes:
+  #     - ./src/:/app/src
+  #     - ./public/:/app/public
+  #     - ./next.config.js:/app/next.config.js
+  #     - ./tailwind.config.ts:/app/tailwind.config.ts
+  #     - ./prisma/:/app/prisma
+  #     - ./jest.setup.ts:/app/jest.setup.ts
+  #     - ./jest-server.setup.ts/:/app/jest-server.setup.ts
+  #     - ./jest.config.mjs:/app/jest.config.mjs
+  #     - ./entrypoint-dev.sh:/app/entrypoint-dev.sh
+  #     - ./.env:/app/.env
+  #   ports:
+  #     - 3000:3000
+
   db:
     image: postgres:16.1-alpine
     restart: unless-stopped
-    container_name: finance-db
+    container_name: db
     ports:
       - '5433:5432'
     environment:
@@ -16,12 +38,14 @@ services:
 
   adminer:
     image: adminer
+    container_name: adminer
     restart: unless-stopped
     ports:
       - 8080:8080
 
   mailhog:
     image: mailhog/mailhog
+    container_name: mailhog
     ports:
       - "1025:1025"
       - "8025:8025"

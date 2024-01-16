@@ -17,16 +17,16 @@ Setup env
 cp .env-example .env
 ```
 
+Setup tools (db, mail server, adminer)
+
+```bash
+docker compose up
+```
+
 Setup db
 
 ```bash
 npx prisma generate && npx prisma migrate dev
-```
-
-Start mail server
-
-```bash
-docker compose up
 ```
 
 ## TODO
