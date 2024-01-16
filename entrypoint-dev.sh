@@ -3,5 +3,5 @@
 set -ex
 
 npx prisma generate
-npx prisma db push
+npx prisma migrate deploy
 yarn dev
