@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # Uncomment if you to app dev mode in docker
+  ## Uncomment if you to app dev mode in docker
   # app:
   #   image: finance-app
   #   container_name: app
