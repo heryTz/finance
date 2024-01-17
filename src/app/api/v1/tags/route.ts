@@ -1,19 +1,10 @@
-import { Tag } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { apiGuard } from "@/lib/api-guard";
-import { prisma } from "@/lib/prisma";
+import { weh } from "@/lib/with-error-handler";
+import { getTags } from "@/app/(dashboard)/tag/tag-service";
 
-export async function GET() {
-  const { resp, user } = await apiGuard();
-  if (resp) return resp;
-
-  const tags = await prisma.tag.findMany({
-    where: { userId: user!.id },
-    orderBy: { name: "asc" },
-  });
-  return NextResponse.json<GetTagResponse>({ results: tags });
-}
-
-export type GetTagResponse = {
-  results: Tag[];
-};
+export const GET = weh(async () => {
+  const { user } = await apiGuard();
+  const tags = await getTags(user.id);
+  return NextResponse.json(tags);
+});

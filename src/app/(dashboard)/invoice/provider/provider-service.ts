@@ -1,10 +1,8 @@
 import { apiGuard } from "@/lib/api-guard";
 import { prisma } from "@/lib/prisma";
-import { UnauthorizedException } from "@/lib/exception";
 
 export async function getProvider() {
-  const { user, resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
+  const { user } = await apiGuard();
 
   return await prisma.provider.findFirstOrThrow({
     where: { ownerId: user!.id },

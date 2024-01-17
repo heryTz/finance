@@ -3,13 +3,11 @@
 import { prisma } from "@/lib/prisma";
 import { CreateInvoiceInput } from "./invoice-dto";
 import { apiGuard } from "@/lib/api-guard";
-import { UnauthorizedException } from "@/lib/exception";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export async function createInvoice(input: CreateInvoiceInput) {
-  const { user, resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
+  const { user } = await apiGuard();
 
   const { products, ...data } = input;
   const nbInvoice = await prisma.invoice.count({
@@ -21,7 +19,7 @@ export async function createInvoice(input: CreateInvoiceInput) {
 
   const invoice = await prisma.invoice.create({
     data: {
-      ownerId: user!.id,
+      ownerId: user.id,
       ref: `${client.ref}-${nbInvoice + 1}`,
       ...data,
     },
@@ -30,7 +28,7 @@ export async function createInvoice(input: CreateInvoiceInput) {
   await Promise.all(
     products.map((el) =>
       prisma.product.create({
-        data: { ...el, ownerId: user!.id, invoiceId: invoice.id },
+        data: { ...el, ownerId: user.id, invoiceId: invoice.id },
       })
     )
   );
@@ -40,8 +38,7 @@ export async function createInvoice(input: CreateInvoiceInput) {
 }
 
 export async function updateInvoice(id: string, input: CreateInvoiceInput) {
-  const { user, resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
+  const { user } = await apiGuard();
 
   const { products, ...data } = input;
   // make it sample for now
@@ -52,22 +49,20 @@ export async function updateInvoice(id: string, input: CreateInvoiceInput) {
     data,
   });
 
-  await Promise.all(
-    products.map((el) =>
-      prisma.product.create({
-        data: { ...el, ownerId: user!.id, invoiceId: id },
-      })
-    )
-  );
+  await prisma.product.createMany({
+    data: products.map((el) => ({
+      ...el,
+      ownerId: user.id,
+      invoiceId: id,
+    })),
+  });
 
   revalidatePath("/invoice");
   redirect("/invoice");
 }
 
 export async function deleteInvoice(id: string) {
-  const { resp } = await apiGuard();
-  if (resp) throw new UnauthorizedException();
-
+  await apiGuard();
   await prisma.invoice.delete({ where: { id } });
   revalidatePath("/invoice");
 }

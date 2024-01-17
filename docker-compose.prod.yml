@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    image: finance-prod
+    container_name: app
+    build:
+      target: prod
+      context: .
+    ports:
+      - 3001:3000
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16.1-alpine
+    restart: unless-stopped
+    container_name: db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      POSTGRES_DB: finance
+    volumes:
+      - finance_db_prod:/var/lib/postgresql/data
+
+volumes:
+  finance_db_prod:

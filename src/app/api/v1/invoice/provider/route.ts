@@ -1,5 +1,6 @@
 import { apiGuard } from "@/lib/api-guard";
 import { prisma } from "@/lib/prisma";
+import { weh } from "@/lib/with-error-handler";
 import { Provider } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -13,15 +14,14 @@ export type SaveProviderInput = {
   nif: string | null;
 };
 
-export async function POST(request: Request) {
-  const { user, resp } = await apiGuard();
-  if (resp) return resp;
+export const POST = weh(async (request: Request) => {
+  const { user } = await apiGuard();
 
   const input = (await request.json()) as SaveProviderInput;
 
-  const data = { ...input, ownerId: user!.id };
+  const data = { ...input, ownerId: user.id };
   const existConfig = await prisma.provider.findFirst({
-    where: { ownerId: user!.id },
+    where: { ownerId: user.id },
   });
 
   let provider: Provider;
@@ -35,20 +35,19 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json(provider);
-}
+});
 
-export async function GET() {
-  const { user, resp } = await apiGuard();
-  if (resp) return resp;
+export const GET = weh(async () => {
+  const { user } = await apiGuard();
 
   const provider = await prisma.provider.findFirst({
-    where: { ownerId: user!.id },
+    where: { ownerId: user.id },
   });
 
   if (!provider) {
     const newProvider = await prisma.provider.create({
       data: {
-        ownerId: user!.id,
+        ownerId: user.id,
         address: "",
         email: "",
         name: "",
@@ -58,4 +57,4 @@ export async function GET() {
   }
 
   return NextResponse.json(provider);
-}
+});
