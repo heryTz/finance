@@ -20,15 +20,8 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      const userExists = await prisma.user.findUnique({
-        where: { email: user.email ?? undefined },
-      });
-      if (userExists) {
-        return true;
-      } else {
-        return false;
-      }
+    async signIn() {
+      return true;
     },
   },
 };
