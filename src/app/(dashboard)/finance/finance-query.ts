@@ -1,9 +1,14 @@
 import type { FinanceAnalytics } from "@/app/api/v1/finances/analytics/route";
 import { httpClient } from "@/lib";
-import type { FinanceWithTag } from "@/entity";
 import { useMutation, useQuery } from "react-query";
 import type { GetFinancesQuery, SaveFinanceInput } from "./finance-dto";
-import type { GetFinances } from "./finance-service";
+import type {
+  CreateFinance,
+  DeleteFinance,
+  GetFinanceById,
+  GetFinances,
+  UpdateFinance,
+} from "./finance-service";
 
 export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
   return useQuery(["finance", q, distinct], ({ queryKey }) => {
@@ -16,14 +21,14 @@ export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
 
 export function useFinanceSave() {
   return useMutation("finance.save", (data: SaveFinanceInput) =>
-    httpClient.post<FinanceWithTag>(`/finances`, data)
+    httpClient.post<CreateFinance>(`/finances`, data)
   );
 }
 
 export function useFinanceById(id: string | null) {
   return useQuery({
     queryKey: ["finance", id],
-    queryFn: () => httpClient.get<FinanceWithTag>(`/finances/${id}`),
+    queryFn: () => httpClient.get<GetFinanceById>(`/finances/${id}`),
     enabled: !!id,
   });
 }
@@ -32,13 +37,13 @@ export function useFinanceUpdate() {
   return useMutation(
     "finance.update",
     ({ id, ...input }: SaveFinanceInput & { id: string }) =>
-      httpClient.put<FinanceWithTag>(`/finances/${id}`, input)
+      httpClient.put<UpdateFinance>(`/finances/${id}`, input)
   );
 }
 
 export function useFinanceDelete() {
   return useMutation("finance.delete", (id: string) =>
-    httpClient.delete<FinanceWithTag>(`/finances/${id}`)
+    httpClient.delete<DeleteFinance>(`/finances/${id}`)
   );
 }
 

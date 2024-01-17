@@ -80,6 +80,8 @@ export async function createFinance(userId: string, input: SaveFinanceInput) {
   return finance;
 }
 
+export type CreateFinance = Awaited<ReturnType<typeof createFinance>>;
+
 export async function getFinanceById(userId: string, id: string) {
   const finance = await prisma.finance.findUnique({
     where: { id, userId },
