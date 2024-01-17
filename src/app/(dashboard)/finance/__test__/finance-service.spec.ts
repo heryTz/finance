@@ -21,7 +21,7 @@ describe("finance service", () => {
     expect(finance.tags[0].name).toBe(input.tags[0]);
   });
 
-  it("cannot see other user's finance", async () => {
+  it("can only view my finance list", async () => {
     const user1 = await createUser({ email: "user1@example.com" });
     const user2 = await createUser({ email: "user2@example.com" });
     await createFinance(user1.id, {
