@@ -6,7 +6,6 @@ import {
   getFinances,
   updateFinance,
 } from "../finance-service";
-import { SaveFinanceInput } from "../finance-dto";
 import { FinanceType } from "@/entity";
 import { buildSaveFinanceInput } from "@/lib/factory";
 import { NotFoundException } from "@/lib/exception";
@@ -14,13 +13,7 @@ import { NotFoundException } from "@/lib/exception";
 describe("finance service", () => {
   it("create finance", async () => {
     const user1 = await createUser({ email: "user1@example.com" });
-    const input: SaveFinanceInput = {
-      label: "Income 1",
-      amount: 1000,
-      createdAt: new Date().toISOString(),
-      tags: ["tag1"],
-      type: FinanceType.revenue,
-    };
+    const input = buildSaveFinanceInput({ tags: ["tag1"] });
     const finance = await createFinance(user1.id, input);
     expect(finance.label).toBe(input.label);
     expect(finance.amount.toNumber()).toBe(input.amount);
@@ -32,14 +25,7 @@ describe("finance service", () => {
   it("can only view my finance list", async () => {
     const user1 = await createUser({ email: "user1@example.com" });
     const user2 = await createUser({ email: "user2@example.com" });
-    await createFinance(user1.id, {
-      label: "Income 2",
-      amount: 1000,
-      createdAt: new Date().toISOString(),
-      tags: [],
-      type: FinanceType.revenue,
-    });
-
+    await createFinance(user1.id, buildSaveFinanceInput());
     const user2Finances = await getFinances(user2.id, {});
     const financeOfOtherUser = user2Finances.results.find(
       (el) => el.userId !== user2.id
