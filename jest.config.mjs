@@ -27,7 +27,7 @@ const serverConfig = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  // setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  setupFilesAfterEnv: ["<rootDir>/jest-server.setup.ts"],
   testMatch: ["**/*.spec.ts?(x)"],
 };
 

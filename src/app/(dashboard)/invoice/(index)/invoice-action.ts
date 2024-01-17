@@ -49,13 +49,13 @@ export async function updateInvoice(id: string, input: CreateInvoiceInput) {
     data,
   });
 
-  await Promise.all(
-    products.map((el) =>
-      prisma.product.create({
-        data: { ...el, ownerId: user.id, invoiceId: id },
-      })
-    )
-  );
+  await prisma.product.createMany({
+    data: products.map((el) => ({
+      ...el,
+      ownerId: user.id,
+      invoiceId: id,
+    })),
+  });
 
   revalidatePath("/invoice");
   redirect("/invoice");

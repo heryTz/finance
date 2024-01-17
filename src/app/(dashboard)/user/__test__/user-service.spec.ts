@@ -1,11 +1,5 @@
-import { prisma } from "@/lib/prisma";
 import { CreateUserInput } from "../user-dto";
 import { createUser } from "../user-service";
-
-afterAll(async () => {
-  await prisma.user.deleteMany();
-  await prisma.$disconnect();
-});
 
 describe("user service", () => {
   it("create user", async () => {

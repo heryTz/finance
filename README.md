@@ -9,12 +9,18 @@ A simple application to manage your budget and invoice. You can see the demo wit
 
 ![Finance demo](https://github.com/heryTz/finance/blob/main/demo.gif)
 
-## Setup
+## Setup dev
 
 Setup env
 
 ```bash
 cp .env-example .env
+```
+
+Setup tools (db, mail server, adminer)
+
+```bash
+docker compose up
 ```
 
 Setup db
@@ -23,10 +29,18 @@ Setup db
 npx prisma generate && npx prisma migrate dev
 ```
 
-Start mail server
+## Setup prod
+
+Setup env
 
 ```bash
-docker compose up
+cp .env-example .env.production.local
+```
+
+Start the application
+
+```bash
+docker compose -f docker-compose.prod.yml up
 ```
 
 ## TODO
