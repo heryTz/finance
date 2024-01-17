@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "dotenv -e .env.test -- npx prisma migrate deploy && jest",
-    "test:watch": "dotenv -e .env.test -- npx prisma migrate deploy && jest --watch",
+    "test": "dotenv -e .env.test -- npx prisma db push --force-reset && jest",
+    "test:watch": "dotenv -e .env.test -- npx prisma db push --force-reset && jest --watch",
     "test:studio": "dotenv -e .env.test -- npx prisma studio",
     "cli": "npx ts-node -r tsconfig-paths/register"
   },
