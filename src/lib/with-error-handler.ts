@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { UnauthorizedException } from "./exception";
+import { NotFoundException, UnauthorizedException } from "./exception";
 import { logError } from "./logger";
 
 type Handler = (...args: any[]) => Promise<NextResponse | Response>;
@@ -17,6 +17,9 @@ export const weh =
       }
       if (error instanceof UnauthorizedException) {
         return new Response("unauthorized", { status: 403 });
+      }
+      if (error instanceof NotFoundException) {
+        return new Response(error.message, { status: 404 });
       }
       return new Response(null, { status: 500 });
     }

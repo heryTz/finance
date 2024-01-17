@@ -3,3 +3,9 @@ export class UnauthorizedException extends Error {
     super("Unauthorized");
   }
 }
+
+export class NotFoundException extends Error {
+  constructor() {
+    super("Not found");
+  }
+}

@@ -1,9 +1,8 @@
-import type { UpdateFinanceInput } from "@/app/api/v1/finances/[id]/route";
 import type { FinanceAnalytics } from "@/app/api/v1/finances/analytics/route";
 import { httpClient } from "@/lib";
 import type { FinanceWithTag } from "@/entity";
 import { useMutation, useQuery } from "react-query";
-import type { GetFinancesQuery, CreateFinanceInput } from "./finance-dto";
+import type { GetFinancesQuery, SaveFinanceInput } from "./finance-dto";
 import type { GetFinances } from "./finance-service";
 
 export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
@@ -16,7 +15,7 @@ export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
 }
 
 export function useFinanceSave() {
-  return useMutation("finance.save", (data: CreateFinanceInput) =>
+  return useMutation("finance.save", (data: SaveFinanceInput) =>
     httpClient.post<FinanceWithTag>(`/finances`, data)
   );
 }
@@ -32,7 +31,7 @@ export function useFinanceById(id: string | null) {
 export function useFinanceUpdate() {
   return useMutation(
     "finance.update",
-    ({ id, ...input }: UpdateFinanceInput & { id: string }) =>
+    ({ id, ...input }: SaveFinanceInput & { id: string }) =>
       httpClient.put<FinanceWithTag>(`/finances/${id}`, input)
   );
 }

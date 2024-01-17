@@ -8,7 +8,7 @@ export const getFinancesQuerySchema = z.object({
 
 export type GetFinancesQuery = z.infer<typeof getFinancesQuerySchema>;
 
-export const createFinanceInputSchema = z.object({
+export const saveFinanceInputSchema = z.object({
   label: z.string(),
   type: z.nativeEnum(FinanceType),
   tags: z.array(z.string()),
@@ -16,4 +16,4 @@ export const createFinanceInputSchema = z.object({
   createdAt: z.string(),
 });
 
-export type CreateFinanceInput = z.infer<typeof createFinanceInputSchema>;
+export type SaveFinanceInput = z.infer<typeof saveFinanceInputSchema>;
