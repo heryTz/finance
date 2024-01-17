@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { UnauthorizedException } from "./exception";
+import { logError } from "./logger";
 
 type Handler = (...args: any[]) => Promise<NextResponse | Response>;
 
@@ -10,6 +11,7 @@ export const weh =
     try {
       return await handler(...args);
     } catch (error) {
+      logError(error);
       if (error instanceof z.ZodError) {
         return new Response(JSON.stringify(error.issues), { status: 400 });
       }
