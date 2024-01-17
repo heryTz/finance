@@ -48,3 +48,4 @@ docker compose -f docker-compose.prod.yml up
 - [ ] Make code base consistent
 - [ ] Use server action and server component if possible
 - [x] Improve ```apiGuard``` by throw Exception when unauthorized
+- [ ] Make test other than db async
