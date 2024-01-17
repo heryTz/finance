@@ -49,7 +49,7 @@ export function useFinanceDelete() {
 
 export function useFinanceAnalytics() {
   return useQuery({
-    queryKey: "finance.analytics",
-    queryFn: () => httpClient.get<GetStats>(`/finances/analytics`),
+    queryKey: "finance.stats",
+    queryFn: () => httpClient.get<GetStats>(`/finances/stats`),
   });
 }
