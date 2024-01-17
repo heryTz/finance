@@ -1,21 +1,17 @@
-import { apiGuard } from "@/lib/api-guard";
-import { prisma } from "@/lib/prisma";
 import { FinanceType } from "@/entity";
+import { profitEvo } from "@/lib";
+import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
-import { NextResponse } from "next/server";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { profitEvo } from "@/lib";
-import { weh } from "@/lib/with-error-handler";
+
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-export const GET = weh(async () => {
-  const { user } = await apiGuard();
-
+export async function getStats(userId: string) {
   const finances = await prisma.finance.findMany({
     where: {
-      userId: user!.id,
+      userId,
       createdAt: {
         lte: dayjs().endOf("year").toDate(),
         gte: dayjs().startOf("year").toDate(),
@@ -49,7 +45,7 @@ export const GET = weh(async () => {
   const prevAmount = await prisma.finance.groupBy({
     by: ["type"],
     where: {
-      userId: user!.id,
+      userId,
       createdAt: { lte: dayjs().add(-1, "year").endOf("year").toDate() },
     },
     _sum: { amount: true },
@@ -65,15 +61,13 @@ export const GET = weh(async () => {
       ?._sum.amount?.toNumber() ?? 0;
   const profit = profitEvo(income, expense);
 
-  return NextResponse.json<FinanceAnalytics>({
+  return {
     datasets: [
       { label: "Revenu", data: income },
       { label: "Dépense", data: expense },
       { label: "Bénéfice", data: profit },
     ],
-  });
-});
+  };
+}
 
-export type FinanceAnalytics = {
-  datasets: { label: "Dépense" | "Revenu" | "Bénéfice"; data: number[] }[];
-};
+export type GetStats = Awaited<ReturnType<typeof getStats>>;

@@ -1,4 +1,3 @@
-import type { FinanceAnalytics } from "@/app/api/v1/finances/analytics/route";
 import { httpClient } from "@/lib";
 import { useMutation, useQuery } from "react-query";
 import type { GetFinancesQuery, SaveFinanceInput } from "./finance-dto";
@@ -9,6 +8,7 @@ import type {
   GetFinances,
   UpdateFinance,
 } from "./finance-service";
+import type { GetStats } from "../(stat)/stat-service";
 
 export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
   return useQuery(["finance", q, distinct], ({ queryKey }) => {
@@ -50,6 +50,6 @@ export function useFinanceDelete() {
 export function useFinanceAnalytics() {
   return useQuery({
     queryKey: "finance.analytics",
-    queryFn: () => httpClient.get<FinanceAnalytics>(`/finances/analytics`),
+    queryFn: () => httpClient.get<GetStats>(`/finances/analytics`),
   });
 }
