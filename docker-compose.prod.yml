@@ -14,7 +14,6 @@ services:
   db:
     image: postgres:16.1-alpine
     restart: unless-stopped
-    container_name: finance-prod-db
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: user
