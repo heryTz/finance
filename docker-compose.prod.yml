@@ -3,7 +3,6 @@ version: '3.8'
 services:
   app:
     image: finance-prod-app
-    container_name: finance-prod-app
     build:
       target: prod
       context: .

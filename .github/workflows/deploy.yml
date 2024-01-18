@@ -21,6 +21,6 @@ jobs:
           ssh -p${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cd ~/finance/app && \
             git pull origin main && \
-            docker compose -f docker-compose.prod.yml build finance-prod-app && \
-            docker compose -f docker-compose.prod.yml up --no-deps -d finance-prod-app && \
+            docker compose -f docker-compose.prod.yml down --remove-orphans && \
+            docker compose -f docker-compose.prod.yml up --build -d && \
             docker image prune -f"
