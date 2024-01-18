@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import { usePaymentsModeDeleteStore } from "../payment-mode-store";
 import { useTransition } from "react";
-import { deletePaymentMode } from "../payment-mode-action";
+import { deletePaymentMode } from "../payment-mode-service";
 
 export function PaymentsModeDelete() {
   const [isPending, startTransition] = useTransition();

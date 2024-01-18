@@ -1,6 +1,6 @@
 import { httpClient } from "@/lib";
-import { PaymentMode } from "@prisma/client";
 import { useQuery } from "react-query";
+import type { GetPaymentModeById } from "./payment-mode-service";
 
 export function useGetPaymentsMode(id: string | null) {
   return useQuery({
@@ -8,7 +8,7 @@ export function useGetPaymentsMode(id: string | null) {
     enabled: !!id,
     queryFn: () =>
       httpClient
-        .get<PaymentMode>(`/invoice/payments-mode/${id}`)
+        .get<GetPaymentModeById>(`/invoice/payments-mode/${id}`)
         .then((resp) => resp.data),
   });
 }

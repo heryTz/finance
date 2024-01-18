@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { apiGuard } from "@/lib/api-guard";
 import { CreatePaymentModeInput } from "./payment-mode-dto";
 import { revalidatePath } from "next/cache";
+import { NotFoundException } from "@/lib/exception";
 
 export async function createPaymentMode(input: CreatePaymentModeInput) {
   const { user } = await apiGuard();
@@ -20,7 +21,7 @@ export async function updatePaymentMode(
 ) {
   const { user } = await apiGuard();
   const payment = await prisma.paymentMode.update({
-    data: { ...input, onwerId: user!.id },
+    data: { ...input, onwerId: user.id },
     where: { id },
   });
   revalidatePath("/invoice");
@@ -35,3 +36,13 @@ export async function deletePaymentMode(id: string) {
   revalidatePath("/invoice");
   return payment;
 }
+
+export async function getPaymentModeById(userId: string, id: string) {
+  const mode = await prisma.paymentMode.findFirst({
+    where: { id, onwerId: userId },
+  });
+  if (!mode) throw new NotFoundException();
+  return mode;
+}
+
+export type GetPaymentModeById = Awaited<ReturnType<typeof getPaymentModeById>>;
