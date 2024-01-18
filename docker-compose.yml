@@ -3,8 +3,8 @@ version: "3.8"
 services:
   ## Uncomment if you to app dev mode in docker
   # app:
-  #   image: finance-app
-  #   container_name: app
+  #   image: finance-dev-app
+  #   container_name: finance-dev-app
   #   build:
   #     target: dev
   #     context: .
@@ -29,7 +29,7 @@ services:
   db:
     image: postgres:16.1-alpine
     restart: unless-stopped
-    container_name: db
+    container_name: finance-dev-db
     ports:
       - '5433:5432'
     environment:
@@ -41,14 +41,14 @@ services:
 
   adminer:
     image: adminer
-    container_name: adminer
+    container_name: finance-dev-adminer
     restart: unless-stopped
     ports:
       - 8080:8080
 
   mailhog:
     image: mailhog/mailhog
-    container_name: mailhog
+    container_name: finance-dev-mailhog
     ports:
       - "1025:1025"
       - "8025:8025"
