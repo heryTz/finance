@@ -3,6 +3,7 @@ version: '3.8'
 services:
   app:
     image: finance-prod-app
+    container_name: finance-prod-app
     build:
       target: prod
       context: .
@@ -13,6 +14,7 @@ services:
 
   db:
     image: postgres:16.1-alpine
+    container_name: finance-prod-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: user
