@@ -19,7 +19,7 @@ services:
       POSTGRES_PASSWORD: user
       POSTGRES_DB: finance
     volumes:
-      - finance_db_prod:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
 
 volumes:
   db:
