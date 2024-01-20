@@ -22,4 +22,4 @@ services:
       - finance_db_prod:/var/lib/postgresql/data
 
 volumes:
-  finance_db_prod:
+  db:
