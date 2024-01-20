@@ -1,5 +1,7 @@
 version: '3.8'
 
+name: finance-prod
+
 services:
   app:
     image: finance-prod-app
