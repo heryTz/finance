@@ -2,13 +2,11 @@ import { useForm } from "react-hook-form";
 import { useEffect, useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   Stack,
   TextField,
 } from "@mui/material";
@@ -19,7 +17,7 @@ import {
   CreatePaymentModeInput,
   createPaymentModeSchema,
 } from "../payment-mode-dto";
-import { createPaymentMode, updatePaymentMode } from "../payment-mode-action";
+import { createPaymentMode, updatePaymentMode } from "../payment-mode-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type FormValue = CreatePaymentModeInput;
