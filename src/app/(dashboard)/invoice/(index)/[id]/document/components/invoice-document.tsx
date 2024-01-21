@@ -288,6 +288,6 @@ function DescriptionResume(props: {
 }
 
 type InvoiceDocumentProps = {
-  invoice: NonNullable<GetInvoiceById>;
-  provider: GetProvider;
+  invoice: GetInvoiceById;
+  provider: NonNullable<GetProvider>;
 };
