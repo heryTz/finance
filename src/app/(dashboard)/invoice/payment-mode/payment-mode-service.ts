@@ -25,8 +25,8 @@ export async function updatePaymentMode(
   input: CreatePaymentModeInput
 ) {
   const payment = await prisma.paymentMode.update({
-    data: { ...input, onwerId: userId },
-    where: { id },
+    data: { ...input },
+    where: { id, onwerId: userId },
   });
   return payment;
 }

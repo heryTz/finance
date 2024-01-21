@@ -1,11 +1,9 @@
-import { apiGuard } from "@/lib/api-guard";
 import { prisma } from "@/lib/prisma";
 
-export async function getPaymentsMode() {
-  const { user } = await apiGuard();
+export async function getPaymentsMode(userId: string) {
   const payments = await prisma.paymentMode.findMany({
     orderBy: { name: "asc" },
-    where: { onwerId: user!.id },
+    where: { onwerId: userId },
   });
   return {
     results: payments,

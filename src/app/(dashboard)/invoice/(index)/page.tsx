@@ -5,13 +5,15 @@ import { InvoiceTab } from "./components/invoice-tab";
 import PaymentModePage from "../payment-mode/payment-mode-page";
 import { getPaymentsMode } from "../payment-mode/payment-service";
 import InvoiceList from "./components/invoice-list";
+import { apiGuard } from "@/lib/api-guard";
 
 // 🥵 WFT! make "ClientListing", "InvoiceLising", "ProviderSetup" as default export solve this problem
 // Element type is invalid. Received a promise that resolves to: undefined. Lazy element type must resolve to a class or function.
 
 export default async function InvoicePage() {
+  const { user } = await apiGuard();
   const invoices = await getInvoices();
-  const paymentsMode = await getPaymentsMode();
+  const paymentsMode = await getPaymentsMode(user.id);
 
   return (
     <InvoiceTab
