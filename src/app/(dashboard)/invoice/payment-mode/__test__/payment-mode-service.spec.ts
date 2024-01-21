@@ -4,8 +4,8 @@ import {
   deletePaymentMode,
   getPaymentModeById,
   updatePaymentMode,
+  getPaymentsMode
 } from "../payment-mode-service";
-import { getPaymentsMode } from "../payment-service";
 import { NotFoundException } from "@/lib/exception";
 import { CreatePaymentModeInput } from "../payment-mode-dto";
 

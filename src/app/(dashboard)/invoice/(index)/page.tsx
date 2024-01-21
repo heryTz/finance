@@ -3,7 +3,7 @@ import ClientListing from "../client/client-page";
 import { getInvoices } from "./invoice-service";
 import { InvoiceTab } from "./components/invoice-tab";
 import PaymentModePage from "../payment-mode/payment-mode-page";
-import { getPaymentsMode } from "../payment-mode/payment-service";
+import { getPaymentsMode } from "../payment-mode/payment-mode-service";
 import InvoiceList from "./components/invoice-list";
 import { apiGuard } from "@/lib/api-guard";
 

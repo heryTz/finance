@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
 import { useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
-import { GetPaymentsMode } from "../../payment-mode/payment-service";
+import { GetPaymentsMode } from "../../payment-mode/payment-mode-service";
 
 export function InvoiceSave({
   clients,
