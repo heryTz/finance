@@ -1,5 +1,5 @@
 "use client";
-import { GetPaymentsMode } from "./payment-service";
+import { GetPaymentsMode } from "./payment-mode-service";
 import { useColumnDefs } from "./payment-mode-util";
 import { Block } from "@/components/block";
 import { Button } from "@mui/material";

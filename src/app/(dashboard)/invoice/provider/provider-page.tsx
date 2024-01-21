@@ -4,11 +4,11 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import { useGetProvider, useSaveProvider } from "./provider-query";
 import { Loader } from "@/components/loader";
 import { ErrorSection } from "@/components/error-section";
-import { SaveProviderInput } from "@/app/api/v1/invoice/provider/route";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
+import type { SaveProviderInput } from "./provider-dto";
 
 type FormValue = SaveProviderInput;
 
@@ -17,9 +17,7 @@ export default function ProviderPage() {
   const { data, isLoading, error } = useGetProvider();
   const { mutateAsync, isLoading: saveLoading } = useSaveProvider();
   const config = data?.data;
-  const { register, handleSubmit, formState, reset } = useForm<FormValue>({
-    defaultValues: config,
-  });
+  const { register, handleSubmit, formState, reset } = useForm<FormValue>();
   const { isValid, isDirty } = formState;
 
   useEffect(() => {

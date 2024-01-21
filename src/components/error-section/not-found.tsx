@@ -2,24 +2,14 @@
 
 import { Link, Stack, Typography } from "@mui/material";
 import NextLink from "next/link";
+import { AlertPage } from "../alert-page";
 
 export default function NotFound() {
   return (
-    <Stack
-      direction={"column"}
-      alignItems={"center"}
-      maxWidth={"500px"}
-      marginX={"auto"}
-      marginY={"48px"}
-      gap={1}
-    >
-      <Typography variant="h2">Page introuvable</Typography>
-      <Typography variant="body1">
-        Impossible de trouver la ressource demandée
-      </Typography>
-      <Link href="/" component={NextLink}>
-        Accueil
-      </Link>
-    </Stack>
+    <AlertPage
+      title="Page introuvable"
+      message="Impossible de trouver la ressource demandée."
+      action={{ href: "/", label: "Accueil" }}
+    />
   );
 }

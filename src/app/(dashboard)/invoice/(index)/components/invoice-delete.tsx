@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import { useInvoiceDeleteStore } from "../invoic-store";
 import { useTransition } from "react";
-import { deleteInvoice } from "../invoice-action";
+import { deleteInvoiceAction } from "../invoice-action";
 
 export function InvoiceDelete() {
   const { open, onClose, itemToDelete, onFinish } = useInvoiceDeleteStore();
@@ -11,7 +11,7 @@ export function InvoiceDelete() {
 
   const onSubmit = () => {
     startTransition(async () => {
-      await deleteInvoice(itemToDelete!.id);
+      await deleteInvoiceAction(itemToDelete!.id);
       enqueueSnackbar("Suppression effectué avec succès", {
         variant: "success",
       });

@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { createInvoice, updateInvoice } from "../invoice-action";
+import { createInvoiceAction, updateInvoiceAction } from "../invoice-action";
 import { CURRENCY, Currency } from "../invoice-util";
 import { Add, Delete } from "@mui/icons-material";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
 import { useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
-import { GetPaymentsMode } from "../../payment-mode/payment-service";
+import { GetPaymentsMode } from "../../payment-mode/payment-mode-service";
 
 export function InvoiceSave({
   clients,
@@ -54,8 +54,8 @@ export function InvoiceSave({
   const onSubmit = handleSubmit(async (data) => {
     startTransition(async () => {
       try {
-        if (invoice) await updateInvoice(invoice.id, data);
-        else await createInvoice(data);
+        if (invoice) await updateInvoiceAction(invoice.id, data);
+        else await createInvoiceAction(data);
       } catch (error: any) {
         enqueueSnackbar({
           message: error?.message ?? "Une erreur est survenue.",

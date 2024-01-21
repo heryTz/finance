@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import { usePaymentsModeDeleteStore } from "../payment-mode-store";
 import { useTransition } from "react";
-import { deletePaymentMode } from "../payment-mode-action";
+import { deletePaymentModeAction } from "../payment-mode-action";
 
 export function PaymentsModeDelete() {
   const [isPending, startTransition] = useTransition();
@@ -12,7 +12,7 @@ export function PaymentsModeDelete() {
 
   const onSubmit = () => {
     startTransition(async () => {
-      await deletePaymentMode(itemToDelete!.id);
+      await deletePaymentModeAction(itemToDelete!.id);
       enqueueSnackbar("Suppression effectué avec succès", {
         variant: "success",
       });

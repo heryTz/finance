@@ -2,13 +2,11 @@ import { useForm } from "react-hook-form";
 import { useEffect, useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   Stack,
   TextField,
 } from "@mui/material";
@@ -19,7 +17,7 @@ import {
   CreatePaymentModeInput,
   createPaymentModeSchema,
 } from "../payment-mode-dto";
-import { createPaymentMode, updatePaymentMode } from "../payment-mode-action";
+import { createPaymentModeAction, updatePaymentModeAction } from "../payment-mode-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type FormValue = CreatePaymentModeInput;
@@ -51,12 +49,12 @@ export function PaymentsModeSaveModal() {
     startTransition(async () => {
       try {
         if (idToEdit) {
-          await updatePaymentMode(idToEdit, data);
+          await updatePaymentModeAction(idToEdit, data);
           enqueueSnackbar("Modification effectué avec succès", {
             variant: "success",
           });
         } else {
-          await createPaymentMode(data);
+          await createPaymentModeAction(data);
           enqueueSnackbar("Ajout effectué avec succès", { variant: "success" });
         }
         onFinish();

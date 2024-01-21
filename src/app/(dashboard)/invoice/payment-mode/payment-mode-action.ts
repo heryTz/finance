@@ -1,37 +1,34 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { apiGuard } from "@/lib/api-guard";
 import { CreatePaymentModeInput } from "./payment-mode-dto";
 import { revalidatePath } from "next/cache";
+import {
+  createPaymentMode,
+  deletePaymentMode,
+  updatePaymentMode,
+} from "./payment-mode-service";
 
-export async function createPaymentMode(input: CreatePaymentModeInput) {
+export async function createPaymentModeAction(input: CreatePaymentModeInput) {
   const { user } = await apiGuard();
-  const payment = await prisma.paymentMode.create({
-    data: { ...input, onwerId: user!.id },
-  });
+  const payment = await createPaymentMode(user.id, input);
   revalidatePath("/invoice");
   return payment;
 }
 
-export async function updatePaymentMode(
+export async function updatePaymentModeAction(
   id: string,
   input: CreatePaymentModeInput
 ) {
   const { user } = await apiGuard();
-  const payment = await prisma.paymentMode.update({
-    data: { ...input, onwerId: user!.id },
-    where: { id },
-  });
+  const payment = await updatePaymentMode(user.id, id, input);
   revalidatePath("/invoice");
   return payment;
 }
 
-export async function deletePaymentMode(id: string) {
-  await apiGuard();
-  const payment = await prisma.paymentMode.delete({
-    where: { id },
-  });
+export async function deletePaymentModeAction(id: string) {
+  const { user } = await apiGuard();
+  const payment = await deletePaymentMode(user.id, id);
   revalidatePath("/invoice");
   return payment;
 }

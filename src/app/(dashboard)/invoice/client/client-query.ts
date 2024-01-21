@@ -1,21 +1,18 @@
-import { UpdateInvoiceClientInput } from "@/app/api/v1/invoice/client/[id]/route";
-import {
-  GetClientResponse,
-  InvoiceSaveClientInput,
-} from "@/app/api/v1/invoice/client/route";
 import { httpClient } from "@/lib";
 import { Client } from "@prisma/client";
 import { useMutation, useQuery } from "react-query";
+import type { SaveClientInput } from "./client-dto";
+import { GetClients } from "./client-service";
 
 export function useCreateInvoiceClient() {
-  return useMutation("invoice.client.create", (data: InvoiceSaveClientInput) =>
+  return useMutation("invoice.client.create", (data: SaveClientInput) =>
     httpClient.post<Client>("/invoice/client", data)
   );
 }
 
 export function useGetInvoiceClient() {
   return useQuery("invoice.client.get", () =>
-    httpClient.get<GetClientResponse>("/invoice/client")
+    httpClient.get<GetClients>("/invoice/client")
   );
 }
 
@@ -30,7 +27,7 @@ export function useGetByIdInvoiceClient(id: string | null) {
 export function usePutInvoiceClient(id: string | null) {
   return useMutation(
     ["invoice.client.put", id],
-    (data: UpdateInvoiceClientInput) =>
+    (data: SaveClientInput) =>
       httpClient.put<Client>(`/invoice/client/${id}`, data)
   );
 }
