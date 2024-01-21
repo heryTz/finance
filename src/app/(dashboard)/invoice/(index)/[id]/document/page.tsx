@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { InvoiceDocument } from "./components/invoice-document";
 import { getInvoiceById } from "../../invoice-service";
 import { getProvider } from "../../../provider/provider-service";
@@ -9,8 +8,7 @@ export default async function InvoiceDocumentPage({
   params,
 }: InvoiceDocumentPageProps) {
   const { user } = await apiGuard();
-  const invoice = await getInvoiceById(params.id);
-  if (!invoice) notFound();
+  const invoice = await getInvoiceById(user.id, params.id);
   const provider = await getProvider(user.id);
   if (!provider) {
     return (

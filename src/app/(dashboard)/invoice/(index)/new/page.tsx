@@ -7,7 +7,7 @@ import { getProducts } from "../invoice-service";
 export default async function InvoiceNewPage() {
   const { user } = await apiGuard();
   const clients = await getClients(user.id);
-  const products = await getProducts();
+  const products = await getProducts(user.id);
   const paymentsMode = await getPaymentsMode(user.id);
   return (
     <InvoiceSave

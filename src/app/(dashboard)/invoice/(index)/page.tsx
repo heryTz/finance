@@ -12,7 +12,7 @@ import { apiGuard } from "@/lib/api-guard";
 
 export default async function InvoicePage() {
   const { user } = await apiGuard();
-  const invoices = await getInvoices();
+  const invoices = await getInvoices(user.id);
   const paymentsMode = await getPaymentsMode(user.id);
 
   return (
