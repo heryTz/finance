@@ -1,41 +1,6 @@
-"use server";
-
-import { prisma } from "@/lib/prisma";
-import { apiGuard } from "@/lib/api-guard";
-import { CreatePaymentModeInput } from "./payment-mode-dto";
-import { revalidatePath } from "next/cache";
 import { NotFoundException } from "@/lib/exception";
-
-export async function createPaymentMode(input: CreatePaymentModeInput) {
-  const { user } = await apiGuard();
-  const payment = await prisma.paymentMode.create({
-    data: { ...input, onwerId: user!.id },
-  });
-  revalidatePath("/invoice");
-  return payment;
-}
-
-export async function updatePaymentMode(
-  id: string,
-  input: CreatePaymentModeInput
-) {
-  const { user } = await apiGuard();
-  const payment = await prisma.paymentMode.update({
-    data: { ...input, onwerId: user.id },
-    where: { id },
-  });
-  revalidatePath("/invoice");
-  return payment;
-}
-
-export async function deletePaymentMode(id: string) {
-  await apiGuard();
-  const payment = await prisma.paymentMode.delete({
-    where: { id },
-  });
-  revalidatePath("/invoice");
-  return payment;
-}
+import { prisma } from "@/lib/prisma";
+import { CreatePaymentModeInput } from "./payment-mode-dto";
 
 export async function getPaymentModeById(userId: string, id: string) {
   const mode = await prisma.paymentMode.findFirst({
@@ -46,3 +11,32 @@ export async function getPaymentModeById(userId: string, id: string) {
 }
 
 export type GetPaymentModeById = Awaited<ReturnType<typeof getPaymentModeById>>;
+
+export async function deletePaymentMode(userId: string, id: string) {
+  const payment = await prisma.paymentMode.delete({
+    where: { id, onwerId: userId },
+  });
+  return payment;
+}
+
+export async function updatePaymentMode(
+  userId: string,
+  id: string,
+  input: CreatePaymentModeInput
+) {
+  const payment = await prisma.paymentMode.update({
+    data: { ...input, onwerId: userId },
+    where: { id },
+  });
+  return payment;
+}
+
+export async function createPaymentMode(
+  userId: string,
+  input: CreatePaymentModeInput
+) {
+  const payment = await prisma.paymentMode.create({
+    data: { ...input, onwerId: userId },
+  });
+  return payment;
+}

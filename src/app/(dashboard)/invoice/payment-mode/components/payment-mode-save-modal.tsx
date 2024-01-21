@@ -17,7 +17,7 @@ import {
   CreatePaymentModeInput,
   createPaymentModeSchema,
 } from "../payment-mode-dto";
-import { createPaymentMode, updatePaymentMode } from "../payment-mode-service";
+import { createPaymentModeAction, updatePaymentModeAction } from "../payment-mode-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type FormValue = CreatePaymentModeInput;
@@ -49,12 +49,12 @@ export function PaymentsModeSaveModal() {
     startTransition(async () => {
       try {
         if (idToEdit) {
-          await updatePaymentMode(idToEdit, data);
+          await updatePaymentModeAction(idToEdit, data);
           enqueueSnackbar("Modification effectué avec succès", {
             variant: "success",
           });
         } else {
-          await createPaymentMode(data);
+          await createPaymentModeAction(data);
           enqueueSnackbar("Ajout effectué avec succès", { variant: "success" });
         }
         onFinish();
