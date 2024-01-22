@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
       - name: Set up pnpm
         uses: pnpm/action-setup@v2
         with:
