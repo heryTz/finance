@@ -22,8 +22,8 @@ jobs:
       - uses: ./.github/actions/docker-compose
       - name: Run tests
         run: |
-          docker compose up -d
-          pnpm test
+          chmod +x ./entrypoint-test-ci.sh
+          pnpm test:ci
       # - name: Setup SSH
       #   run: |
       #     mkdir -p ~/.ssh/
