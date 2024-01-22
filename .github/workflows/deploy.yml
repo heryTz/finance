@@ -8,6 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+      - name: Install dependencies
+        shell: bash
+        run: pnpm install
+      - uses: ./.github/actions/docker-compose
+      - name: Run tests
+        run: |
+          docker compose up -d
+          pnpm test
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
