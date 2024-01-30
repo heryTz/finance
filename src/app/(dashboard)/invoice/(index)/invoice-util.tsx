@@ -1,14 +1,19 @@
-export const CURRENCY = ["Ar", "EUR"] as const;
-export type Currency = (typeof CURRENCY)[number];
-
 import { GridColDef } from "@mui/x-data-grid";
 import { useInvoiceDeleteStore } from "./invoic-store";
 import { humanAmount, humanDate } from "@/lib";
 import { TableAction } from "@/components/table-action";
 import { useRouter } from "next/navigation";
 import { Product } from "@prisma/client";
-import { Box, IconButton, Stack, Tooltip } from "@mui/material";
+import { Box, IconButton, Stack, Tooltip, capitalize } from "@mui/material";
 import { Download, Info } from "@mui/icons-material";
+import { InvoiceMailingAction } from "./components/invoice-mailing-action";
+import dayjs from "dayjs";
+import "dayjs/locale/fr";
+
+export function getCurrency() {
+  return ["Ar", "EUR"] as const;
+}
+export type Currency = ReturnType<typeof getCurrency>[number];
 
 export function useColumnDefs() {
   const { push } = useRouter();
@@ -82,7 +87,7 @@ export function useColumnDefs() {
     {
       field: "action",
       headerName: "Action",
-      width: 150,
+      width: 250,
       renderCell: (params) => (
         <TableAction
           onUpdate={() => push(`/invoice/${params.row.id}/edit`)}
@@ -93,12 +98,15 @@ export function useColumnDefs() {
             })
           }
           buttons={
-            <IconButton
-              size="small"
-              onClick={() => push(`/invoice/${params.row.id}/document`)}
-            >
-              <Download />
-            </IconButton>
+            <>
+              <IconButton
+                size="small"
+                onClick={() => push(`/invoice/${params.row.id}/document`)}
+              >
+                <Download />
+              </IconButton>
+              <InvoiceMailingAction id={params.row.id} />
+            </>
           }
         />
       ),
@@ -106,4 +114,14 @@ export function useColumnDefs() {
   ];
 
   return { columns };
+}
+
+export function defaultInvoiceSubject() {
+  const date = dayjs().locale("fr").format("MMMM YYYY");
+  return `Facture de mois de ${capitalize(date)}`;
+}
+
+export function defaultInvoiceContent(options: { senderName: string }) {
+  const date = dayjs().locale("fr").format("MMMM YYYY");
+  return `Bonjour,\n\nVoici ma facture du mois de ${date}.\n\nCordialement,\n\n${options.senderName}`;
 }

@@ -1,6 +1,6 @@
 import { NotFoundException } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
-import { CreateInvoiceInput } from "./invoice-dto";
+import { CreateInvoiceInput, SendInvoiceMailInput } from "./invoice-dto";
 
 export async function getProducts(userId: string) {
   const products = await prisma.product.findMany({
@@ -91,3 +91,9 @@ export async function updateInvoice(
 export async function deleteInvoice(userId: string, id: string) {
   return await prisma.invoice.delete({ where: { id, ownerId: userId } });
 }
+
+export async function sendInvoiceMail(
+  userId: string,
+  id: string,
+  input: SendInvoiceMailInput
+) {}
