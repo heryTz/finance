@@ -69,7 +69,9 @@ export function InvoiceMailing({
 
   return (
     <Dialog open={open} keepMounted maxWidth="sm" fullWidth>
-      <DialogTitle>{`Envoyer la facture n° ${invoice?.data?.ref} par mail`}</DialogTitle>
+      <DialogTitle>{`Envoyer la facture n° ${
+        invoice?.data?.ref ?? "..."
+      } par mail`}</DialogTitle>
       {isLoading ? (
         <Loader />
       ) : (
@@ -91,7 +93,7 @@ export function InvoiceMailing({
             <Button
               variant="contained"
               disabled={!isValid || isPending || isLoading}
-              onSubmit={onSubmit}
+              onClick={onSubmit}
             >
               Envoyer
             </Button>
