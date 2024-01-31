@@ -1,6 +1,7 @@
 import { NotFoundException } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
 import { CreateInvoiceInput, SendInvoiceMailInput } from "./invoice-dto";
+import { sendEmail } from "@/lib/mailer";
 
 export async function getProducts(userId: string) {
   const products = await prisma.product.findMany({
@@ -96,4 +97,12 @@ export async function sendInvoiceMail(
   userId: string,
   id: string,
   input: SendInvoiceMailInput
-) {}
+) {
+  try {
+    const invoice = await getInvoiceById(userId, id);
+    const content = input.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+    await sendEmail({ ...input, content, to: invoice.Client.email });
+  } catch (error) {
+    throw new Error(`Echec de l'envoi de l'e-mail`);
+  }
+}

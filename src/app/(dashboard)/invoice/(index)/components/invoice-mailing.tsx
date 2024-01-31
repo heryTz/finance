@@ -58,6 +58,7 @@ export function InvoiceMailing({
       try {
         await sendInvoiceMailAction(id, data);
         enqueueSnackbar("Votre facture a été envoyé", { variant: "success" });
+        onClose();
         onFinish?.();
       } catch (error: any) {
         enqueueSnackbar({ message: error?.message, variant: "error" });
