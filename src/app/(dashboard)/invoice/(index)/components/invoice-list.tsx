@@ -2,10 +2,11 @@
 import { Block } from "@/components/block";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { GetInvoices } from "../invoice-service";
+import { GetInvoiceById, GetInvoices } from "../invoice-service";
 import { DataGrid } from "@mui/x-data-grid";
 import { useColumnDefs } from "../invoice-util";
 import { InvoiceDelete } from "./invoice-delete";
+import dayjs from "dayjs";
 
 export default function InvoiceList({ invoices }: InvoiceListProps) {
   const { push } = useRouter();
@@ -38,3 +39,9 @@ export default function InvoiceList({ invoices }: InvoiceListProps) {
 type InvoiceListProps = {
   invoices: GetInvoices;
 };
+
+export function invoiceDetaultFilename(invoice: GetInvoiceById) {
+  return `${invoice.ref}_${dayjs().format(
+    "DDMMYYYY"
+  )}_${invoice.Client.name.replace(" ", "-")}.pdf`;
+}

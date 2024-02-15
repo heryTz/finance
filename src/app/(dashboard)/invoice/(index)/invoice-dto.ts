@@ -1,11 +1,11 @@
 import * as z from "zod";
-import { CURRENCY } from "./invoice-util";
+import { getCurrency } from "./invoice-util";
 
 export const createInvoiceSchema = z.object({
   clientId: z.string(),
   paymentModeId: z.string(),
   tva: z.number().optional(),
-  currency: z.enum(CURRENCY),
+  currency: z.enum(getCurrency()),
   products: z
     .array(
       z.object({
@@ -18,3 +18,12 @@ export const createInvoiceSchema = z.object({
 });
 
 export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>;
+
+export const sendInvoiceMailInputSchema = z.object({
+  subject: z.string(),
+  content: z.string(),
+  file: z.string(),
+  filename: z.string().optional(),
+});
+
+export type SendInvoiceMailInput = z.infer<typeof sendInvoiceMailInputSchema>;

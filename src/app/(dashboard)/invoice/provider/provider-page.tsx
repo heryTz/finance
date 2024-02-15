@@ -33,7 +33,7 @@ export default function ProviderPage() {
   return (
     <Block title="Information du prestataire">
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {isLoading || !config ? (
+        {isLoading ? (
           <Loader />
         ) : error ? (
           <ErrorSection />

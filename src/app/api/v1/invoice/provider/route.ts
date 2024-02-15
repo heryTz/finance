@@ -1,7 +1,6 @@
 import { saveProviderInputSchema } from "@/app/(dashboard)/invoice/provider/provider-dto";
 import { getProvider, saveProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { apiGuard } from "@/lib/api-guard";
-import { prisma } from "@/lib/prisma";
 import { weh } from "@/lib/with-error-handler";
 import { NextResponse } from "next/server";
 
