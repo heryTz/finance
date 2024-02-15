@@ -1,13 +1,20 @@
 import { createTransport } from "nodemailer";
 import { logError } from "./logger";
+import Mail from "nodemailer/lib/mailer";
 
 type SendMailParams = {
   to: string;
   subject: string;
   content: string;
+  attachments?: Mail.Attachment[];
 };
 
-export async function sendEmail({ to, subject, content }: SendMailParams) {
+export async function sendEmail({
+  to,
+  subject,
+  content,
+  attachments,
+}: SendMailParams) {
   try {
     const transporter = createTransport({
       host: process.env.SMTP_HOST,
@@ -24,6 +31,7 @@ export async function sendEmail({ to, subject, content }: SendMailParams) {
       to,
       subject: subject,
       html: content,
+      attachments,
     });
   } catch (error) {
     logError(error);

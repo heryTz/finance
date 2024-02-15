@@ -1,5 +1,5 @@
 import { Send } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { Button } from "@mui/material";
 import { useState } from "react";
 import { InvoiceMailing, InvoiceMailingProps } from "./invoice-mailing";
 
@@ -7,9 +7,13 @@ export function InvoiceMailingAction(props: InvoiceMailingActionProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <IconButton size="small" onClick={() => setOpen(true)}>
-        <Send />
-      </IconButton>
+      <Button
+        variant="contained"
+        onClick={() => setOpen(true)}
+        endIcon={<Send />}
+      >
+        Envoyer par email
+      </Button>
       {open && (
         <InvoiceMailing {...props} open onClose={() => setOpen(false)} />
       )}
@@ -17,4 +21,4 @@ export function InvoiceMailingAction(props: InvoiceMailingActionProps) {
   );
 }
 
-type InvoiceMailingActionProps = Pick<InvoiceMailingProps, "id">;
+type InvoiceMailingActionProps = Pick<InvoiceMailingProps, "id" | "onSubmit">;

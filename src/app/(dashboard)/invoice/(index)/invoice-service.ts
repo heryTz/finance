@@ -101,7 +101,12 @@ export async function sendInvoiceMail(
   try {
     const invoice = await getInvoiceById(userId, id);
     const content = input.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
-    await sendEmail({ ...input, content, to: invoice.Client.email });
+    await sendEmail({
+      ...input,
+      content,
+      to: invoice.Client.email,
+      attachments: [{ path: input.file, filename: input.filename }],
+    });
   } catch (error) {
     throw new Error(`Echec de l'envoi de l'e-mail`);
   }

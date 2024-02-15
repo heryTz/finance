@@ -15,17 +15,17 @@ import {
 import { useForm } from "react-hook-form";
 import { useEffect, useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
-import { sendInvoiceMailAction } from "../invoice-action";
 import { useGetProvider } from "../../provider/provider-query";
 import { Loader } from "@/components/loader";
 import { useGetInvoiceById } from "../invoice-query";
 import { defaultInvoiceContent, defaultInvoiceSubject } from "../invoice-util";
+import { invoiceDetaultFilename } from "./invoice-list";
 
 export function InvoiceMailing({
   open,
   onClose,
-  onFinish,
   id,
+  onSubmit,
 }: InvoiceMailingProps) {
   const [isPending, startTransition] = useTransition();
   const provider = useGetProvider();
@@ -34,32 +34,34 @@ export function InvoiceMailing({
   const { register, formState, handleSubmit, reset } =
     useForm<SendInvoiceMailInput>({
       defaultValues: {
-        content: "fdfsd",
-        subject: "fsdfsdfdfsdfsd",
+        content: "",
+        subject: "",
+        file: "",
       },
       resolver: zodResolver(sendInvoiceMailInputSchema),
     });
   const { isValid, isDirty } = formState;
 
   useEffect(() => {
-    if (provider?.data && !isDirty) {
+    if (provider?.data && !isDirty && invoice?.data) {
       reset({
         subject: defaultInvoiceSubject(),
         content: defaultInvoiceContent({
           senderName: provider.data.data?.name ?? "",
         }),
+        file: "placeholder",
+        filename: invoiceDetaultFilename(invoice.data),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provider?.data]);
+  }, [provider?.data, invoice?.data]);
 
-  const onSubmit = handleSubmit((data) => {
+  const submit = handleSubmit((data) => {
     startTransition(async () => {
       try {
-        await sendInvoiceMailAction(id, data);
+        await onSubmit(data);
         enqueueSnackbar("Votre facture a été envoyé", { variant: "success" });
         onClose();
-        onFinish?.();
       } catch (error: any) {
         enqueueSnackbar({ message: error?.message, variant: "error" });
       }
@@ -87,6 +89,11 @@ export function InvoiceMailing({
                 fullWidth
                 {...register("content")}
               />
+              <TextField
+                label="Nom du fichier"
+                fullWidth
+                {...register("filename")}
+              />
             </Stack>
           </DialogContent>
           <DialogActions>
@@ -94,7 +101,7 @@ export function InvoiceMailing({
             <Button
               variant="contained"
               disabled={!isValid || isPending || isLoading}
-              onClick={onSubmit}
+              onClick={submit}
             >
               Envoyer
             </Button>
@@ -109,5 +116,7 @@ export type InvoiceMailingProps = {
   open: boolean;
   onClose: () => void;
   id: string;
-  onFinish?: () => void;
+  onSubmit: (
+    data: Pick<SendInvoiceMailInput, "content" | "subject">
+  ) => Promise<void>;
 };

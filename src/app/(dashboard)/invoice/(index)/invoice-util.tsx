@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Product } from "@prisma/client";
 import { Box, IconButton, Stack, Tooltip, capitalize } from "@mui/material";
 import { Download, Info } from "@mui/icons-material";
-import { InvoiceMailingAction } from "./components/invoice-mailing-action";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
 
@@ -98,15 +97,12 @@ export function useColumnDefs() {
             })
           }
           buttons={
-            <>
-              <IconButton
-                size="small"
-                onClick={() => push(`/invoice/${params.row.id}/document`)}
-              >
-                <Download />
-              </IconButton>
-              <InvoiceMailingAction id={params.row.id} />
-            </>
+            <IconButton
+              size="small"
+              onClick={() => push(`/invoice/${params.row.id}/document`)}
+            >
+              <Download />
+            </IconButton>
           }
         />
       ),
@@ -123,5 +119,7 @@ export function defaultInvoiceSubject() {
 
 export function defaultInvoiceContent(options: { senderName: string }) {
   const date = dayjs().locale("fr").format("MMMM YYYY");
-  return `Bonjour,\n\nVoici ma facture du mois de ${date}.\n\nCordialement,\n\n${options.senderName}`;
+  return `Bonjour,\n\nVoici ma facture du mois de ${capitalize(
+    date
+  )}.\n\nCordialement,\n\n${options.senderName}`;
 }
