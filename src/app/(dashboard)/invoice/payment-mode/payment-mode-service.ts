@@ -22,7 +22,7 @@ export async function deletePaymentMode(userId: string, id: string) {
 export async function updatePaymentMode(
   userId: string,
   id: string,
-  input: CreatePaymentModeInput
+  input: CreatePaymentModeInput,
 ) {
   const payment = await prisma.paymentMode.update({
     data: { ...input },
@@ -33,7 +33,7 @@ export async function updatePaymentMode(
 
 export async function createPaymentMode(
   userId: string,
-  input: CreatePaymentModeInput
+  input: CreatePaymentModeInput,
 ) {
   const payment = await prisma.paymentMode.create({
     data: { ...input, onwerId: userId },

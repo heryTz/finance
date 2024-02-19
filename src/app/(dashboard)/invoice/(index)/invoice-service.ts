@@ -67,7 +67,7 @@ export async function createInvoice(userId: string, input: CreateInvoiceInput) {
 export async function updateInvoice(
   userId: string,
   id: string,
-  input: CreateInvoiceInput
+  input: CreateInvoiceInput,
 ) {
   const { products, ...data } = input;
   // make it sample for now
@@ -96,7 +96,7 @@ export async function deleteInvoice(userId: string, id: string) {
 export async function sendInvoiceMail(
   userId: string,
   id: string,
-  input: SendInvoiceMailInput
+  input: SendInvoiceMailInput,
 ) {
   try {
     const invoice = await getInvoiceById(userId, id);

@@ -7,7 +7,7 @@ import { useInvoiceDeleteClient } from "../client-query";
 export function ClientDelete() {
   const { open, onClose, itemToDelete, onFinish } = useClientDeleteStore();
   const { mutateAsync, isLoading } = useInvoiceDeleteClient(
-    itemToDelete?.id ?? null
+    itemToDelete?.id ?? null,
   );
 
   const onSubmit = async () => {

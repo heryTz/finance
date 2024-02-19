@@ -18,7 +18,7 @@ export async function createPaymentModeAction(input: CreatePaymentModeInput) {
 
 export async function updatePaymentModeAction(
   id: string,
-  input: CreatePaymentModeInput
+  input: CreatePaymentModeInput,
 ) {
   const { user } = await apiGuard();
   const payment = await updatePaymentMode(user.id, id, input);

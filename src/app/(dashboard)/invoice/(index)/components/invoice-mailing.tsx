@@ -117,6 +117,6 @@ export type InvoiceMailingProps = {
   onClose: () => void;
   id: string;
   onSubmit: (
-    data: Pick<SendInvoiceMailInput, "content" | "subject">
+    data: Pick<SendInvoiceMailInput, "content" | "subject">,
   ) => Promise<void>;
 };

@@ -21,7 +21,7 @@ Chart.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const defaultDatasets = [

@@ -11,7 +11,7 @@ describe("stat service", () => {
     const user2 = await createUser({ email: "user2@example.com" });
     await createFinance(
       user1.id,
-      buildSaveFinanceInput({ type: FinanceType.revenue })
+      buildSaveFinanceInput({ type: FinanceType.revenue }),
     );
     const user2Stat = await getStats(user2.id);
     expect(JSON.stringify(user2Stat.datasets)).toBe(
@@ -19,7 +19,7 @@ describe("stat service", () => {
         { label: "Revenu", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
         { label: "Dépense", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
         { label: "Bénéfice", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-      ])
+      ]),
     );
   });
 
@@ -53,7 +53,7 @@ describe("stat service", () => {
           label: "Bénéfice",
           data: [0, 0, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20],
         },
-      ])
+      ]),
     );
   });
 });

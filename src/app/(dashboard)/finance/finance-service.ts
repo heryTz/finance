@@ -55,8 +55,8 @@ export async function createFinance(userId: string, input: SaveFinanceInput) {
           create: { name: el, userId },
           update: {},
           where: { name_userId: { name: el, userId } },
-        })
-      )
+        }),
+      ),
     );
     tags = await prisma.tag.findMany({
       where: { name: { in: input.tags } },
@@ -96,7 +96,7 @@ export type GetFinanceById = Awaited<ReturnType<typeof getFinanceById>>;
 export async function updateFinance(
   userId: string,
   id: string,
-  input: SaveFinanceInput
+  input: SaveFinanceInput,
 ) {
   const finance = await prisma.finance.findUnique({
     where: { id, userId },

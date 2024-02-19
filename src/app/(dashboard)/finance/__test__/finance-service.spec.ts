@@ -28,7 +28,7 @@ describe("finance service", () => {
     await createFinance(user1.id, buildSaveFinanceInput());
     const user2Finances = await getFinances(user2.id, {});
     const financeOfOtherUser = user2Finances.results.find(
-      (el) => el.userId !== user2.id
+      (el) => el.userId !== user2.id,
     );
     expect(financeOfOtherUser).toBeFalsy();
     expect(user2Finances.stats.expense).toBe(0);
@@ -42,7 +42,7 @@ describe("finance service", () => {
     const user1FinanceById = await getFinanceById(user1.id, user1Finance.id);
     expect(user1FinanceById).toBeTruthy();
     await expect(getFinanceById(user2.id, user1Finance.id)).rejects.toThrow(
-      NotFoundException
+      NotFoundException,
     );
   });
 
@@ -50,7 +50,7 @@ describe("finance service", () => {
     const user = await createUser({ email: "user1@example.com" });
     const finance = await createFinance(
       user.id,
-      buildSaveFinanceInput({ tags: ["tag2"] })
+      buildSaveFinanceInput({ tags: ["tag2"] }),
     );
     const update = buildSaveFinanceInput({
       tags: ["tag1"],
@@ -68,7 +68,7 @@ describe("finance service", () => {
     const user2 = await createUser({ email: "user2@example.com" });
     const user1Finance = await createFinance(user1.id, buildSaveFinanceInput());
     await expect(
-      updateFinance(user2.id, user1Finance.id, buildSaveFinanceInput())
+      updateFinance(user2.id, user1Finance.id, buildSaveFinanceInput()),
     ).rejects.toThrow(NotFoundException);
   });
 

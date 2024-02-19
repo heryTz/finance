@@ -46,7 +46,7 @@ export function useColumnDefs() {
                 <Tooltip
                   placement="right"
                   title={params.row.Products.map((el: Product) => el.name).join(
-                    ", "
+                    ", ",
                   )}
                 >
                   <Info />
@@ -66,7 +66,7 @@ export function useColumnDefs() {
       renderCell: (params) => {
         const sum = params.value.reduce(
           (acc: number, cur: Product) => acc + cur.price * cur.qte,
-          0
+          0,
         );
         return `${humanAmount(sum)} ${params.row.currency}`;
       },
@@ -120,6 +120,6 @@ export function defaultInvoiceSubject() {
 export function defaultInvoiceContent(options: { senderName: string }) {
   const date = dayjs().locale("fr").format("MMMM YYYY");
   return `Bonjour,\n\nVoici ma facture du mois de ${capitalize(
-    date
+    date,
   )}.\n\nCordialement,\n\n${options.senderName}`;
 }

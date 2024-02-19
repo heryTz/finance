@@ -22,7 +22,7 @@ describe("client service", () => {
     await createClient(user1.id, buildSaveClientInput());
     const user2Clients = await getClients(user2.id);
     const clientOfOtherUser = user2Clients.results.find(
-      (el) => el.ownerId !== user2.id
+      (el) => el.ownerId !== user2.id,
     );
     expect(clientOfOtherUser).toBeFalsy();
   });
@@ -34,7 +34,7 @@ describe("client service", () => {
     const user1ClientById = await getClientById(user1.id, user1Client.id);
     expect(user1ClientById).toBeTruthy();
     await expect(getClientById(user2.id, user1Client.id)).rejects.toThrow(
-      NotFoundException
+      NotFoundException,
     );
   });
 
@@ -65,7 +65,7 @@ describe("client service", () => {
     const user2 = await createUser({ email: "user2@example.com" });
     const user1Client = await createClient(user1.id, buildSaveClientInput());
     await expect(
-      updateClient(user2.id, user1Client.id, buildSaveClientInput())
+      updateClient(user2.id, user1Client.id, buildSaveClientInput()),
     ).rejects.toThrow();
   });
 

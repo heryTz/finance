@@ -21,7 +21,7 @@ export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
 
 export function useFinanceSave() {
   return useMutation("finance.save", (data: SaveFinanceInput) =>
-    httpClient.post<CreateFinance>(`/finances`, data)
+    httpClient.post<CreateFinance>(`/finances`, data),
   );
 }
 
@@ -37,13 +37,13 @@ export function useFinanceUpdate() {
   return useMutation(
     "finance.update",
     ({ id, ...input }: SaveFinanceInput & { id: string }) =>
-      httpClient.put<UpdateFinance>(`/finances/${id}`, input)
+      httpClient.put<UpdateFinance>(`/finances/${id}`, input),
   );
 }
 
 export function useFinanceDelete() {
   return useMutation("finance.delete", (id: string) =>
-    httpClient.delete<DeleteFinance>(`/finances/${id}`)
+    httpClient.delete<DeleteFinance>(`/finances/${id}`),
   );
 }
 

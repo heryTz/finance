@@ -86,7 +86,7 @@ export function FinanceSaveModal() {
             });
             onFinish();
           },
-        }
+        },
       );
     } else {
       create(input, {
@@ -139,12 +139,12 @@ export function FinanceSaveModal() {
                     onInputChange={(_, value) => {
                       field.onChange(value);
                       const item = existFinance?.data?.results.find(
-                        (el) => el.label === value
+                        (el) => el.label === value,
                       );
                       if (item) {
                         setValue(
                           "tags",
-                          item.tags.map((el) => el.name)
+                          item.tags.map((el) => el.name),
                         );
                       }
                     }}

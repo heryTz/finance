@@ -53,7 +53,7 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   };
 
   const onSendMail = async (
-    data: Pick<SendInvoiceMailInput, "content" | "subject">
+    data: Pick<SendInvoiceMailInput, "content" | "subject">,
   ) => {
     const doc = await printFile();
     const docBase64 = doc.output("datauristring");

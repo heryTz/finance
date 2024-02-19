@@ -39,7 +39,7 @@ export type CreateClient = Awaited<ReturnType<typeof createClient>>;
 export async function updateClient(
   userId: string,
   id: string,
-  input: SaveClientInput
+  input: SaveClientInput,
 ) {
   const client = await prisma.client.update({
     where: { id, ownerId: userId },

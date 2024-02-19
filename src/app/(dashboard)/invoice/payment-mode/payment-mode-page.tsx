@@ -8,9 +8,7 @@ import { PaymentsModeSave } from "./components/payment-mode-save";
 import { PaymentsModeDelete } from "./components/payment-mode-delete";
 import { usePaymentsModeSaveStore } from "./payment-mode-store";
 
-export default function PaymentModePage({
-  paymentsMode,
-}: PaymentsModeProps) {
+export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
   const { columns } = useColumnDefs();
   const { onOpen } = usePaymentsModeSaveStore();
 

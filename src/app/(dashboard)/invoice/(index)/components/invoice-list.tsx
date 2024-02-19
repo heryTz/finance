@@ -42,6 +42,6 @@ type InvoiceListProps = {
 
 export function invoiceDetaultFilename(invoice: GetInvoiceById) {
   return `${invoice.ref}_${dayjs().format(
-    "DDMMYYYY"
+    "DDMMYYYY",
   )}_${invoice.Client.name.replace(" ", "-")}.pdf`;
 }

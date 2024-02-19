@@ -17,7 +17,10 @@ import {
   CreatePaymentModeInput,
   createPaymentModeSchema,
 } from "../payment-mode-dto";
-import { createPaymentModeAction, updatePaymentModeAction } from "../payment-mode-action";
+import {
+  createPaymentModeAction,
+  updatePaymentModeAction,
+} from "../payment-mode-action";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type FormValue = CreatePaymentModeInput;

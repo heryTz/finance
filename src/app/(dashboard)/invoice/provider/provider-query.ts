@@ -5,12 +5,12 @@ import type { GetProvider, SaveProvider } from "./provider-service";
 
 export function useSaveProvider() {
   return useMutation("invoice.save.provider", (data: SaveProviderInput) =>
-    httpClient.post<SaveProvider>("/invoice/provider", data)
+    httpClient.post<SaveProvider>("/invoice/provider", data),
   );
 }
 
 export function useGetProvider() {
   return useQuery("invoice.provider", () =>
-    httpClient.get<GetProvider>("/invoice/provider")
+    httpClient.get<GetProvider>("/invoice/provider"),
   );
 }

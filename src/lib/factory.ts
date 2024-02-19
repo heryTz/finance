@@ -7,7 +7,7 @@ import { FinanceType } from "@/entity";
 import { faker } from "@faker-js/faker";
 
 export function buildSaveFinanceInput(
-  finance?: Partial<SaveFinanceInput>
+  finance?: Partial<SaveFinanceInput>,
 ): SaveFinanceInput {
   return {
     label: faker.commerce.product(),
@@ -20,7 +20,7 @@ export function buildSaveFinanceInput(
 }
 
 export function buildSaveClientInput(
-  client?: Partial<SaveClientInput>
+  client?: Partial<SaveClientInput>,
 ): SaveClientInput {
   return {
     address: "address",
@@ -32,7 +32,7 @@ export function buildSaveClientInput(
 
 export async function buildCreateInvoiceInput(
   userId: string,
-  invoice?: Partial<CreateInvoiceInput>
+  invoice?: Partial<CreateInvoiceInput>,
 ): Promise<CreateInvoiceInput> {
   const payment = await createPaymentMode(userId, {
     name: `${faker.company.buzzNoun()}${new Date().getTime()}`,

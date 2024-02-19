@@ -12,7 +12,7 @@ export const createInvoiceSchema = z.object({
         name: z.string().min(1),
         price: z.number(),
         qte: z.number(),
-      })
+      }),
     )
     .min(1),
 });
