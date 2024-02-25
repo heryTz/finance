@@ -2,7 +2,7 @@
 
 import { LineChart } from "@/components/chart";
 import { useFinanceAnalytics } from "../finance/finance-query";
-import { CircularProgress, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 
 const labels = [
   "Janvier",
@@ -22,16 +22,16 @@ const labels = [
 export default function StatPage() {
   const { data, isLoading, isError, error } = useFinanceAnalytics();
 
-  if (isLoading || !data) return <CircularProgress />;
   if (isError && error) return <>{error}</>;
 
   return (
     <Stack gap={4}>
       <LineChart
+        loading={isLoading || !data}
         minWidth="900px"
         title="Dépense/Revenu/Bénéfice"
         labels={labels}
-        datasets={data.data.datasets}
+        datasets={data?.data.datasets ?? []}
       />
     </Stack>
   );

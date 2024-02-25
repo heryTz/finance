@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper } from "@mui/material";
+import { Box, CircularProgress, Paper } from "@mui/material";
 
 import {
   Chart,
@@ -44,6 +44,7 @@ export function LineChart({
   datasets,
   labels,
   minWidth,
+  loading,
 }: LineChartProps) {
   return (
     <Paper sx={{ p: 2 }} style={{ position: "relative", minWidth }}>
@@ -73,11 +74,27 @@ export function LineChart({
           })),
         }}
       />
+      {loading && (
+        <Box
+          zIndex={10}
+          position={"absolute"}
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <CircularProgress />
+        </Box>
+      )}
     </Paper>
   );
 }
 
 type LineChartProps = {
+  loading?: boolean;
   minWidth?: string;
   title: string;
   labels: string[];
