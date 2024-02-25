@@ -50,6 +50,11 @@ export function LineChart({
       <Line
         options={{
           responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
           plugins: {
             legend: {
               position: "bottom" as const,

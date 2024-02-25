@@ -4,6 +4,7 @@ import { createUser } from "../../user/user-service";
 import { FinanceType } from "@/entity";
 import { getStats } from "../stat-service";
 import dayjs from "dayjs";
+import { statData } from "../stat-util";
 
 describe("stat service", () => {
   it("can only view my stat", async () => {
@@ -16,42 +17,77 @@ describe("stat service", () => {
     const user2Stat = await getStats(user2.id);
     expect(JSON.stringify(user2Stat.datasets)).toBe(
       JSON.stringify([
-        { label: "Revenu", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { label: "Dépense", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { label: "Bénéfice", data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        {
+          label: statData.incomePerMonth.label,
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        {
+          label: statData.expensePerMonth.label,
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        {
+          label: statData.totalProfit.label,
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
       ]),
     );
   });
 
   it("show stats", async () => {
     const user = await createUser({ email: "user1@example.com" });
-    const createdAt = dayjs().set("month", 2);
-    const income = buildSaveFinanceInput({
-      type: FinanceType.revenue,
-      createdAt: createdAt.toISOString(),
-      amount: 30,
-    });
-    const expense = buildSaveFinanceInput({
-      type: FinanceType.depense,
-      createdAt: createdAt.toISOString(),
-      amount: 10,
-    });
-    await createFinance(user.id, income);
-    await createFinance(user.id, expense);
+    const createdAtMarch = dayjs().set("month", 2);
+    const createdAtApril = dayjs().set("month", 3);
+    const incomes = [
+      buildSaveFinanceInput({
+        type: FinanceType.revenue,
+        createdAt: createdAtMarch.toISOString(),
+        amount: 30,
+      }),
+      buildSaveFinanceInput({
+        type: FinanceType.revenue,
+        createdAt: createdAtMarch.toISOString(),
+        amount: 40,
+      }),
+      buildSaveFinanceInput({
+        type: FinanceType.revenue,
+        createdAt: createdAtApril.toISOString(),
+        amount: 20,
+      }),
+    ];
+    const expenses = [
+      buildSaveFinanceInput({
+        type: FinanceType.depense,
+        createdAt: createdAtMarch.toISOString(),
+        amount: 10,
+      }),
+      buildSaveFinanceInput({
+        type: FinanceType.depense,
+        createdAt: createdAtMarch.toISOString(),
+        amount: 20,
+      }),
+      buildSaveFinanceInput({
+        type: FinanceType.depense,
+        createdAt: createdAtApril.toISOString(),
+        amount: 30,
+      }),
+    ];
+    await Promise.all(incomes.map((el) => createFinance(user.id, el)));
+    await Promise.all(expenses.map((el) => createFinance(user.id, el)));
+
     const stats = await getStats(user.id);
     expect(JSON.stringify(stats.datasets)).toBe(
       JSON.stringify([
         {
-          label: "Revenu",
-          data: [0, 0, income.amount, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          label: statData.incomePerMonth.label,
+          data: [0, 0, 70, 20, 0, 0, 0, 0, 0, 0, 0, 0],
         },
         {
-          label: "Dépense",
-          data: [0, 0, expense.amount, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          label: statData.expensePerMonth.label,
+          data: [0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0, 0],
         },
         {
-          label: "Bénéfice",
-          data: [0, 0, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20],
+          label: statData.totalProfit.label,
+          data: [0, 0, 40, 30, 0, 0, 0, 0, 0, 0, 0, 0],
         },
       ]),
     );

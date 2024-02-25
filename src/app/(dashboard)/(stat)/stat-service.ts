@@ -1,9 +1,9 @@
 import { FinanceType } from "@/entity";
-import { profitEvo } from "@/lib";
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { statData } from "./stat-util";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -22,6 +22,7 @@ export async function getStats(userId: string) {
   const monthsOfYear = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   const expense: number[] = [];
   const income: number[] = [];
+  let lastMonthOfFinance = 0;
 
   for (const months of monthsOfYear) {
     expense[months] = 0;
@@ -33,6 +34,7 @@ export async function getStats(userId: string) {
         createdAtDayjs.isSameOrAfter(monthDayjs.startOf("month")) &&
         createdAtDayjs.isSameOrBefore(monthDayjs.endOf("month"))
       ) {
+        lastMonthOfFinance = months;
         if (finance.type === FinanceType.depense) {
           expense[months] = expense[months] + finance.amount.toNumber();
         } else {
@@ -51,21 +53,31 @@ export async function getStats(userId: string) {
     _sum: { amount: true },
   });
 
-  expense[0] +=
+  const prevExpense =
     prevAmount
       .find((el) => el.type === FinanceType.depense)
       ?._sum.amount?.toNumber() ?? 0;
-  income[0] +=
+  const prevIncome =
     prevAmount
       .find((el) => el.type === FinanceType.revenue)
       ?._sum.amount?.toNumber() ?? 0;
-  const profit = profitEvo(income, expense);
+
+  const profit: number[] = [];
+  for (const month of monthsOfYear) {
+    if (month === 0) {
+      profit[0] = prevIncome + income[month] - (prevExpense + expense[month]);
+    } else if (month <= lastMonthOfFinance) {
+      profit[month] = profit[month - 1] + (income[month] - expense[month]);
+    } else {
+      profit[month] = 0;
+    }
+  }
 
   return {
     datasets: [
-      { label: "Revenu", data: income },
-      { label: "Dépense", data: expense },
-      { label: "Bénéfice", data: profit },
+      { label: statData.incomePerMonth.label, data: income },
+      { label: statData.expensePerMonth.label, data: expense },
+      { label: statData.totalProfit.label, data: profit },
     ],
   };
 }

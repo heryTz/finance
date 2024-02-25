@@ -29,7 +29,7 @@ export default function StatPage() {
     <Stack gap={4}>
       <LineChart
         minWidth="900px"
-        title="Dépense-Revenu par mois et évolution du bénéfice"
+        title="Dépense/Revenu/Bénéfice"
         labels={labels}
         datasets={data.data.datasets}
       />
