@@ -7,6 +7,8 @@ type SendMailParams = {
   subject: string;
   content: string;
   attachments?: Mail.Attachment[];
+  cc?: Mail.Options["cc"];
+  replyTo?: Mail.Options["replyTo"];
 };
 
 export async function sendEmail({
@@ -14,6 +16,8 @@ export async function sendEmail({
   subject,
   content,
   attachments,
+  cc,
+  replyTo,
 }: SendMailParams) {
   try {
     const transporter = createTransport({
@@ -32,6 +36,8 @@ export async function sendEmail({
       subject: subject,
       html: content,
       attachments,
+      cc,
+      replyTo,
     });
   } catch (error) {
     logError(error);

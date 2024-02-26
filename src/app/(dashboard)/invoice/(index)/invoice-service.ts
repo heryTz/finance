@@ -2,6 +2,7 @@ import { NotFoundException } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
 import { CreateInvoiceInput, SendInvoiceMailInput } from "./invoice-dto";
 import { sendEmail } from "@/lib/mailer";
+import { getProvider } from "../provider/provider-service";
 
 export async function getProducts(userId: string) {
   const products = await prisma.product.findMany({
@@ -99,6 +100,9 @@ export async function sendInvoiceMail(
   input: SendInvoiceMailInput,
 ) {
   try {
+    const provider = await getProvider(userId);
+    if (!provider) throw new Error(`Empty provider`);
+
     const invoice = await getInvoiceById(userId, id);
     const content = input.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
     await sendEmail({
@@ -106,6 +110,8 @@ export async function sendInvoiceMail(
       content,
       to: invoice.Client.email,
       attachments: [{ path: input.file, filename: input.filename }],
+      cc: { address: provider.email, name: provider.name },
+      replyTo: { address: provider.email, name: provider.name },
     });
   } catch (error) {
     throw new Error(`Echec de l'envoi de l'e-mail`);
