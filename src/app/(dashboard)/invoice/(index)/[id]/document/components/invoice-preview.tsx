@@ -112,7 +112,7 @@ export function InvoicePreview({
                     {humanAmount(el.price)} {invoice.currency}
                   </TableCell>
                   <TableCell align="right">
-                    {humanAmount(el.price)} {invoice.currency}
+                    {humanAmount(el.price * el.qte)} {invoice.currency}
                   </TableCell>
                 </TableRow>
               ))}
