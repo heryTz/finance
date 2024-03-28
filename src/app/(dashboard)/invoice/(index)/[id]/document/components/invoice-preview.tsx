@@ -47,7 +47,10 @@ export function InvoicePreview({
     qte: el.qte,
     price: el.price,
   }));
-  const sumProductsHT = products.reduce((acc, cur) => acc + cur.price, 0);
+  const sumProductsHT = products.reduce(
+    (acc, cur) => acc + cur.price * cur.qte,
+    0,
+  );
   const tvaAmount = (sumProductsHT * invoice.tva) / 100;
 
   const payments = [
