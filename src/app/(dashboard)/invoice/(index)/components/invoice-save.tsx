@@ -22,6 +22,8 @@ import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
 import { useTransition } from "react";
 import { enqueueSnackbar } from "notistack";
 import { GetPaymentsMode } from "../../payment-mode/payment-mode-service";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 export function InvoiceSave({
   clients,
@@ -39,6 +41,8 @@ export function InvoiceSave({
         clientId: invoice?.clientId,
         currency: invoice?.currency as Currency,
         paymentModeId: invoice?.paymentModeId,
+        createdAt:
+          invoice?.createdAt?.toISOString() ?? new Date().toISOString(),
       },
       resolver: zodResolver(createInvoiceSchema),
     });
@@ -127,6 +131,17 @@ export function InvoiceSave({
                 options={paymentsMode}
                 isOptionEqualToValue={(o, v) => o.id === v.id}
                 getOptionLabel={(o) => o.name}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="createdAt"
+            render={({ field }) => (
+              <DatePicker
+                label="Date de création"
+                value={dayjs(field.value)}
+                onChange={(d) => field.onChange(d?.toISOString())}
               />
             )}
           />

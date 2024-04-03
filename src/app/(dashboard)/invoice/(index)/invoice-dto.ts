@@ -6,6 +6,7 @@ export const createInvoiceSchema = z.object({
   paymentModeId: z.string(),
   tva: z.number().optional(),
   currency: z.enum(getCurrency()),
+  createdAt: z.string(),
   products: z
     .array(
       z.object({
