@@ -48,6 +48,7 @@ export async function buildCreateInvoiceInput(
     paymentModeId: payment.id,
     tva: 0,
     products: [{ name: "p1", price: 100, qte: 1 }],
+    createdAt: new Date().toISOString(),
     ...invoice,
   };
 }
