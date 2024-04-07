@@ -119,7 +119,9 @@ export function FinanceSaveModal() {
       ) : (
         <>
           <DialogContent>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Box
+              sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}
+            >
               <Controller
                 control={control}
                 name="label"
