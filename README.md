@@ -50,4 +50,5 @@ docker compose -f docker-compose.prod.yml up
 - [x] Improve ```apiGuard``` by throw Exception when unauthorized
 - [ ] Make test other than db async
 - [ ] Secure server action input
-- [ ] Improve stat
+- [ ] Improve stat dashboard
+- [ ] Add a guide to the invoice creation process
