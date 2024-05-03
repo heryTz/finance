@@ -1,6 +1,6 @@
 import { FinanceType } from "@/entity";
 import { Finance } from "@prisma/client";
-import { bilanGlobal } from "./finance-stat";
+import { bilanGlobal } from "../finance-stat";
 import { Decimal } from "@prisma/client/runtime/library";
 
 describe("bilanGlobal", () => {
