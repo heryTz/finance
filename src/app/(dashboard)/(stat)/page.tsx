@@ -1,38 +1,10 @@
-"use client";
+import { apiGuard } from "@/lib/api-guard";
+import { getStats } from "./stat-service";
+import { StatContent } from "./components/stat-content";
 
-import { LineChart } from "@/components/chart";
-import { useFinanceAnalytics } from "../finance/finance-query";
-import { Stack } from "@mui/material";
+export default async function StatPage() {
+  const { user } = await apiGuard();
+  const stats = await getStats(user.id);
 
-const labels = [
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Août",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Décembre",
-];
-
-export default function StatPage() {
-  const { data, isLoading, isError, error } = useFinanceAnalytics();
-
-  if (isError && error) return <>{error}</>;
-
-  return (
-    <Stack gap={4}>
-      <LineChart
-        loading={isLoading || !data}
-        minWidth="900px"
-        title="Dépense/Revenu/Bénéfice"
-        labels={labels}
-        datasets={data?.data.datasets ?? []}
-      />
-    </Stack>
-  );
+  return <StatContent data={stats} />;
 }

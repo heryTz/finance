@@ -8,7 +8,6 @@ import type {
   GetFinances,
   UpdateFinance,
 } from "./finance-service";
-import type { GetStats } from "../(stat)/stat-service";
 
 export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
   return useQuery(["finance", q, distinct], ({ queryKey }) => {
@@ -45,11 +44,4 @@ export function useFinanceDelete() {
   return useMutation("finance.delete", (id: string) =>
     httpClient.delete<DeleteFinance>(`/finances/${id}`),
   );
-}
-
-export function useFinanceAnalytics() {
-  return useQuery({
-    queryKey: "finance.stats",
-    queryFn: () => httpClient.get<GetStats>(`/finances/stats`),
-  });
 }
