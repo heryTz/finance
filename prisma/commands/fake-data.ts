@@ -1,6 +1,15 @@
 import { faker } from "@faker-js/faker";
 import { FinanceType } from "../../src/entity";
 import { prisma } from "@/lib/prisma";
+import dayjs from "dayjs";
+
+function randomDayOfMonth(date: Date | null): Date {
+  if (!date) {
+    return new Date();
+  }
+  const day = faker.number.int({ min: 1, max: 28 });
+  return dayjs(date).set("date", day).toDate();
+}
 
 async function run() {
   const users = await prisma.user.findMany();
@@ -9,6 +18,8 @@ async function run() {
       where: { id: user.id },
       data: {
         email: faker.internet.email(),
+        createdAt: randomDayOfMonth(user.createdAt),
+        updatedAt: randomDayOfMonth(user.updatedAt),
       },
     });
   }
@@ -23,6 +34,8 @@ async function run() {
           finance.type === FinanceType.depense
             ? faker.number.int({ min: 1000, max: 1500 })
             : faker.number.int({ min: 3000, max: 10000 }),
+        createdAt: randomDayOfMonth(finance.createdAt),
+        updatedAt: randomDayOfMonth(finance.updatedAt),
       },
     });
   }
@@ -31,7 +44,11 @@ async function run() {
   for (let index = 0; index < tags.length; index++) {
     await prisma.tag.update({
       where: { id: tags[index].id },
-      data: { name: faker.word.noun() + index },
+      data: {
+        name: faker.word.noun() + index,
+        createdAt: randomDayOfMonth(tags[index].createdAt),
+        updatedAt: randomDayOfMonth(tags[index].updatedAt),
+      },
     });
   }
 
@@ -47,6 +64,8 @@ async function run() {
         siren: faker.string.alpha(),
         nif: faker.string.alpha(),
         phone: faker.phone.number(),
+        createdAt: randomDayOfMonth(clients[index].createdAt),
+        updatedAt: randomDayOfMonth(clients[index].updatedAt),
       },
     });
   }
@@ -63,6 +82,8 @@ async function run() {
         siren: faker.string.alpha(),
         nif: faker.string.alpha(),
         phone: faker.phone.number(),
+        createdAt: randomDayOfMonth(provider.createdAt),
+        updatedAt: randomDayOfMonth(provider.updatedAt),
       },
     });
   }
@@ -74,6 +95,8 @@ async function run() {
       data: {
         name: faker.commerce.product(),
         price: +faker.commerce.price(),
+        createdAt: randomDayOfMonth(product.createdAt),
+        updatedAt: randomDayOfMonth(product.updatedAt),
       },
     });
   }
@@ -86,6 +109,8 @@ async function run() {
         accountName: faker.animal.crocodilia(),
         iban: faker.string.alphanumeric(),
         name: faker.commerce.department(),
+        createdAt: randomDayOfMonth(payment.createdAt),
+        updatedAt: randomDayOfMonth(payment.updatedAt),
       },
     });
   }
