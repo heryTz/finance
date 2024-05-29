@@ -17,7 +17,10 @@ async function run() {
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        email: faker.internet.email(),
+        email:
+          user.email === "admin@yopmail.fr"
+            ? user.email
+            : faker.internet.email(),
         createdAt: randomDayOfMonth(user.createdAt),
         updatedAt: randomDayOfMonth(user.updatedAt),
       },
