@@ -3,6 +3,16 @@ import { FinanceType } from "../../src/entity";
 import { prisma } from "@/lib/prisma";
 
 async function run() {
+  const users = await prisma.user.findMany();
+  for (const user of users) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        email: faker.internet.email(),
+      },
+    });
+  }
+
   const finances = await prisma.finance.findMany();
   for (const finance of finances) {
     await prisma.finance.update({
