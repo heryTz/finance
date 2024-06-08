@@ -1,7 +1,7 @@
 import { ConfirmationModal } from "@/components/modal";
 import { Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
-import { useInvoiceDeleteStore } from "../invoic-store";
+import { useInvoiceDeleteStore } from "../invoice-store";
 import { useTransition } from "react";
 import { deleteInvoiceAction } from "../invoice-action";
 

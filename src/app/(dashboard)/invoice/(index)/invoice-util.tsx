@@ -1,5 +1,5 @@
 import { GridColDef } from "@mui/x-data-grid";
-import { useInvoiceDeleteStore } from "./invoic-store";
+import { useInvoiceDeleteStore } from "./invoice-store";
 import { humanAmount, humanDate } from "@/lib";
 import { TableAction } from "@/components/table-action";
 import { useRouter } from "next/navigation";

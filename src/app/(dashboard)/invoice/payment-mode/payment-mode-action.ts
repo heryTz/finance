@@ -1,7 +1,10 @@
 "use server";
 
 import { apiGuard } from "@/lib/api-guard";
-import { CreatePaymentModeInput } from "./payment-mode-dto";
+import {
+  CreatePaymentModeInput,
+  createPaymentModeSchema,
+} from "./payment-mode-dto";
 import { revalidatePath } from "next/cache";
 import {
   createPaymentMode,
@@ -11,7 +14,8 @@ import {
 
 export async function createPaymentModeAction(input: CreatePaymentModeInput) {
   const { user } = await apiGuard();
-  const payment = await createPaymentMode(user.id, input);
+  const data = createPaymentModeSchema.parse(input);
+  const payment = await createPaymentMode(user.id, data);
   revalidatePath("/invoice");
   return payment;
 }
@@ -21,7 +25,8 @@ export async function updatePaymentModeAction(
   input: CreatePaymentModeInput,
 ) {
   const { user } = await apiGuard();
-  const payment = await updatePaymentMode(user.id, id, input);
+  const data = createPaymentModeSchema.parse(input);
+  const payment = await updatePaymentMode(user.id, id, data);
   revalidatePath("/invoice");
   return payment;
 }
