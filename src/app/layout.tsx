@@ -1,14 +1,16 @@
-/* eslint-disable @next/next/no-page-custom-font */
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { AppProvider } from "./app-provider";
 import { getServerSession } from "next-auth";
 import { CssBaseline } from "@mui/material";
 import { authOptions } from "./api/auth/[...nextauth]/options";
+import { Inter as FontSans } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "FINANCE",
@@ -33,14 +35,15 @@ export default async function RootLayout({
         />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
-        />
-        <link
-          rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </head>
-      <body>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
         <CssBaseline />
         <AppProvider session={session}>{children}</AppProvider>
       </body>
