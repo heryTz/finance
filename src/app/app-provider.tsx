@@ -6,6 +6,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { SnackbarProvider } from "notistack";
+import { setupLang } from "@/lang/config";
+
+setupLang();
 
 const queryClient = new QueryClient();
 

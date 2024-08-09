@@ -1,28 +1,26 @@
-version: "3.8"
-
 name: finance-dev
 
 services:
-  app:
-    build:
-      target: dev
-      context: .
-    working_dir: /app
-    volumes:
-      - ./:/app
-      - /app/node_modules/
-      - /app/.next/
-    ports:
-      - 3000:3000
-    depends_on:
-      - db
-      - mailhog
+  # app:
+  #   build:
+  #     target: dev
+  #     context: .
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
+  #     - /app/node_modules/
+  #     - /app/.next/
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - db
+  #     - mailhog
 
   db:
     image: postgres:16.1-alpine
     restart: unless-stopped
     ports:
-      - '5433:5432'
+      - "5433:5432"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: user
