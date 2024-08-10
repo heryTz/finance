@@ -1,5 +1,3 @@
-import { CircularProgress } from "@mui/material";
-
 export function Loader() {
   return (
     <div
@@ -11,7 +9,7 @@ export function Loader() {
         alignItems: "center",
       }}
     >
-      <CircularProgress />
+      <p className="text-muted-foreground">Chargement...</p>
     </div>
   );
 }

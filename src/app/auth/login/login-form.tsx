@@ -71,6 +71,7 @@ export function LoginForm() {
               render={({ field }) => (
                 <InputField
                   {...field}
+                  type="email"
                   label="Email"
                   placeholder="m@example.com"
                 />
