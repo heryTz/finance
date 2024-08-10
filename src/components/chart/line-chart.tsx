@@ -42,13 +42,15 @@ export function LineChart({ title, labels, datasets }: LineChartProps) {
   });
 
   return (
-    <Card>
+    <Card className="overflow-auto">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription></CardDescription>
+        <CardDescription>
+          Janvier - Décembre {new Date().getFullYear()}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
+      <CardContent className="overflow-auto">
+        <ChartContainer style={{ minWidth: 700 }} config={chartConfig}>
           <RechartLineChart
             accessibilityLayer
             data={chartData}
