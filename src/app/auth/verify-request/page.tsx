@@ -25,7 +25,7 @@ export default function VerifyRequestPage() {
       </CardHeader>
       <CardFooter>
         <Button className="w-full" asChild>
-          <Link href="/">Entrer dans tableau de bord</Link>
+          <Link href="/">Entrer dans le dashboard</Link>
         </Button>
       </CardFooter>
     </Card>

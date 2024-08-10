@@ -1,10 +1,11 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
-export function Container({ title, children }: ContainerProps) {
+export function Container({ action, title, children }: ContainerProps) {
   return (
     <>
-      <div className="flex items-center">
+      <div className="flex justify-between items-center gap-4">
         <h1 className="text-lg font-semibold md:text-2xl">{title}</h1>
+        {action}
       </div>
       {children}
     </>
@@ -13,4 +14,5 @@ export function Container({ title, children }: ContainerProps) {
 
 type ContainerProps = PropsWithChildren<{
   title: string;
+  action?: ReactNode;
 }>;

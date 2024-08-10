@@ -1,1 +1,1 @@
-export * from "./error-section";
+export * from "../error-section";
