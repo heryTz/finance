@@ -16,9 +16,7 @@ export function useColumnDefs() {
       field: "type",
       headerName: "Type",
       width: 100,
-      renderCell: (params) => (
-        <Dot color={params.value === "depense" ? "lightpink" : "lightgreen"} />
-      ),
+      renderCell: (params) => <Dot />,
     },
     {
       field: "amount",

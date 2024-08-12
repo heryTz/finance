@@ -1,18 +1,11 @@
-import { Box } from "@mui/material";
+import { cn } from "@/lib/utils";
 
-export function Dot({ color }: DotProps) {
+export function Dot({ className }: DotProps) {
   return (
-    <Box
-      sx={{
-        backgroundColor: color,
-        height: "16px",
-        width: "16px",
-        borderRadius: "100%",
-      }}
-    />
+    <span className={cn("h-3 w-3 rounded-full inline-block", className)}></span>
   );
 }
 
 type DotProps = {
-  color: "lightpink" | "lightgreen";
+  className?: string;
 };
