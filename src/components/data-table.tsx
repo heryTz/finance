@@ -11,6 +11,7 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  InitialTableState,
   useReactTable,
 } from "@tanstack/react-table";
 import { AppPagination } from "./app-pagination";
@@ -18,10 +19,16 @@ import { AppPagination } from "./app-pagination";
 export function DataTable<TData, TValue>({
   data,
   columns,
+  initialState,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
+    initialState: {
+      pagination: {
+        pageSize: 15,
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
@@ -82,7 +89,12 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <AppPagination />
+      <AppPagination
+        page={table.getState().pagination.pageIndex + 1}
+        pageSize={table.getState().pagination.pageSize}
+        totalItems={table.getFilteredRowModel().rows.length}
+        onChange={(p) => table.setPageIndex(p - 1)}
+      />
     </div>
   );
 }
@@ -90,4 +102,5 @@ export function DataTable<TData, TValue>({
 type DataTableProps<TData, TValue> = {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
+  initialState?: InitialTableState;
 };
