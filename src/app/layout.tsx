@@ -44,8 +44,10 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        <CssBaseline />
-        <AppProvider session={session}>{children}</AppProvider>
+        <div vaul-drawer-wrapper="" className="min-h-dvh bg-background">
+          <CssBaseline />
+          <AppProvider session={session}>{children}</AppProvider>
+        </div>
       </body>
     </html>
   );
