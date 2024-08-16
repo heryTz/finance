@@ -25,12 +25,15 @@ export function useFinanceColumnDefs() {
     {
       accessorKey: "label",
       header: "Libellé",
+      meta: {
+        className: "w-[350px]",
+      },
     },
     {
       accessorKey: "type",
       header: "Type",
       meta: {
-        className: "text-center",
+        className: "w-[150px] text-center",
       },
       cell(props) {
         return props.getValue() === FinanceType.depense ? (
@@ -44,7 +47,7 @@ export function useFinanceColumnDefs() {
       accessorKey: "amount",
       header: "Montant",
       meta: {
-        className: "text-right",
+        className: "w-[200px] text-right",
       },
       cell(props) {
         return humanAmount(props.getValue() as number);
@@ -53,6 +56,9 @@ export function useFinanceColumnDefs() {
     {
       accessorKey: "tags",
       header: "Tags",
+      meta: {
+        className: "w-[300px]",
+      },
       cell(props) {
         return (
           <div className="flex items-center gap-2">

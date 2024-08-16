@@ -31,7 +31,7 @@ export function Component({ children }: PropsWithChildren) {
   ];
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-dvh w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <Sidebar menus={menus} />
       <div className="flex flex-col">
         <Appbar menus={menus} />

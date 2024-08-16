@@ -15,6 +15,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { AppPagination } from "./app-pagination";
+import { HScrollable } from "./h-scrollable";
 
 export function DataTable<TData, TValue>({
   data,
@@ -35,7 +36,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="grid gap-4">
-      <div className="rounded-md border">
+      <HScrollable className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -88,7 +89,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
+      </HScrollable>
       <AppPagination
         page={table.getState().pagination.pageIndex + 1}
         pageSize={table.getState().pagination.pageSize}

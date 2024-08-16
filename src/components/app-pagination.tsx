@@ -8,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./ui/pagination";
+import { useMq } from "@/lib/use-mq";
 
 export function AppPagination({
   pageSize,
@@ -15,43 +16,58 @@ export function AppPagination({
   totalItems,
   onChange,
 }: AppPaginationProps) {
+  const { isMD } = useMq();
   const pageCount = Math.ceil(totalItems / pageSize);
-  const range = getPageRange({
-    pageIndex: page,
-    pageCount,
-    maxVisiblePages: 5,
-  });
+  const range = isMD
+    ? getPageRange({
+        pageIndex: page,
+        pageCount,
+        maxVisiblePages: 5,
+      })
+    : [page];
+
+  const offsetCount = pageSize * (page - 1);
 
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious onClick={() => onChange(Math.min(1, page - 1))} />
-        </PaginationItem>
-        {range.map((p) => {
-          if (typeof p === "boolean") {
+    <>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => onChange(Math.min(1, page - 1))}
+            />
+          </PaginationItem>
+          {range.map((p) => {
+            if (typeof p === "boolean") {
+              return (
+                <PaginationItem key="ellipsis">
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+
             return (
-              <PaginationItem key="ellipsis">
-                <PaginationEllipsis />
+              <PaginationItem key={p.toString()}>
+                <PaginationLink
+                  isActive={p === page}
+                  onClick={() => onChange(p)}
+                >
+                  {p}
+                </PaginationLink>
               </PaginationItem>
             );
-          }
-
-          return (
-            <PaginationItem key={p.toString()}>
-              <PaginationLink isActive={p === page} onClick={() => onChange(p)}>
-                {p}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })}
-        <PaginationItem>
-          <PaginationNext
-            onClick={() => onChange(Math.min(pageCount, page + 1))}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+          })}
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => onChange(Math.min(pageCount, page + 1))}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+      <div className="mx-auto flex justify-center items-center text-muted-foreground text-sm">
+        {offsetCount + 1}-{offsetCount + pageSize} sur {totalItems} résultats
+      </div>
+    </>
   );
 }
 
