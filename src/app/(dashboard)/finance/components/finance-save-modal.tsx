@@ -1,6 +1,6 @@
 "use client";
 import { FinanceType } from "@/entity";
-import { Autocomplete, MenuItem, TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useFinanceSaveStore } from "../finance-store";
 import { Controller, useForm } from "react-hook-form";
@@ -16,9 +16,11 @@ import { useEffect } from "react";
 import { enqueueSnackbar } from "notistack";
 import { Modal } from "@/components/modal";
 import { Loader } from "@/components/loader";
-import { Form } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { saveFinanceInputSchema } from "../finance-dto";
+import { Field } from "@/components/field";
+import { Autocomplete } from "@/components/autocomplete";
 
 type FormData = {
   label: string;
@@ -112,7 +114,25 @@ export function FinanceSaveModal() {
       ) : (
         <Form {...form}>
           <div className="grid gap-4">
-            <Controller
+            <FormField
+              control={form.control}
+              name="label"
+              render={({ field }) => (
+                <Field label="Libellé">
+                  <Autocomplete
+                    value={field.value}
+                    onChange={field.onChange}
+                    options={
+                      existFinance?.data.results.map((el) => ({
+                        label: el.label,
+                        value: el.label,
+                      })) ?? []
+                    }
+                  />
+                </Field>
+              )}
+            />
+            {/* <Controller
               control={form.control}
               name="label"
               rules={{ required: true }}
@@ -142,7 +162,7 @@ export function FinanceSaveModal() {
                   }}
                 />
               )}
-            />
+            /> */}
             <Controller
               control={form.control}
               name="type"
@@ -172,7 +192,7 @@ export function FinanceSaveModal() {
                 />
               )}
             />
-            <Controller
+            {/* <Controller
               control={form.control}
               name="tags"
               render={({ field }) => (
@@ -190,7 +210,7 @@ export function FinanceSaveModal() {
                   onChange={(_, value) => field.onChange(value)}
                 />
               )}
-            />
+            /> */}
             <Controller
               control={form.control}
               name="createdAt"
