@@ -35,7 +35,7 @@ export function Component({ children }: PropsWithChildren) {
       <Sidebar menus={menus} />
       <div className="flex flex-col">
         <Appbar menus={menus} />
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 max-h-[calc(100dvh_-_56px)] lg:max-h-[calc(100dvh_-_60px)] h-full overflow-auto">
           {children}
         </main>
       </div>

@@ -50,7 +50,10 @@ export function LineChart({ title, labels, datasets }: LineChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="overflow-auto">
-        <ChartContainer style={{ minWidth: 700 }} config={chartConfig}>
+        <ChartContainer
+          className="w-full min-w-[700px] max-h-[600px]"
+          config={chartConfig}
+        >
           <RechartLineChart
             accessibilityLayer
             data={chartData}
