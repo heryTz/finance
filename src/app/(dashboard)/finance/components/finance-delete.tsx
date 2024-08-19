@@ -1,8 +1,7 @@
-import { ConfirmationModal } from "@/components/modal";
 import { useFinanceDeleteStore } from "../finance-store";
-import { Typography } from "@mui/material";
 import { useFinanceDelete } from "../finance-query";
 import { enqueueSnackbar } from "notistack";
+import { Modal } from "@/components/modal";
 
 export function FinanceDelete() {
   const { open, onClose, itemToDelete, onFinish } = useFinanceDeleteStore();
@@ -22,18 +21,23 @@ export function FinanceDelete() {
   if (!open || !itemToDelete) return null;
 
   return (
-    <ConfirmationModal
-      submitLabel="Supprimer"
-      title="Confirmation"
-      content={
-        <Typography>
-          Voulez-vous supprimer le <strong>{itemToDelete.label}</strong> ?
-        </Typography>
-      }
-      onSubmit={onSubmit}
-      onCancel={onClose}
-      loading={isLoading}
+    <Modal
       open={open}
-    />
+      onOpenChange={(v) => !v && onClose()}
+      title="Confirmation de la suppression"
+      description=""
+      submit={{
+        onClick: onSubmit,
+        variant: "destructive",
+        children: "Supprimer",
+        disabled: isLoading,
+      }}
+      cancel={{ onClick: onClose, children: "Annuler" }}
+    >
+      <p className="text-muted-foreground">
+        Etes-vous sûr de vouloir supprimer l&apos;opération{" "}
+        <strong>{itemToDelete.label}</strong> ?
+      </p>
+    </Modal>
   );
 }

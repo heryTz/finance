@@ -39,7 +39,7 @@ export function FinanceSaveModal() {
     distinct: "true",
   });
   const form = useForm<FormData>({
-    resolver: zodResolver(saveFinanceInputSchema),
+    // resolver: zodResolver(saveFinanceInputSchema),
     defaultValues: {
       label: "",
       amount: "",
