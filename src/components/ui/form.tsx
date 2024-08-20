@@ -126,6 +126,24 @@ const FormControl = React.forwardRef<
 });
 FormControl.displayName = "FormControl";
 
+const FormControlWithArea = (props: {
+  component: (
+    props: React.HTMLAttributes<unknown> & React.AriaAttributes,
+  ) => React.ReactNode;
+}) => {
+  const { error, formItemId, formDescriptionId, formMessageId } =
+    useFormField();
+
+  return props.component({
+    id: formItemId,
+    "aria-describedby": !error
+      ? `${formDescriptionId}`
+      : `${formDescriptionId} ${formMessageId}`,
+    "aria-invalid": !!error,
+  });
+};
+FormControlWithArea.displayName = "FormControlWithArea";
+
 const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -176,4 +194,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormControlWithArea,
 };

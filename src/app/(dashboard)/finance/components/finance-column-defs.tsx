@@ -10,7 +10,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -74,6 +73,9 @@ export function useFinanceColumnDefs() {
     {
       accessorKey: "createdAt",
       header: "Création",
+      meta: {
+        className: "min-w-[200px]",
+      },
       cell(props) {
         return humanDate(props.getValue() as string);
       },

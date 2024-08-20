@@ -1,10 +1,7 @@
 "use client";
 import { FinanceType } from "@/entity";
-import { MenuItem, TextField } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useFinanceSaveStore } from "../finance-store";
-import { Controller, useForm } from "react-hook-form";
-import dayjs, { Dayjs } from "dayjs";
+import { useForm } from "react-hook-form";
 import { useTags } from "../../tag/tag-query";
 import {
   useFinanceById,
@@ -13,80 +10,68 @@ import {
   useFinances,
 } from "../finance-query";
 import { useEffect } from "react";
-import { enqueueSnackbar } from "notistack";
 import { Modal } from "@/components/modal";
 import { Loader } from "@/components/loader";
 import { Form, FormField } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { saveFinanceInputSchema } from "../finance-dto";
-import { Field } from "@/components/field";
-import { Autocomplete } from "@/components/autocomplete";
+import { SelectField } from "@/components/select-field";
+import { InputField } from "@/components/input-field";
+import { CalendarField } from "@/components/calendar-field";
+import { MultiSelectField } from "@/components/multi-select-field";
+import { AutocompleteField } from "@/components/autocomplete-field";
+import { zd } from "@/lib/zod";
+import { toast } from "sonner";
 
-type FormData = {
-  label: string;
-  type: FinanceType;
-  amount: string;
-  tags: string[];
-  createdAt: Dayjs;
-};
+// TODO: Fix focus for CalendarField, Button
+// TODO: Fix error js - press enter on input autocomplete and press arrow down
+
+type FormData = zd.infer<typeof saveFinanceInputSchema>;
 
 export function FinanceSaveModal() {
   const { open, onClose, onFinish, idToEdit } = useFinanceSaveStore();
-  const { data: tags, isLoading: tagsLoading } = useTags();
-  const { data: financeData, isLoading: financeLoading } =
-    useFinanceById(idToEdit);
-  const { mutate: create, isLoading: saveLoading } = useFinanceSave();
-  const { mutate: update, isLoading: updateLoading } = useFinanceUpdate();
-  const { data: existFinance, isLoading: existFinanceLoading } = useFinances({
-    distinct: "true",
-  });
+  const tags = useTags();
+  const financeItem = useFinanceById(idToEdit);
+  const create = useFinanceSave();
+  const update = useFinanceUpdate();
+  const finances = useFinances({ distinct: "true" });
   const form = useForm<FormData>({
-    // resolver: zodResolver(saveFinanceInputSchema),
+    resolver: zodResolver(saveFinanceInputSchema),
     defaultValues: {
       label: "",
-      amount: "",
+      amount: 0,
       tags: [],
       type: FinanceType.depense,
-      createdAt: dayjs(),
+      createdAt: new Date(),
     },
   });
 
   useEffect(() => {
-    if (financeData?.data) {
-      const data = financeData.data;
-      form.reset({
-        label: data.label,
-        amount: data.amount.toString(),
-        createdAt: dayjs(data.createdAt),
-        tags: data.tags.map((el) => el.name),
-        type: data.type as FinanceType,
+    if (financeItem.data?.data) {
+      const data = saveFinanceInputSchema.parse({
+        ...financeItem.data.data,
+        tags: financeItem.data.data.tags.map((el) => el.name),
       });
+      form.reset(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [financeData]);
+  }, [financeItem.data]);
 
   const onSubmit = form.handleSubmit((data) => {
-    const input = {
-      ...data,
-      amount: +data.amount,
-      createdAt: data.createdAt.toISOString(),
-    };
     if (idToEdit) {
-      update(
-        { ...input, id: idToEdit },
+      update.mutate(
+        { ...data, id: idToEdit },
         {
           onSuccess: () => {
-            enqueueSnackbar("Modification effectué avec succès", {
-              variant: "success",
-            });
+            toast("Modification effectuée avec succès");
             onFinish();
           },
         },
       );
     } else {
-      create(input, {
+      create.mutate(data, {
         onSuccess: () => {
-          enqueueSnackbar("Ajout effectué avec succès", { variant: "success" });
+          toast("Ajout effectué avec succès");
           onFinish();
         },
       });
@@ -106,10 +91,10 @@ export function FinanceSaveModal() {
       cancel={{ onClick: onCancel }}
       submit={{
         onClick: onSubmit,
-        disabled: saveLoading || financeLoading || updateLoading,
+        disabled: create.isLoading || financeItem.isLoading || update.isLoading,
       }}
     >
-      {idToEdit && financeLoading ? (
+      {idToEdit && financeItem.isLoading ? (
         <Loader />
       ) : (
         <Form {...form}>
@@ -118,105 +103,65 @@ export function FinanceSaveModal() {
               control={form.control}
               name="label"
               render={({ field }) => (
-                <Field label="Libellé">
-                  <Autocomplete
-                    value={field.value}
-                    onChange={field.onChange}
-                    options={
-                      existFinance?.data.results.map((el) => ({
-                        label: el.label,
-                        value: el.label,
-                      })) ?? []
-                    }
-                  />
-                </Field>
-              )}
-            />
-            {/* <Controller
-              control={form.control}
-              name="label"
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Autocomplete
-                  freeSolo
-                  loading={existFinanceLoading}
-                  options={
-                    existFinance?.data.results.map((el) => el.label) ?? []
-                  }
-                  getOptionLabel={(option) => option}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Libellé" />
-                  )}
+                <AutocompleteField
+                  label="Libellé"
                   value={field.value}
-                  onInputChange={(_, value) => {
-                    field.onChange(value);
-                    const item = existFinance?.data?.results.find(
-                      (el) => el.label === value,
-                    );
-                    if (item) {
-                      form.setValue(
-                        "tags",
-                        item.tags.map((el) => el.name),
-                      );
-                    }
-                  }}
+                  onChange={field.onChange}
+                  hideEmptySuggestion
+                  options={
+                    finances.data?.data.results.map((el) => ({
+                      label: el.label,
+                      value: el.label,
+                    })) ?? []
+                  }
                 />
               )}
-            /> */}
-            <Controller
+            />
+            <FormField
               control={form.control}
               name="type"
-              rules={{ required: true }}
               render={({ field }) => (
-                <TextField
-                  select
+                <SelectField
+                  value={field.value}
+                  onChange={field.onChange}
                   label="Type"
-                  value={field.value}
-                  onChange={field.onChange}
-                >
-                  <MenuItem value={FinanceType.revenue}>Revenu</MenuItem>
-                  <MenuItem value={FinanceType.depense}>Dépense</MenuItem>
-                </TextField>
-              )}
-            />
-            <Controller
-              control={form.control}
-              name="amount"
-              rules={{ required: true }}
-              render={({ field }) => (
-                <TextField
-                  label="Montant"
-                  type="number"
-                  value={field.value}
-                  onChange={field.onChange}
+                  options={[
+                    { value: FinanceType.revenue, label: "Revenu" },
+                    { value: FinanceType.depense, label: "Dépense" },
+                  ]}
                 />
               )}
             />
-            {/* <Controller
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <InputField label="Montant" {...field} type="number" />
+              )}
+            />
+            <FormField
               control={form.control}
               name="tags"
               render={({ field }) => (
-                <Autocomplete
-                  multiple
+                <MultiSelectField
+                  label="Tags"
                   freeSolo
-                  loading={tagsLoading}
-                  options={tags?.data.results.map((el) => el.name) ?? []}
-                  getOptionLabel={(option) => option}
-                  filterSelectedOptions
-                  renderInput={(params) => (
-                    <TextField {...params} label="Tags" />
-                  )}
                   value={field.value}
-                  onChange={(_, value) => field.onChange(value)}
+                  onChange={field.onChange}
+                  options={
+                    tags.data?.data.results.map((el) => ({
+                      label: el.name,
+                      value: el.name,
+                    })) ?? []
+                  }
                 />
               )}
-            /> */}
-            <Controller
+            />
+            <FormField
               control={form.control}
               name="createdAt"
-              rules={{ required: true }}
               render={({ field }) => (
-                <DatePicker
+                <CalendarField
                   label="Date de création"
                   value={field.value}
                   onChange={field.onChange}

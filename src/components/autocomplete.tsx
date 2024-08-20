@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { PopoverV2, usePopoverV2 } from "./popover-v2";
-import { CommandItem, CommandList } from "./ui/command";
+import { CommandEmpty, CommandItem, CommandList } from "./ui/command";
 import { Command } from "cmdk";
 
-export function Autocomplete({ options, value, onChange }: AutocompleteProps) {
+export function Autocomplete({
+  hideEmptySuggestion,
+  options,
+  value,
+  onChange,
+  inputProps,
+}: AutocompleteProps) {
   const [search, setSearch] = useState("");
   const popover = usePopoverV2<HTMLInputElement>();
 
@@ -31,23 +37,35 @@ export function Autocomplete({ options, value, onChange }: AutocompleteProps) {
         value={search}
         onFocus={() => popover.setOpen(true)}
         onBlur={() => handleChange(search)}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          if (!popover.open) popover.setOpen(true);
+        }}
+        {...inputProps}
       />
-      {popover.open && (
-        <PopoverV2 {...popover} className="p-1">
-          <CommandList>
-            {filteredOptions.map((option) => (
-              <CommandItem
-                key={option.value}
-                value={option.value}
-                onSelect={(v) => handleChange(v)}
-              >
-                {option.label}
-              </CommandItem>
-            ))}
-          </CommandList>
-        </PopoverV2>
-      )}
+      {popover.open &&
+        (!hideEmptySuggestion ||
+          (hideEmptySuggestion && filteredOptions.length > 0)) && (
+          <PopoverV2 {...popover} className="p-1">
+            <CommandEmpty>Aucun résultat.</CommandEmpty>
+            <CommandList>
+              {filteredOptions.map((option) => (
+                <CommandItem
+                  key={option.value}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  value={option.value}
+                  onSelect={() => handleChange(option.value)}
+                  className={"cursor-pointer"}
+                >
+                  {option.label}
+                </CommandItem>
+              ))}
+            </CommandList>
+          </PopoverV2>
+        )}
     </Command>
   );
 }
@@ -56,4 +74,6 @@ type AutocompleteProps = {
   options: Array<{ value: string; label: string }>;
   value: string;
   onChange: (value: string) => void;
+  hideEmptySuggestion?: boolean;
+  inputProps?: ComponentProps<typeof Input>;
 };

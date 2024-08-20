@@ -6,6 +6,7 @@ import { CssBaseline } from "@mui/material";
 import { authOptions } from "./api/auth/[...nextauth]/options";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,12 +28,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -48,6 +43,7 @@ export default async function RootLayout({
           <CssBaseline />
           <AppProvider session={session}>{children}</AppProvider>
         </div>
+        <Toaster />
       </body>
     </html>
   );

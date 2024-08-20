@@ -1,19 +1,19 @@
 import { FinanceType } from "@/entity";
-import { z } from "zod";
+import { zd } from "@/lib/zod";
 
-export const getFinancesQuerySchema = z.object({
-  q: z.string().nullable().optional(),
-  distinct: z.enum(["true", "false"]).nullable().optional(),
+export const getFinancesQuerySchema = zd.object({
+  q: zd.string().nullable().optional(),
+  distinct: zd.enum(["true", "false"]).nullable().optional(),
 });
 
-export type GetFinancesQuery = z.infer<typeof getFinancesQuerySchema>;
+export type GetFinancesQuery = zd.infer<typeof getFinancesQuerySchema>;
 
-export const saveFinanceInputSchema = z.object({
-  label: z.string(),
-  type: z.nativeEnum(FinanceType),
-  tags: z.array(z.string()),
-  amount: z.number(),
-  createdAt: z.string(),
+export const saveFinanceInputSchema = zd.object({
+  label: zd.string().min(1),
+  type: zd.nativeEnum(FinanceType),
+  tags: zd.array(zd.string()),
+  amount: zd.coerce.number().min(1),
+  createdAt: zd.coerce.date(),
 });
 
-export type SaveFinanceInput = z.infer<typeof saveFinanceInputSchema>;
+export type SaveFinanceInput = zd.infer<typeof saveFinanceInputSchema>;

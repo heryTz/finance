@@ -1,7 +1,7 @@
 import { useFinanceDeleteStore } from "../finance-store";
 import { useFinanceDelete } from "../finance-query";
-import { enqueueSnackbar } from "notistack";
 import { Modal } from "@/components/modal";
+import { toast } from "sonner";
 
 export function FinanceDelete() {
   const { open, onClose, itemToDelete, onFinish } = useFinanceDeleteStore();
@@ -10,9 +10,7 @@ export function FinanceDelete() {
   const onSubmit = () => {
     mutate(itemToDelete?.id!, {
       onSuccess: () => {
-        enqueueSnackbar("Suppression effectué avec succès", {
-          variant: "success",
-        });
+        toast("Suppression effectué avec succès");
         onFinish();
       },
     });
