@@ -10,7 +10,7 @@ import type {
 } from "./finance-service";
 
 export function useFinances({ q, distinct }: GetFinancesQuery = {}) {
-  return useQuery(["finance", q, distinct], ({ queryKey }) => {
+  return useQuery([useFinances.name, q, distinct], ({ queryKey }) => {
     const [_, q, distinct] = queryKey;
     return httpClient.get<GetFinances>(`/finances`, {
       params: { q, distinct },
@@ -24,7 +24,7 @@ export function useFinanceSave() {
   );
 }
 
-export function useFinanceById(id: string | null) {
+export function useFinanceById(id?: string) {
   return useQuery({
     queryKey: ["finance", id],
     queryFn: () => httpClient.get<GetFinanceById>(`/finances/${id}`),

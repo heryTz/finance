@@ -1,27 +1,30 @@
-import { useFinanceDeleteStore } from "../finance-store";
 import { useFinanceDelete } from "../finance-query";
 import { Modal } from "@/components/modal";
 import { toast } from "sonner";
 
-export function FinanceDelete() {
-  const { open, onClose, itemToDelete, onFinish } = useFinanceDeleteStore();
-  const { mutate, isLoading } = useFinanceDelete();
+export function FinanceDelete({
+  open,
+  onOpenChange,
+  onFinish,
+  item,
+}: FinanceDeleteProps) {
+  const { mutateAsync, isLoading } = useFinanceDelete();
 
-  const onSubmit = () => {
-    mutate(itemToDelete?.id!, {
-      onSuccess: () => {
-        toast("Suppression effectué avec succès");
-        onFinish();
-      },
-    });
+  const onSubmit = async () => {
+    try {
+      await mutateAsync(item.id);
+      toast("Suppression effectué avec succès");
+      onOpenChange(false);
+      onFinish?.();
+    } catch (error) {
+      toast.error("Une erreur est survenue");
+    }
   };
-
-  if (!open || !itemToDelete) return null;
 
   return (
     <Modal
       open={open}
-      onOpenChange={(v) => !v && onClose()}
+      onOpenChange={onOpenChange}
       title="Confirmation de la suppression"
       description=""
       submit={{
@@ -30,12 +33,22 @@ export function FinanceDelete() {
         children: "Supprimer",
         disabled: isLoading,
       }}
-      cancel={{ onClick: onClose, children: "Annuler" }}
+      cancel={{ onClick: () => onOpenChange(false), children: "Annuler" }}
     >
       <p className="text-muted-foreground">
         Etes-vous sûr de vouloir supprimer l&apos;opération{" "}
-        <strong>{itemToDelete.label}</strong> ?
+        <strong>{item.label}</strong> ?
       </p>
     </Modal>
   );
 }
+
+type FinanceDeleteProps = {
+  open: boolean;
+  onOpenChange: (b: boolean) => void;
+  onFinish?: () => void;
+  item: {
+    id: string;
+    label: string;
+  };
+};

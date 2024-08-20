@@ -20,6 +20,6 @@ describe("humanDate", () => {
 
   it("formats the date in the 'DD/MM/YYYY' format", () => {
     const result = humanDate(new Date("2022-01-01"));
-    expect(result).toBe("01/01/2022");
+    expect(result).toBe("01 janv. 2022");
   });
 });

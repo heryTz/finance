@@ -5,21 +5,9 @@ import { FinanceType } from "@/entity";
 import { Dot } from "@/components/dot";
 import { humanAmount, humanDate } from "@/lib";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { useFinanceDeleteStore, useFinanceSaveStore } from "../finance-store";
+import { FinanceAction } from "./finance-action";
 
 export function useFinanceColumnDefs() {
-  const onUpdate = useFinanceSaveStore((state) => state.onUpdate);
-  const onDelete = useFinanceDeleteStore((state) => state.onDelete);
-
   const columns: ColumnDef<ArrayElement<GetFinances["results"]>>[] = [
     {
       accessorKey: "label",
@@ -84,33 +72,7 @@ export function useFinanceColumnDefs() {
       accessorKey: "action",
       header: "",
       cell(props) {
-        const row = props.row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => onUpdate(row.id)}>
-                Editer
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() =>
-                  onDelete({
-                    id: row.id,
-                    label: row.label,
-                  })
-                }
-              >
-                Supprimer
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
+        return <FinanceAction row={props.row.original} />;
       },
     },
   ];
