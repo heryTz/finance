@@ -18,7 +18,7 @@ import { enqueueSnackbar } from "notistack";
 import { useGetProvider } from "../../provider/provider-query";
 import { Loader } from "@/components/loader";
 import { useGetInvoiceById } from "../invoice-query";
-import { defaultInvoiceContent, defaultInvoiceSubject } from "./invoice-util";
+import { defaultInvoiceContent, defaultInvoiceSubject } from "../invoice-util";
 import { invoiceDetaultFilename } from "./invoice-list";
 
 export function InvoiceMailing({

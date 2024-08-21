@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { getCurrency } from "./components/invoice-util";
+import { getCurrency } from "./invoice-util";
 
 export const createInvoiceSchema = z.object({
   clientId: z.string(),

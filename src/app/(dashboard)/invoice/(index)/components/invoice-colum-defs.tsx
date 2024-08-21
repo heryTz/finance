@@ -1,28 +1,13 @@
-import { useInvoiceDeleteStore } from "../invoice-store";
-import { humanAmount, humanDate } from "@/lib";
-import { TableAction } from "@/components/table-action";
-import { useRouter } from "next/navigation";
-import { Product } from "@prisma/client";
-import { Box, IconButton, Stack, Tooltip, capitalize } from "@mui/material";
-import { Download } from "@mui/icons-material";
-import dayjs from "dayjs";
-import "dayjs/locale/fr";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrayElement } from "@/lib/types";
-import { GetInvoices } from "../invoice-service";
 import { AppTooltip } from "@/components/app-tooltip";
+import { humanAmount, humanDate } from "@/lib/humanizer";
+import { ArrayElement } from "@/lib/types";
+import { Product } from "@prisma/client";
+import { ColumnDef } from "@tanstack/react-table";
 import { InfoIcon } from "lucide-react";
+import { GetInvoices } from "../invoice-service";
 import { InvoiceTableAction } from "./invoice-table-action";
 
-export function getCurrency() {
-  return ["Ar", "EUR"] as const;
-}
-export type Currency = ReturnType<typeof getCurrency>[number];
-
 export function useColumnDefs() {
-  const { push } = useRouter();
-  const onDelete = useInvoiceDeleteStore((state) => state.onDelete);
-
   const columns: ColumnDef<ArrayElement<GetInvoices["results"]>>[] = [
     {
       accessorKey: "ref",
@@ -102,16 +87,4 @@ export function useColumnDefs() {
   ];
 
   return { columns };
-}
-
-export function defaultInvoiceSubject() {
-  const date = dayjs().locale("fr").format("MMMM YYYY");
-  return `Facture de mois de ${capitalize(date)}`;
-}
-
-export function defaultInvoiceContent(options: { senderName: string }) {
-  const date = dayjs().locale("fr").format("MMMM YYYY");
-  return `Bonjour,\n\nVoici ma facture du mois de ${capitalize(
-    date,
-  )}.\n\nCordialement,\n\n${options.senderName}`;
 }

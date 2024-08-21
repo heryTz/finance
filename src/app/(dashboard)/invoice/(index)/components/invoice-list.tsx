@@ -1,12 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { GetInvoiceById, GetInvoices } from "../invoice-service";
-import { useColumnDefs } from "./invoice-util";
 import dayjs from "dayjs";
 import { Container } from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
 import { useSeo } from "@/lib/use-seo";
+import { useColumnDefs } from "./invoice-colum-defs";
 
 export default function InvoiceList({ invoices }: InvoiceListProps) {
   const { push } = useRouter();

@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { createInvoiceAction, updateInvoiceAction } from "../invoice-action";
-import { getCurrency, Currency } from "./invoice-util";
+import { getCurrency, Currency } from "../invoice-util";
 import { Add, Delete } from "@mui/icons-material";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

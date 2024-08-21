@@ -13,3 +13,7 @@ export function humanDate(date: Date | string | null) {
   dayjs.locale("fr");
   return dayjs(date).format("DD MMM YYYY");
 }
+
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
