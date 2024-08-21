@@ -12,13 +12,14 @@ import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { FinanceSave } from "./finance-save";
 import { useQueryClient } from "react-query";
-import { useFinances } from "../finance-query";
-import { FinanceDelete } from "./finance-delete";
+import { useFinanceDelete, useFinances } from "../finance-query";
+import { ModalDelete } from "@/components/modal-delete";
 
 export function FinanceAction({ row }: FinanceActionProps) {
   const queryClient = useQueryClient();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const deleteFn = useFinanceDelete();
 
   const onRefetch = () => {
     queryClient.refetchQueries({ queryKey: [useFinances.name] });
@@ -52,11 +53,14 @@ export function FinanceAction({ row }: FinanceActionProps) {
         />
       )}
       {openDelete && (
-        <FinanceDelete
+        <ModalDelete
           open={openDelete}
           onOpenChange={setOpenDelete}
-          onFinish={onRefetch}
-          item={{ id: row.id, label: row.label }}
+          label={row.label}
+          onDelete={async () => {
+            await deleteFn.mutateAsync(row.id);
+            onRefetch();
+          }}
         />
       )}
     </>
