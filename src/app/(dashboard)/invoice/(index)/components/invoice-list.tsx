@@ -1,38 +1,25 @@
 "use client";
-import { Block } from "@/components/block";
-import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { GetInvoiceById, GetInvoices } from "../invoice-service";
-import { DataGrid } from "@mui/x-data-grid";
-import { useColumnDefs } from "../invoice-util";
-import { InvoiceDelete } from "./invoice-delete";
+import { useColumnDefs } from "./invoice-util";
 import dayjs from "dayjs";
+import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/data-table";
+import { useSeo } from "@/lib/use-seo";
 
 export default function InvoiceList({ invoices }: InvoiceListProps) {
   const { push } = useRouter();
   const { columns } = useColumnDefs();
+  useSeo({ title: "Facture" });
+
   return (
-    <Block
-      title="Mes factures"
-      actionBar={<Button onClick={() => push("/invoice/new")}>Ajouter</Button>}
+    <Container
+      title="Finance"
+      action={<Button onClick={() => push("/invoice/new")}>Ajouter</Button>}
     >
-      <DataGrid
-        rows={invoices.results}
-        columns={columns}
-        pageSizeOptions={[20, 40, 60]}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 20,
-            },
-          },
-          sorting: {
-            sortModel: [{ field: "createdAt", sort: "desc" }],
-          },
-        }}
-      />
-      <InvoiceDelete />
-    </Block>
+      <DataTable data={invoices.results} columns={columns} />
+    </Container>
   );
 }
 
