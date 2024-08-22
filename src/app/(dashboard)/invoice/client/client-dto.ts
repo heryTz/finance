@@ -1,13 +1,13 @@
-import { z } from "zod";
+import { zd } from "@/lib/zod";
 
-export const saveClientInputSchema = z.object({
-  name: z.string(),
-  email: z.string(),
-  phone: z.string().nullable().optional(),
-  address: z.string(),
-  siren: z.string().nullable().optional(),
-  ape: z.string().nullable().optional(),
-  nif: z.string().nullable().optional(),
+export const saveClientInputSchema = zd.object({
+  name: zd.string(),
+  email: zd.string(),
+  phone: zd.string().nullish(),
+  address: zd.string(),
+  siren: zd.string().nullish(),
+  ape: zd.string().nullish(),
+  nif: zd.string().nullish(),
 });
 
-export type SaveClientInput = z.infer<typeof saveClientInputSchema>;
+export type SaveClientInput = zd.infer<typeof saveClientInputSchema>;

@@ -15,7 +15,7 @@ export default function InvoiceList({ invoices }: InvoiceListProps) {
 
   return (
     <Container
-      title="Finance"
+      title="Facture"
       action={<Button onClick={() => push("/invoice/new")}>Ajouter</Button>}
     >
       <DataTable data={invoices.results} columns={columns} />

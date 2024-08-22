@@ -33,11 +33,12 @@ export function FinanceSave({
   idToEdit,
   onFinish,
 }: FinanceSaveProps) {
-  const tags = useTags();
-  const financeItem = useFinanceById(idToEdit);
-  const create = useFinanceSave();
-  const update = useFinanceUpdate();
-  const finances = useFinances({ distinct: "true" });
+  const tagsFn = useTags();
+  const financeFn = useFinanceById(idToEdit);
+  const finance = financeFn.data?.data;
+  const createFn = useFinanceSave();
+  const updateFn = useFinanceUpdate();
+  const financesFn = useFinances({ distinct: "true" });
   const form = useForm<FormData>({
     resolver: zodResolver(saveFinanceInputSchema),
     defaultValues: {
@@ -50,36 +51,29 @@ export function FinanceSave({
   });
 
   useEffect(() => {
-    if (financeItem.data?.data) {
+    if (finance) {
       const data = saveFinanceInputSchema.parse({
-        ...financeItem.data.data,
-        tags: financeItem.data.data.tags.map((el) => el.name),
+        ...finance,
+        tags: finance.tags.map((el) => el.name),
       });
       form.reset(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [financeItem.data]);
+  }, [finance]);
 
-  const onSubmit = form.handleSubmit((data) => {
-    if (idToEdit) {
-      update.mutate(
-        { ...data, id: idToEdit },
-        {
-          onSuccess: () => {
-            toast("Modification effectuée avec succès");
-            onOpenChange(false);
-            onFinish?.();
-          },
-        },
-      );
-    } else {
-      create.mutate(data, {
-        onSuccess: () => {
-          toast("Ajout effectué avec succès");
-          onOpenChange(false);
-          onFinish?.();
-        },
-      });
+  const onSubmit = form.handleSubmit(async (data) => {
+    try {
+      if (idToEdit) {
+        await updateFn.mutateAsync({ ...data, id: idToEdit });
+        toast.success("Modification effectuée avec succès");
+      } else {
+        await createFn.mutateAsync(data);
+        toast.success("Ajout effectué avec succès");
+      }
+      onOpenChange(false);
+      onFinish?.();
+    } catch (error) {
+      toast.error("Une erreur s'est produite");
     }
   });
 
@@ -96,10 +90,11 @@ export function FinanceSave({
       cancel={{ onClick: onCancel }}
       submit={{
         onClick: onSubmit,
-        disabled: create.isLoading || financeItem.isLoading || update.isLoading,
+        disabled:
+          createFn.isLoading || financeFn.isLoading || updateFn.isLoading,
       }}
     >
-      {idToEdit && financeItem.isLoading ? (
+      {idToEdit && financeFn.isLoading ? (
         <Loader />
       ) : (
         <Form {...form}>
@@ -114,7 +109,7 @@ export function FinanceSave({
                   onChange={field.onChange}
                   hideEmptySuggestion
                   options={
-                    finances.data?.data.results.map((el) => ({
+                    financesFn.data?.data.results.map((el) => ({
                       label: el.label,
                       value: el.label,
                     })) ?? []
@@ -154,7 +149,7 @@ export function FinanceSave({
                   value={field.value}
                   onChange={field.onChange}
                   options={
-                    tags.data?.data.results.map((el) => ({
+                    tagsFn.data?.data.results.map((el) => ({
                       label: el.name,
                       value: el.name,
                     })) ?? []

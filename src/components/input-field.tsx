@@ -20,4 +20,4 @@ InputField.displayName = "InputField";
 
 type InputFieldProps = {
   label: string;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+} & React.ComponentProps<typeof Input>;

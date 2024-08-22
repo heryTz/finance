@@ -14,7 +14,7 @@ export function ModalDelete({
     startTransition(async () => {
       try {
         await onDelete();
-        toast("Suppression effectué avec succès");
+        toast.success("Suppression effectué avec succès");
         onOpenChange(false);
       } catch (error) {
         toast.error("Une erreur est survenue");

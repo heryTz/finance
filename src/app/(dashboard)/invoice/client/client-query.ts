@@ -16,7 +16,7 @@ export function useGetInvoiceClient() {
   );
 }
 
-export function useGetByIdInvoiceClient(id: string | null) {
+export function useGetByIdInvoiceClient(id?: string | null) {
   return useQuery({
     queryKey: ["invoice.client.get", id],
     enabled: !!id,
@@ -24,7 +24,7 @@ export function useGetByIdInvoiceClient(id: string | null) {
   });
 }
 
-export function usePutInvoiceClient(id: string | null) {
+export function usePutInvoiceClient(id?: string | null) {
   return useMutation(["invoice.client.put", id], (data: SaveClientInput) =>
     httpClient.put<Client>(`/invoice/client/${id}`, data),
   );

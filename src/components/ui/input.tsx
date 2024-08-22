@@ -2,8 +2,12 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export type InputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "value"
+> & {
+  value?: React.ComponentPropsWithoutRef<"input">["value"] | null;
+};
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
@@ -16,6 +20,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         ref={ref}
         {...props}
+        // This make input always controlled
+        value={props.value ?? ""}
       />
     );
   },
