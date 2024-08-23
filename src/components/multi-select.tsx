@@ -60,9 +60,9 @@ export function MultiSelect({
         <div className="flex flex-wrap gap-1">
           {value.map((v) => {
             let option = options.find((o) => o.value === v);
-            if (!option && freeSolo) {
+            if (option === undefined && freeSolo) {
               option = { label: v, value: v };
-            } else if (!option) {
+            } else if (option === undefined) {
               return null;
             }
             return (
@@ -72,14 +72,14 @@ export function MultiSelect({
                   className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      handleUnselect(option);
+                      handleUnselect(option!);
                     }
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                   }}
-                  onClick={() => handleUnselect(option)}
+                  onClick={() => handleUnselect(option!)}
                 >
                   <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                 </button>
