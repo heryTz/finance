@@ -1,21 +1,19 @@
 import { GetProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { GetInvoiceById } from "../../../invoice-service";
+import dayjs from "dayjs";
+import { humanAmount } from "@/lib";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import {
-  Box,
-  Divider,
-  Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
+  TableFooter,
   TableHead,
+  TableHeader,
   TableRow,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import dayjs from "dayjs";
-import { humanAmount } from "@/lib";
+} from "@/components/ui/table";
 
 export function InvoicePreview({
   invoice,
@@ -60,21 +58,16 @@ export function InvoicePreview({
   ];
 
   return (
-    <Paper style={{ width: "595.28pt", height: "841.89pt" }}>
-      <Stack
-        className={invoiceClassName}
-        direction={"column"}
-        gap={3}
-        sx={{ p: 4 }}
-      >
-        <Typography variant="h5" sx={{ textAlign: "center" }}>
+    <Card style={{ width: "595.28pt", height: "841.89pt" }}>
+      <div className={cn(invoiceClassName, "p-8 grid gap-6")}>
+        <div className="text-2xl text-center">
           Facture n° {invoice.ref} le{" "}
           <span contentEditable="true" suppressContentEditableWarning>
             {dayjs().format("DD/MM/YYYY")}
           </span>
-        </Typography>
-        <Divider />
-        <Stack direction={"row"} gap={4} justifyContent={"space-between"}>
+        </div>
+        <Separator />
+        <div className="flex justify-between gap-4">
           <PartenaireShip
             title="Prestataire"
             data={providerData.filter((el) => !!el.value) as any}
@@ -83,82 +76,67 @@ export function InvoicePreview({
             title="Client"
             data={client.filter((el) => !!el.value) as any}
           />
-        </Stack>
-        <Divider />
-        <Typography variant="h6">Description</Typography>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Nom</TableCell>
-                <TableCell align="right">Quantité</TableCell>
-                <TableCell align="right">Prix unitaire HT</TableCell>
-                <TableCell align="right" width={130}>
-                  Prix total HT
+        </div>
+        <Separator />
+        <div className="text-xl">Description</div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nom</TableHead>
+              <TableHead className="text-right">Quantité</TableHead>
+              <TableHead className="text-right">Prix unitaire HT</TableHead>
+              <TableHead className="text-right w-[200px]">
+                Prix total HT
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {products.map((el) => (
+              <TableRow key={el.name}>
+                <TableCell>{el.name}</TableCell>
+                <TableCell className="text-right">{el.qte}</TableCell>
+                <TableCell className="text-right">
+                  {humanAmount(el.price)} {invoice.currency}
+                </TableCell>
+                <TableCell className="text-right">
+                  {humanAmount(el.price * el.qte)} {invoice.currency}
                 </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {products.map((el) => (
-                <TableRow
-                  key={el.name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {el.name}
-                  </TableCell>
-                  <TableCell align="right">{el.qte}</TableCell>
-                  <TableCell align="right">
-                    {humanAmount(el.price)} {invoice.currency}
-                  </TableCell>
-                  <TableCell align="right">
-                    {humanAmount(el.price * el.qte)} {invoice.currency}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Box maxWidth={"400px"} marginLeft={"auto"} width={"100%"}>
-          <DescriptionResume
-            label="Total HT"
-            value={`${humanAmount(sumProductsHT)} ${invoice.currency}`}
-          />
-          <Divider />
-          <DescriptionResume
-            label={`TVA à ${invoice.tva}%`}
-            value={`${tvaAmount} ${invoice.currency}`}
-          />
-          <Divider />
-          <DescriptionResume
-            label="Total TTC"
-            value={`${humanAmount(sumProductsHT + tvaAmount)} ${
-              invoice.currency
-            }`}
-            accent
-          />
-        </Box>
-        <Divider sx={{ mt: 4 }} />
-        <Typography variant="h6">Paiement</Typography>
-        <Stack direction={"column"} gap={1}>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={3}>Total</TableCell>
+              <TableCell className="text-right">{`${humanAmount(sumProductsHT)} ${invoice.currency}`}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={3}>{`TVA à ${invoice.tva}%`}</TableCell>
+              <TableCell className="text-right">{`${humanAmount(tvaAmount)} ${invoice.currency}`}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={3} className="font-bold">
+                Total TTC
+              </TableCell>
+              <TableCell className="text-right font-bold">{`${humanAmount(sumProductsHT + tvaAmount)} ${
+                invoice.currency
+              }`}</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+        <Separator />
+        <div className="text-xl">Paiement</div>
+        <div className="grid gap-1">
           {payments
             .filter((el) => !!el.value)
             .map((el) => (
-              <Stack
-                key={el.label}
-                direction={"row"}
-                alignItems={"center"}
-                gap={1}
-              >
-                <Typography sx={{ fontWeight: 700, fontSize: 14, width: 150 }}>
-                  {el.label}:
-                </Typography>
-                <Typography sx={{ fontSize: 14 }}>{el.value}</Typography>
-              </Stack>
+              <div className="flex items-center text-sm gap-2" key={el.label}>
+                <div className="font-bold w-[150px]">{el.label}:</div>
+                <div>{el.value}</div>
+              </div>
             ))}
-        </Stack>
-      </Stack>
-    </Paper>
+        </div>
+      </div>
+    </Card>
   );
 }
 
@@ -174,55 +152,15 @@ function PartenaireShip(props: {
 }) {
   return (
     <div>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        {props.title}
-      </Typography>
-      <Stack direction={"column"} gap={1}>
+      <div className="text-xl mb-2">{props.title}</div>
+      <div className="grid gap-2">
         {props.data.map((el) => (
-          <Typography key={el.label} sx={{ fontSize: 12 }}>
-            <strong
-              style={{
-                width: 70,
-                display: "inline-block",
-              }}
-            >
-              {el.label}:
-            </strong>{" "}
+          <div key={el.label} className="text-sm">
+            <strong className="w-[70px] inline-block">{el.label}:</strong>{" "}
             {el.value}
-          </Typography>
+          </div>
         ))}
-      </Stack>
+      </div>
     </div>
-  );
-}
-
-function DescriptionResume(props: {
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
-  const theme = useTheme();
-  return (
-    <Stack
-      direction={"row"}
-      gap={14}
-      padding={"16px"}
-      color={props.accent ? theme.palette.common.white : undefined}
-      bgcolor={props.accent ? theme.palette.common.black : undefined}
-    >
-      <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
-        {props.label}
-      </Typography>
-      <Typography
-        sx={{
-          fontSize: 14,
-          flexGrow: 1,
-          textAlign: "right",
-          fontWeight: props.accent ? 700 : 500,
-        }}
-      >
-        {props.value}
-      </Typography>
-    </Stack>
   );
 }
