@@ -59,7 +59,11 @@ export function InvoicePreview({
 
   return (
     <Card style={{ width: "595.28pt", height: "841.89pt" }}>
-      <div className={cn(invoiceClassName, "p-8 grid gap-6")}>
+      <div
+        className={cn(invoiceClassName, "p-8 grid gap-6")}
+        // TODO: jspdf cannot use the custom font, fix this later
+        style={{ fontFamily: "Helvetica" }}
+      >
         <div className="text-2xl text-center">
           Facture n° {invoice.ref} le{" "}
           <span contentEditable="true" suppressContentEditableWarning>
