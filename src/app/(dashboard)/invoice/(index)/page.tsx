@@ -7,17 +7,19 @@ import InvoiceList from "./components/invoice-list";
 import { apiGuard } from "@/lib/api-guard";
 import { AppTab } from "@/components/app-tab";
 import { getClients } from "../client/client-service";
+import { getProvider } from "../provider/provider-service";
 
 // 🥵 WFT! make "ClientListing", "InvoiceLising", "ProviderSetup" as default export solve this problem
 // Element type is invalid. Received a promise that resolves to: undefined. Lazy element type must resolve to a class or function.
 
-// TODO: Make all tabs in different routes
+// TODO: Make all tabs in different routes and avoid this eager loading
 
 export default async function InvoicePage() {
   const { user } = await apiGuard();
   const invoices = await getInvoices(user.id);
   const paymentsMode = await getPaymentsMode(user.id);
   const clients = await getClients(user.id);
+  const provider = await getProvider(user.id);
 
   return (
     <AppTab
@@ -35,7 +37,7 @@ export default async function InvoicePage() {
         {
           name: "provider",
           title: "Prestataire",
-          component: <ProviderSetup />,
+          component: <ProviderSetup provider={provider} />,
         },
         {
           name: "payment-mode",
