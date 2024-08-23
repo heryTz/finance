@@ -2,17 +2,17 @@ import * as z from "zod";
 import { getCurrency } from "./invoice-util";
 
 export const createInvoiceSchema = z.object({
-  clientId: z.string(),
-  paymentModeId: z.string(),
-  tva: z.number().optional(),
+  clientId: z.string().min(1),
+  paymentModeId: z.string().min(1),
+  tva: z.coerce.number().nullish(),
   currency: z.enum(getCurrency()),
-  createdAt: z.string(),
+  createdAt: z.coerce.date(),
   products: z
     .array(
       z.object({
         name: z.string().min(1),
-        price: z.number(),
-        qte: z.number(),
+        price: z.coerce.number(),
+        qte: z.coerce.number(),
       }),
     )
     .min(1),

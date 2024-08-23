@@ -7,23 +7,39 @@ import { Command } from "cmdk";
 export function Autocomplete({
   hideEmptySuggestion,
   options,
-  value,
+  value = "",
   onChange,
   inputProps,
+  freeSolo,
 }: AutocompleteProps) {
   const [search, setSearch] = useState("");
   const popover = usePopoverV2<HTMLInputElement>();
 
-  const valueLabel =
-    options.find((option) => option.value === value)?.label ?? "";
+  const valueLabel = freeSolo
+    ? value
+    : options.find((option) => option.value === value)?.label ?? "";
+
   useEffect(() => {
     setSearch(valueLabel);
   }, [valueLabel]);
 
-  const handleChange = (newSearch: string) => {
+  const handleChange = (newValue: string) => {
+    const exist = options.find((option) => option.value === newValue);
+    if (exist) {
+      onChange(exist.value);
+      setSearch(exist.label);
+      return;
+    }
+
+    // keep previous value
+    onChange(value);
+    const oldOption = options.find((option) => option.value === value);
+    if (oldOption) setSearch(oldOption.label);
+  };
+
+  const handleChangeFreeSolo = (newSearch: string) => {
     setSearch(newSearch);
     onChange(newSearch);
-    popover.setOpen(false);
   };
 
   const filteredOptions = options.filter((option) =>
@@ -36,7 +52,10 @@ export function Autocomplete({
         ref={popover.anchor}
         value={search}
         onFocus={() => popover.setOpen(true)}
-        onBlur={() => handleChange(search)}
+        // freeSolo use blur to update the value
+        onBlur={() =>
+          freeSolo ? handleChangeFreeSolo(search) : handleChange(value)
+        }
         onChange={(e) => {
           setSearch(e.target.value);
           if (!popover.open) popover.setOpen(true);
@@ -76,4 +95,5 @@ type AutocompleteProps = {
   onChange: (value: string) => void;
   hideEmptySuggestion?: boolean;
   inputProps?: ComponentProps<typeof Input>;
+  freeSolo?: boolean;
 };

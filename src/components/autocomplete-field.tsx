@@ -10,9 +10,9 @@ import { Autocomplete } from "./autocomplete";
 export const AutocompleteField = forwardRef<
   HTMLDivElement,
   AutocompleteFieldProps
->(({ label, ...props }, ref) => {
+>(({ label, formItemProps, ...props }, ref) => {
   return (
-    <FormItem ref={ref}>
+    <FormItem ref={ref} {...formItemProps}>
       <FormLabel>{label}</FormLabel>
       <FormControlWithArea
         component={(area) => <Autocomplete {...props} inputProps={area} />}
@@ -26,4 +26,5 @@ AutocompleteField.displayName = "AutocompleteField";
 
 type AutocompleteFieldProps = {
   label: string;
+  formItemProps?: ComponentProps<typeof FormItem>;
 } & ComponentProps<typeof Autocomplete>;

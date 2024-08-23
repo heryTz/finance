@@ -1,29 +1,25 @@
 "use client";
-import { Block } from "@/components/block";
+
 import { GetClients } from "../../client/client-service";
 import { GetInvoiceById, GetProducts } from "../invoice-service";
-import {
-  Autocomplete,
-  Button,
-  Divider,
-  IconButton,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
 import { createInvoiceAction, updateInvoiceAction } from "../invoice-action";
 import { getCurrency, Currency } from "../invoice-util";
-import { Add, Delete } from "@mui/icons-material";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
 import { useTransition } from "react";
-import { enqueueSnackbar } from "notistack";
 import { GetPaymentsMode } from "../../payment-mode/payment-mode-service";
-import { DatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
+import { Container } from "@/components/container";
+import { toast } from "sonner";
+import { Form, FormField } from "@/components/ui/form";
+import { AutocompleteField } from "@/components/autocomplete-field";
+import { InputField } from "@/components/input-field";
+import { SelectField } from "@/components/select-field";
+import { CalendarField } from "@/components/calendar-field";
+import { Button } from "@/components/ui/button";
+import { TrashIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export function InvoiceSave({
   clients,
@@ -33,174 +29,171 @@ export function InvoiceSave({
 }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
-  const { register, formState, control, handleSubmit } =
-    useForm<CreateInvoiceInput>({
-      defaultValues: {
-        tva: invoice?.tva ?? 0,
-        products: invoice?.Products ?? [],
-        clientId: invoice?.clientId,
-        currency: invoice?.currency as Currency,
-        paymentModeId: invoice?.paymentModeId,
-        createdAt:
-          invoice?.createdAt?.toISOString() ?? new Date().toISOString(),
-      },
-      resolver: zodResolver(createInvoiceSchema),
-    });
-  const productsField = useFieldArray({ control, name: "products" });
+  const invoiceParsed = invoice
+    ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
+    : null;
+  const form = useForm<CreateInvoiceInput>({
+    defaultValues: {
+      tva: invoiceParsed?.tva ?? 0,
+      products: invoiceParsed?.products ?? [],
+      clientId: invoiceParsed?.clientId,
+      currency: invoiceParsed?.currency as Currency,
+      paymentModeId: invoiceParsed?.paymentModeId,
+      createdAt: invoiceParsed?.createdAt ?? new Date(),
+    },
+    resolver: zodResolver(createInvoiceSchema),
+  });
+  const productsField = useFieldArray({
+    control: form.control,
+    name: "products",
+  });
 
-  const { isDirty, isValid } = formState;
-
-  const clientOptions = clients.results.map((el) => ({
-    id: el.id,
-    label: el.name,
-  }));
-
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = form.handleSubmit(async (data) => {
     startTransition(async () => {
       try {
-        if (invoice) await updateInvoiceAction(invoice.id, data);
-        else await createInvoiceAction(data);
-      } catch (error: any) {
-        enqueueSnackbar({
-          message: error?.message ?? "Une erreur est survenue.",
-          variant: "error",
-        });
+        if (invoice) {
+          await updateInvoiceAction(invoice.id, data);
+          toast.success("La facture a été modifiée avec succès.");
+        } else {
+          await createInvoiceAction(data);
+          toast.success("La facture a été créée avec succès.");
+        }
+      } catch (error) {
+        toast.error("Une erreur s'est produite.");
       }
     });
   });
 
   return (
-    <Block
+    <Container
       title={
         invoice
-          ? `Modification de la facture No ${invoice.ref}`
+          ? `Modification de la facture "No ${invoice.ref}"`
           : "Créer une facture"
       }
     >
-      <Stack direction={"column"} gap={3} sx={{ mt: 2 }}>
-        <Stack direction={"column"} gap={2}>
-          <Controller
-            control={control}
+      <Form {...form}>
+        <form className="grid gap-4">
+          <FormField
+            control={form.control}
             name="clientId"
             render={({ field }) => (
-              <Autocomplete
-                value={clientOptions.find((el) => el.id === field.value)}
-                onChange={(_, v) => field.onChange(v?.id)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Client *" />
-                )}
-                options={clientOptions}
-                isOptionEqualToValue={(o, v) => o.id === v.id}
-              />
-            )}
-          />
-          <TextField
-            type="number"
-            label="TVA (%)"
-            {...register("tva", { valueAsNumber: true })}
-          />
-          <Controller
-            control={control}
-            name={`currency`}
-            render={({ field }) => (
-              <TextField
-                select
-                fullWidth
-                label="Devise *"
+              <AutocompleteField
+                label="Client *"
                 value={field.value}
                 onChange={field.onChange}
-              >
-                {getCurrency().map((el) => (
-                  <MenuItem key={el} value={el}>
-                    {el}
-                  </MenuItem>
-                ))}
-              </TextField>
+                options={clients.results.map((el) => ({
+                  value: el.id,
+                  label: el.name,
+                }))}
+              />
             )}
           />
-          <Controller
-            control={control}
+          <FormField
+            control={form.control}
+            name="tva"
+            render={({ field }) => (
+              <InputField
+                type="number"
+                label="TVA (%)"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={`currency`}
+            render={({ field }) => (
+              <SelectField
+                label="Devis *"
+                value={field.value}
+                onChange={field.onChange}
+                options={getCurrency().map((el) => ({ value: el, label: el }))}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
             name="paymentModeId"
             render={({ field }) => (
-              <Autocomplete
-                value={paymentsMode.find((el) => el.id === field.value)}
-                onChange={(_, v) => field.onChange(v?.id)}
-                renderInput={(params) => (
-                  <TextField {...params} label="Mode de paiement *" />
-                )}
-                options={paymentsMode}
-                isOptionEqualToValue={(o, v) => o.id === v.id}
-                getOptionLabel={(o) => o.name}
+              <AutocompleteField
+                label="Mode de paiement *"
+                value={field.value}
+                onChange={field.onChange}
+                options={paymentsMode.map((el) => ({
+                  label: el.name,
+                  value: el.id,
+                }))}
               />
             )}
           />
-          <Controller
-            control={control}
+          <FormField
+            control={form.control}
             name="createdAt"
             render={({ field }) => (
-              <DatePicker
+              <CalendarField
                 label="Date de création"
-                value={dayjs(field.value)}
-                onChange={(d) => field.onChange(d?.toISOString())}
+                value={field.value}
+                onChange={field.onChange}
               />
             )}
           />
-          <Typography>Produits</Typography>
-          <Stack direction={"column"} gap={2}>
+          <p className="font-semibold text-lg underline mt-2">Produits</p>
+          <div className="grid gap-4">
             {productsField.fields.map((field, index) => (
-              <Stack
-                key={field.id}
-                direction={"row"}
-                gap={2}
-                flexWrap={"wrap"}
-                alignItems={"center"}
-              >
-                <IconButton
-                  color="error"
+              <div key={field.id} className="flex items-center gap-4">
+                <Button
+                  variant={"destructive"}
+                  size={"icon"}
                   onClick={() => productsField.remove(index)}
                 >
-                  <Delete />
-                </IconButton>
-                <Controller
-                  control={control}
-                  name={`products.${index}.name`}
-                  render={({ field: fieldName }) => (
-                    <Autocomplete
-                      freeSolo
-                      value={fieldName.value}
-                      onInputChange={(_, v) => fieldName.onChange(v ?? "")}
-                      onChange={(_, v) => fieldName.onChange(v ?? "")}
-                      renderInput={(params) => (
-                        <TextField {...params} label="Nom *" />
-                      )}
-                      options={products.results.map((el) => el.name)}
-                      style={{ flexGrow: 1 }}
-                    />
-                  )}
-                />
-                <TextField
-                  type="number"
-                  label="Prix unitaire *"
-                  style={{ width: 200 }}
-                  {...register(`products.${index}.price`, {
-                    valueAsNumber: true,
-                  })}
-                />
-                <TextField
-                  type="number"
-                  label="Quantité *"
-                  style={{ width: 100 }}
-                  {...register(`products.${index}.qte`, {
-                    valueAsNumber: true,
-                  })}
-                />
-              </Stack>
+                  <TrashIcon />
+                </Button>
+                <div className="flex items-start gap-4 w-full">
+                  <FormField
+                    control={form.control}
+                    name={`products.${index}.name`}
+                    render={({ field: fieldName }) => (
+                      <AutocompleteField
+                        freeSolo
+                        hideEmptySuggestion
+                        label="Nom *"
+                        formItemProps={{ className: "flex-1" }}
+                        value={fieldName.value}
+                        onChange={fieldName.onChange}
+                        options={products.results.map((el) => ({
+                          value: el.name,
+                          label: el.name,
+                        }))}
+                      />
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`products.${index}.price`}
+                    render={({ field }) => (
+                      <InputField
+                        type="number"
+                        label="Prix unitaire *"
+                        {...field}
+                      />
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`products.${index}.qte`}
+                    render={({ field }) => (
+                      <InputField type="number" label="Quantité *" {...field} />
+                    )}
+                  />
+                </div>
+              </div>
             ))}
-
             <Button
-              variant="outlined"
-              style={{ margin: "auto" }}
-              startIcon={<Add />}
+              type="button"
+              variant={"secondary"}
+              className="mx-auto"
               onClick={() =>
                 productsField.append({
                   name: "",
@@ -211,21 +204,19 @@ export function InvoiceSave({
             >
               Ajouter un produit
             </Button>
-          </Stack>
-        </Stack>
-        <Divider />
-        <Stack direction={"row"} gap={2} justifyContent={"center"}>
-          <Button onClick={back}>Annuler</Button>
-          <Button
-            variant="contained"
-            disabled={!isDirty || !isValid || isPending}
-            onClick={onSubmit}
-          >
-            Sauvegarder
-          </Button>
-        </Stack>
-      </Stack>
-    </Block>
+          </div>
+          <Separator />
+          <div className="flex justify-center gap-4">
+            <Button variant={"outline"} onClick={back}>
+              Annuler
+            </Button>
+            <Button disabled={isPending} onClick={onSubmit}>
+              Sauvegarder
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </Container>
   );
 }
 

@@ -104,6 +104,7 @@ export function FinanceSave({
               render={({ field }) => (
                 <AutocompleteField
                   label="Libellé"
+                  freeSolo
                   value={field.value}
                   onChange={field.onChange}
                   hideEmptySuggestion
