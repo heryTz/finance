@@ -21,9 +21,9 @@ export const createInvoiceSchema = z.object({
 export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>;
 
 export const sendInvoiceMailInputSchema = z.object({
-  subject: z.string(),
-  content: z.string(),
-  file: z.string(),
+  subject: z.string().min(1),
+  content: z.string().min(1),
+  file: z.string().min(1),
   filename: z.string().optional(),
 });
 

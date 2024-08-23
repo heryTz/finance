@@ -1,7 +1,10 @@
 import { Send } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { InvoiceMailing, InvoiceMailingProps } from "./invoice-mailing";
+import {
+  InvoiceMailing,
+  InvoiceMailingProps,
+} from "../[id]/document/components/invoice-mailing";
 
 export function InvoiceMailingAction(props: InvoiceMailingActionProps) {
   const [open, setOpen] = useState(false);
