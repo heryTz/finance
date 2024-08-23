@@ -28,7 +28,9 @@ export function Modal({
       <CredenzaContent>
         <CredenzaHeader>
           <CredenzaTitle>{title}</CredenzaTitle>
-          <CredenzaDescription>{description}</CredenzaDescription>
+          {description && (
+            <CredenzaDescription>{description}</CredenzaDescription>
+          )}
         </CredenzaHeader>
         <CredenzaBody>{children}</CredenzaBody>
         <CredenzaFooter>
@@ -56,7 +58,7 @@ type ModalProps = PropsWithChildren<{
   open?: boolean;
   onOpenChange?: (v: boolean) => void;
   title: string;
-  description: ReactNode;
+  description?: ReactNode;
   submit?: ButtonProps;
   cancel?: ButtonProps;
   trigger?: ReactNode;

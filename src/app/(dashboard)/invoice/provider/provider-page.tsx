@@ -14,6 +14,7 @@ import { Form, FormField } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/input-field";
 import { Button } from "@/components/ui/button";
+import { useSeo } from "@/lib/use-seo";
 
 type FormValue = SaveProviderInput;
 
@@ -23,6 +24,7 @@ export default function ProviderPage({ provider }: ProviderPageProps) {
   const form = useForm<FormValue>({
     resolver: zodResolver(saveProviderInputSchema),
   });
+  useSeo({ title: "Prestataire" });
 
   useEffect(() => {
     if (provider) form.reset(saveProviderInputSchema.parse(provider));

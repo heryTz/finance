@@ -1,10 +1,10 @@
 import { zd } from "@/lib/zod";
 
 export const saveClientInputSchema = zd.object({
-  name: zd.string(),
-  email: zd.string(),
+  name: zd.string().min(1),
+  email: zd.string().email(),
   phone: zd.string().nullish(),
-  address: zd.string(),
+  address: zd.string().min(1),
   siren: zd.string().nullish(),
   ape: zd.string().nullish(),
   nif: zd.string().nullish(),

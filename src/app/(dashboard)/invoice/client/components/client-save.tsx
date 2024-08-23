@@ -62,8 +62,11 @@ export function ClientSave({
     <Modal
       open={open}
       onOpenChange={(v) => !v && onCancel()}
-      title={client ? `Modifier le client ${client.name}` : "Ajouter un client"}
-      description="Inscrivez les données de contact et les informations fiscales du client."
+      title={
+        idToEdit
+          ? `Modifier le client "${client?.name ?? "..."}"`
+          : "Ajouter un client"
+      }
       cancel={{ onClick: onCancel }}
       submit={{
         children: "Sauvegarder",

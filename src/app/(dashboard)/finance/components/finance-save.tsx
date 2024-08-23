@@ -86,7 +86,6 @@ export function FinanceSave({
       open={open}
       onOpenChange={(v) => !v && onCancel()}
       title={idToEdit ? "Modifier une opération" : "Ajouter une opération"}
-      description="Ajoutez vos transactions pour garder le contrôle de vos finances."
       cancel={{ onClick: onCancel }}
       submit={{
         onClick: onSubmit,
