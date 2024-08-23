@@ -18,7 +18,7 @@ describe("finance service", () => {
     expect(finance.label).toBe(input.label);
     expect(finance.amount.toNumber()).toBe(input.amount);
     expect(finance.type).toBe(input.type);
-    expect(finance.createdAt.toISOString()).toBe(input.createdAt);
+    expect(finance.createdAt.toISOString()).toBe(input.createdAt.toISOString());
     expect(finance.tags[0].name).toBe(input.tags[0]);
   });
 
