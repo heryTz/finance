@@ -1,65 +1,41 @@
 "use client";
-import { Block } from "@/components/block";
-import { Button, Grid } from "@mui/material";
 import { useFinances } from "./finance-query";
-import { ErrorSection } from "@/components/error-section";
-import { FinanceDelete, FinanceSave } from "./components";
-import { DataGrid } from "@mui/x-data-grid";
-import { MiniGlobalBilan } from "@/components/mini-global-bilan";
-import { useFinanceDeleteStore, useFinanceSaveStore } from "./finance-store";
-import { useEffect } from "react";
-import { useColumnDefs } from "./finance-util";
+import { useState } from "react";
 import { Loader } from "@/components/loader";
+import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { ErrorSection } from "@/components/error-section";
+import { useSeo } from "@/lib/use-seo";
+import { useFinanceColumnDefs } from "./components/finance-column-defs";
+import { DataTable } from "@/components/data-table";
+import { FinanceSave } from "./components/finance-save";
 
 export default function FinancePage() {
   const { data, isLoading, error, refetch } = useFinances();
-  const { onOpen, reloader } = useFinanceSaveStore();
-  const reloaderDelete = useFinanceDeleteStore((state) => state.reloader);
-  const { columns } = useColumnDefs();
+  const { columns } = useFinanceColumnDefs();
+  const [openSave, setOpenSave] = useState(false);
 
-  useEffect(() => {
-    if (reloader || reloaderDelete) refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reloader, reloaderDelete]);
-
-  const stats = data?.data?.stats;
+  useSeo({ title: "List" });
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <MiniGlobalBilan
-          expense={stats?.expense ?? 0}
-          income={stats?.income ?? 0}
+    <Container
+      title="Finance"
+      action={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
+    >
+      {isLoading ? (
+        <Loader />
+      ) : error || !data ? (
+        <ErrorSection />
+      ) : (
+        <DataTable data={data.data.results} columns={columns} />
+      )}
+      {openSave && (
+        <FinanceSave
+          open={openSave}
+          onOpenChange={setOpenSave}
+          onFinish={refetch}
         />
-        <Block
-          title="Mouvement"
-          actionBar={<Button onClick={onOpen}>Ajouter</Button>}
-        >
-          {isLoading ? (
-            <Loader />
-          ) : error ? (
-            <ErrorSection />
-          ) : (
-            <DataGrid
-              rows={data?.data.results!}
-              columns={columns}
-              pageSizeOptions={[20, 40, 60]}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 20,
-                  },
-                },
-                sorting: {
-                  sortModel: [{ field: "createdAt", sort: "desc" }],
-                },
-              }}
-            />
-          )}
-        </Block>
-      </Grid>
-      <FinanceSave />
-      <FinanceDelete />
-    </Grid>
+      )}
+    </Container>
   );
 }

@@ -1,19 +1,19 @@
 FROM node:20-alpine AS base
 
-FROM base as deps
+FROM base AS deps
 WORKDIR /app
 RUN npm i -g pnpm   
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm i
 
-FROM base as dev
+FROM base AS dev
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 EXPOSE 3000
 CMD [ "sh", "entrypoint-dev.sh" ]
 
-FROM base as builder
+FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -21,7 +21,7 @@ COPY .env.production.local .env
 RUN npx prisma generate
 RUN yarn build
 
-FROM base as prod
+FROM base AS prod
 WORKDIR /app
 COPY prisma ./
 COPY --from=builder /app/entrypoint-prod.sh ./entrypoint-prod.sh

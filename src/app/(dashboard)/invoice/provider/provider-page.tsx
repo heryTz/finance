@@ -1,92 +1,117 @@
 "use client";
-import { Block } from "@/components/block";
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
-import { useGetProvider, useSaveProvider } from "./provider-query";
-import { Loader } from "@/components/loader";
-import { ErrorSection } from "@/components/error-section";
+import { useSaveProvider } from "./provider-query";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
-import type { SaveProviderInput } from "./provider-dto";
+import {
+  saveProviderInputSchema,
+  type SaveProviderInput,
+} from "./provider-dto";
+import { GetProvider } from "./provider-service";
+import { toast } from "sonner";
+import { Container } from "@/components/container";
+import { Form, FormField } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InputField } from "@/components/input-field";
+import { Button } from "@/components/ui/button";
+import { useSeo } from "@/lib/use-seo";
 
 type FormValue = SaveProviderInput;
 
-export default function ProviderPage() {
-  const { back } = useRouter();
-  const { data, isLoading, error } = useGetProvider();
-  const { mutateAsync, isLoading: saveLoading } = useSaveProvider();
-  const config = data?.data;
-  const { register, handleSubmit, formState, reset } = useForm<FormValue>();
-  const { isValid, isDirty } = formState;
+export default function ProviderPage({ provider }: ProviderPageProps) {
+  const router = useRouter();
+  const saveFn = useSaveProvider();
+  const form = useForm<FormValue>({
+    resolver: zodResolver(saveProviderInputSchema),
+  });
+  useSeo({ title: "Prestataire" });
 
   useEffect(() => {
-    if (config) reset(config);
+    if (provider) form.reset(saveProviderInputSchema.parse(provider));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config]);
+  }, [provider]);
 
-  const onSubmit = handleSubmit(async (data) => {
-    await mutateAsync(data);
-    enqueueSnackbar("Configuration enregistrée", { variant: "success" });
+  const onSubmit = form.handleSubmit(async (data) => {
+    try {
+      await saveFn.mutateAsync(data);
+      toast.success("Configuration enregistrée");
+      router.refresh();
+    } catch (error) {
+      toast.error("Erreur s'est produite");
+    }
   });
 
+  const onCancel = () => {
+    router.back();
+  };
+
   return (
-    <Block title="Information du prestataire">
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {isLoading ? (
-          <Loader />
-        ) : error ? (
-          <ErrorSection />
-        ) : (
-          <Stack direction={"column"} gap={3}>
-            <Grid container spacing={2}>
-              <Grid item lg={6} style={{ width: "100%" }}>
-                <TextField
-                  label="Nom *"
-                  fullWidth
-                  {...register("name", { required: true })}
-                />
-              </Grid>
-              <Grid item lg={6} style={{ width: "100%" }}>
-                <TextField
-                  label="Adresse *"
-                  fullWidth
-                  {...register("address", { required: true })}
-                />
-              </Grid>
-              <Grid item lg={6} style={{ width: "100%" }}>
-                <TextField
-                  label="Email *"
-                  fullWidth
-                  {...register("email", { required: true })}
-                />
-              </Grid>
-              <Grid item lg={6} style={{ width: "100%" }}>
-                <TextField label="Téléphone" fullWidth {...register("phone")} />
-              </Grid>
-              <Grid item lg={6} style={{ width: "100%" }}>
-                <TextField label="NIF" fullWidth {...register("nif")} />
-              </Grid>
-              <Grid item lg={6} style={{ width: "100%" }}>
-                <TextField label="Siren" fullWidth {...register("siren")} />
-              </Grid>
-              <Grid item lg={6} style={{ width: "100%" }}>
-                <TextField label="APE" fullWidth {...register("ape")} />
-              </Grid>
-            </Grid>
-            <Stack direction={"row"} spacing={2} justifyContent={"center"}>
-              <Button onClick={back}>Annuler</Button>
-              <Button
-                variant="contained"
-                onClick={onSubmit}
-                disabled={!isDirty || !isValid || saveLoading}
-              >
-                Sauvegarder
-              </Button>
-            </Stack>
-          </Stack>
-        )}
-      </Box>
-    </Block>
+    <Container title="Information du prestataire">
+      <Form {...form}>
+        <form className="grid gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => <InputField label="Nom *" {...field} />}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <InputField label="Adresse *" {...field} />
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <InputField label="Email *" {...field} type="email" />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <InputField label="Téléphone *" {...field} />
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="nif"
+              render={({ field }) => <InputField label="NIF" {...field} />}
+            />
+            <FormField
+              control={form.control}
+              name="siren"
+              render={({ field }) => <InputField label="Siren" {...field} />}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="ape"
+              render={({ field }) => <InputField label="APE" {...field} />}
+            />
+          </div>
+          <div className="flex justify-center gap-4">
+            <Button variant={"outline"} onClick={onCancel}>
+              Annuler
+            </Button>
+            <Button onClick={onSubmit} disabled={saveFn.isLoading}>
+              Sauvegarder
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </Container>
   );
 }
+
+type ProviderPageProps = {
+  provider: GetProvider;
+};

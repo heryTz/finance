@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import "dayjs/locale/fr";
 
 export function humanAmount(nb: number) {
   return Intl.NumberFormat("en-US", {
@@ -9,5 +10,10 @@ export function humanAmount(nb: number) {
 
 export function humanDate(date: Date | string | null) {
   if (!date) return "";
-  return dayjs(date).format("DD/MM/YYYY");
+  dayjs.locale("fr");
+  return dayjs(date).format("DD MMM YYYY");
+}
+
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

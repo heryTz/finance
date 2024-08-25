@@ -12,7 +12,7 @@ export function buildSaveFinanceInput(
   return {
     label: faker.commerce.product(),
     amount: +faker.commerce.price(),
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(),
     tags: [],
     type: FinanceType.revenue,
     ...finance,
@@ -48,7 +48,7 @@ export async function buildCreateInvoiceInput(
     paymentModeId: payment.id,
     tva: 0,
     products: [{ name: "p1", price: 100, qte: 1 }],
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(),
     ...invoice,
   };
 }

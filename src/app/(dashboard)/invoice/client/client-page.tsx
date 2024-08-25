@@ -1,57 +1,36 @@
 "use client";
-import { Block } from "@/components/block";
-import { Button } from "@mui/material";
-import { Loader } from "@/components/loader";
-import { ErrorSection } from "@/components/error-section";
-import { useClientDeleteStore, useClientSaveStore } from "./client-store";
-import { useColumnDefs } from "./client-util";
-import { useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { useGetInvoiceClient } from "./client-query";
+
+import { useColumnDefs } from "./components/client-column-defs";
+import { GetClients } from "./client-service";
+import { useSeo } from "@/lib/use-seo";
+import { Container } from "@/components/container";
+import { DataTable } from "@/components/data-table";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { ClientSave } from "./components/client-save";
-import { ClientDelete } from "./components/client-delete";
+import { useRouter } from "next/navigation";
 
-export default function ClientPage() {
-  const { data, isLoading, error, refetch } = useGetInvoiceClient();
-  const { onOpen, reloader } = useClientSaveStore();
-  const reloaderDelete = useClientDeleteStore((state) => state.reloader);
+export default function ClientPage({ clients }: ClientPageProps) {
+  const { refresh } = useRouter();
+  const [open, setOpen] = useState(false);
   const { columns } = useColumnDefs();
-
-  useEffect(() => {
-    if (reloader || reloaderDelete) refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reloader, reloaderDelete]);
+  useSeo({ title: "Clients" });
 
   return (
     <>
-      <Block
-        title="Mes clients"
-        actionBar={<Button onClick={onOpen}>Ajouter</Button>}
+      <Container
+        title="Clients"
+        action={<Button onClick={() => setOpen(true)}>Ajouter</Button>}
       >
-        {!data || isLoading ? (
-          <Loader />
-        ) : error ? (
-          <ErrorSection />
-        ) : (
-          <DataGrid
-            rows={data.data.results}
-            columns={columns}
-            pageSizeOptions={[20, 40, 60]}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 20,
-                },
-              },
-              sorting: {
-                sortModel: [{ field: "createdAt", sort: "desc" }],
-              },
-            }}
-          />
-        )}
-      </Block>
-      <ClientSave />
-      <ClientDelete />
+        <DataTable data={clients.results} columns={columns} />
+      </Container>
+      {open && (
+        <ClientSave open={open} onOpenChange={setOpen} onFinish={refresh} />
+      )}
     </>
   );
 }
+
+type ClientPageProps = {
+  clients: GetClients;
+};

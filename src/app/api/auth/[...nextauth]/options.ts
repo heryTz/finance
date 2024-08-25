@@ -5,6 +5,10 @@ import { prisma } from "@/lib/prisma";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
+  pages: {
+    signIn: "/auth/login",
+    verifyRequest: "/auth/verify-request",
+  },
   providers: [
     EmailProvider({
       server: {

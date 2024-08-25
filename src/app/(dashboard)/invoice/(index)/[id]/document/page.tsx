@@ -2,7 +2,13 @@ import { InvoiceDocument } from "./components/invoice-document";
 import { getInvoiceById } from "../../invoice-service";
 import { getProvider } from "../../../provider/provider-service";
 import { apiGuard } from "@/lib/api-guard";
-import { AlertPage } from "@/components/alert-page";
+import { Empty } from "@/components/empty";
+import { Metadata } from "next";
+import { genTitle } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: genTitle("Génération de facture"),
+};
 
 export default async function InvoiceDocumentPage({
   params,
@@ -12,10 +18,10 @@ export default async function InvoiceDocumentPage({
   const provider = await getProvider(user.id);
   if (!provider) {
     return (
-      <AlertPage
+      <Empty
         title="Prestataire non configuré"
-        message="Vous devez configurer le prestataire de votre facture."
-        action={{ href: "/invoice?tab=2", label: "Configurer" }}
+        description="Vous devez configurer le prestataire de votre facture."
+        cta={{ href: "/invoice?tab=2", label: "Configurer" }}
       />
     );
   }

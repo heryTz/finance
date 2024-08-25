@@ -1,41 +1,35 @@
 "use client";
 import { GetPaymentsMode } from "./payment-mode-service";
-import { useColumnDefs } from "./payment-mode-util";
-import { Block } from "@/components/block";
-import { Button } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { PaymentsModeSave } from "./components/payment-mode-save";
-import { PaymentsModeDelete } from "./components/payment-mode-delete";
-import { usePaymentsModeSaveStore } from "./payment-mode-store";
+import { useState } from "react";
+import { DataTable } from "@/components/data-table";
+import { useColumnDefs } from "./components/payment-mode-column-defs";
+import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { useSeo } from "@/lib/use-seo";
+import { useRouter } from "next/navigation";
+import { PaymentModeSave } from "./components/payment-mode-save";
 
 export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
+  const router = useRouter();
   const { columns } = useColumnDefs();
-  const { onOpen } = usePaymentsModeSaveStore();
+  const [openSave, setOpenSave] = useState(false);
+  useSeo({ title: "Mode de paiements" });
 
   return (
     <>
-      <Block
-        title="Mes mode de paiements"
-        actionBar={<Button onClick={onOpen}>Ajouter</Button>}
+      <Container
+        title="Mode de paiements"
+        action={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
       >
-        <DataGrid
-          rows={paymentsMode.results}
-          columns={columns}
-          pageSizeOptions={[20, 40, 60]}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 20,
-              },
-            },
-            sorting: {
-              sortModel: [{ field: "createdAt", sort: "desc" }],
-            },
-          }}
+        <DataTable data={paymentsMode.results} columns={columns} />
+      </Container>
+      {openSave && (
+        <PaymentModeSave
+          open={openSave}
+          onOpenChange={setOpenSave}
+          onFinish={router.refresh}
         />
-      </Block>
-      <PaymentsModeSave />
-      <PaymentsModeDelete />
+      )}
     </>
   );
 }

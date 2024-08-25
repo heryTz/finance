@@ -51,6 +51,7 @@ export async function createInvoice(userId: string, input: CreateInvoiceInput) {
       ownerId: userId,
       ref: `${client.ref}-${nbInvoice + 1}`,
       ...data,
+      tva: data.tva ?? 0,
     },
   });
 
@@ -76,7 +77,10 @@ export async function updateInvoice(
 
   const invoice = await prisma.invoice.update({
     where: { id, ownerId: userId },
-    data,
+    data: {
+      ...data,
+      tva: data.tva ?? 0,
+    },
   });
 
   await prisma.product.createMany({

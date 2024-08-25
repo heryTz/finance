@@ -1,8 +1,7 @@
 "use client";
 
-import { LineChart } from "@/components/chart";
+import { LineChart } from "@/components/line-chart";
 import { GetStats } from "../stat-service";
-import { Stack } from "@mui/material";
 
 const labels = [
   "Janvier",
@@ -21,14 +20,13 @@ const labels = [
 
 export function StatContent({ data }: StatContentProps) {
   return (
-    <Stack gap={4}>
+    <div className="grid gap-4">
       <LineChart
-        minWidth="900px"
         title="Dépense/Revenu/Bénéfice"
         labels={labels}
         datasets={data.datasets}
       />
-    </Stack>
+    </div>
   );
 }
 
