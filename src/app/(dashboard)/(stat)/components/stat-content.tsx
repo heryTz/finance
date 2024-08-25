@@ -1,6 +1,6 @@
 "use client";
 
-import { LineChart } from "@/components/chart/line-chart";
+import { LineChart } from "@/components/line-chart";
 import { GetStats } from "../stat-service";
 
 const labels = [
