@@ -47,7 +47,7 @@ export function useColumnDefs() {
       accessorKey: "Products",
       header: "Total",
       meta: {
-        className: "text-right w-[150px]",
+        className: "w-[150px]",
       },
       cell: ({ row: { original } }) => {
         const sum = original.Products.reduce(
