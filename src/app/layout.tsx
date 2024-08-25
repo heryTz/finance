@@ -2,7 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { AppProvider } from "./app-provider";
 import { getServerSession } from "next-auth";
-import { CssBaseline } from "@mui/material";
 import { authOptions } from "./api/auth/[...nextauth]/options";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -40,7 +39,6 @@ export default async function RootLayout({
         )}
       >
         <div vaul-drawer-wrapper="" className="min-h-dvh bg-background">
-          <CssBaseline />
           <AppProvider session={session}>{children}</AppProvider>
         </div>
         <Toaster />
