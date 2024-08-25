@@ -27,9 +27,6 @@ export function useColumnDefs() {
     {
       accessorKey: "productsLength",
       header: "Nb Produits",
-      meta: {
-        className: "align-right",
-      },
       cell: (props) => {
         const count = props.row.original.Products.length;
         return (
@@ -50,14 +47,14 @@ export function useColumnDefs() {
       accessorKey: "Products",
       header: "Total",
       meta: {
-        className: "align-right w-[150px]",
+        className: "text-right w-[150px]",
       },
       cell: ({ row: { original } }) => {
         const sum = original.Products.reduce(
           (acc: number, cur: Product) => acc + cur.price * cur.qte,
           0,
         );
-        return `${humanAmount(sum)} ${original.currency}`;
+        return `${humanAmount(sum)} ${original.currency} `;
       },
     },
     {
