@@ -18,7 +18,7 @@ export const CalendarField = forwardRef<HTMLDivElement, CalendarFieldProps>(
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-full pl-3 text-left font-normal",
+                  "w-full pl-3 text-left font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:text-destructive",
                   !value && "text-muted-foreground",
                 )}
               >
