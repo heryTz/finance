@@ -2,29 +2,32 @@
 
 import { LineChart } from "@/components/line-chart";
 import { GetStats } from "../stat-service";
-
-const labels = [
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Août",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Décembre",
-];
+import { statData } from "../stat-util";
 
 export function StatContent({ data }: StatContentProps) {
   return (
     <div className="grid gap-4">
       <LineChart
         title="Dépense/Revenu/Bénéfice"
-        labels={labels}
-        datasets={data.datasets}
+        data={data.results}
+        xAxisConfig={{ dataKey: "month" }}
+        lineConfig={[
+          {
+            dataKey: "income",
+            label: statData.income.label,
+            color: "hsl(var(--chart-3))",
+          },
+          {
+            dataKey: "expense",
+            label: statData.expense.label,
+            color: "hsl(var(--chart-2))",
+          },
+          {
+            dataKey: "retainedEarnings",
+            label: statData.retainedEarnings.label,
+            color: "hsl(var(--chart-1))",
+          },
+        ]}
       />
     </div>
   );

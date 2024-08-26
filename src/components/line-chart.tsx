@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Brush,
   CartesianGrid,
   Legend,
   Line,
@@ -21,23 +22,19 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { capitalizeFirstLetter } from "@/lib/humanizer";
 
-// TODO: improve data type from backend to avoid this adapter
-export function LineChart({ title, labels, datasets }: LineChartProps) {
-  const chartData: any[] = [];
-  for (let i = 0; i < labels.length; i++) {
-    const data: any = { month: labels[i] };
-    for (let j = 0; j < datasets.length; j++) {
-      data[datasets[j].label.toLowerCase()] = datasets[j].data[i];
-    }
-    chartData.push(data);
-  }
-
+export function LineChart<T extends string>({
+  title,
+  data,
+  lineConfig,
+  xAxisConfig,
+}: LineChartProps<T>) {
   const chartConfig = {} as ChartConfig;
-  datasets.forEach((data, i) => {
-    chartConfig[data.label] = {
-      label: data.label,
-      color: `hsl(var(--chart-${(i % 5) + 1}))`,
+  lineConfig.forEach((el) => {
+    chartConfig[el.dataKey] = {
+      color: el.color,
+      label: el.label,
     };
   });
 
@@ -56,7 +53,7 @@ export function LineChart({ title, labels, datasets }: LineChartProps) {
         >
           <RechartLineChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,
@@ -65,36 +62,25 @@ export function LineChart({ title, labels, datasets }: LineChartProps) {
             <CartesianGrid strokeDasharray="5 5" />
             <YAxis tickMargin={8} tickCount={10} allowDecimals={false} />
             <XAxis
-              dataKey="month"
+              dataKey={xAxisConfig.dataKey}
               tickMargin={8}
-              tickFormatter={(value: any) => value.slice(0, 3)}
+              tickFormatter={(value: string) => capitalizeFirstLetter(value)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Line
-              dataKey="revenu par mois"
-              type="linear"
-              stroke="hsl(var(--chart-3))"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              dataKey="dépense par mois"
-              type="linear"
-              stroke="hsl(var(--chart-2))"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              dataKey="bénéfice total"
-              type="linear"
-              stroke="hsl(var(--chart-1))"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Legend />
+            {lineConfig.map((el) => (
+              <Line
+                key={el.dataKey}
+                dataKey={el.dataKey}
+                type="linear"
+                stroke={el.color}
+                strokeWidth={2}
+                dot={false}
+              />
+            ))}
+            <Legend formatter={(value) => chartConfig[value].label} />
           </RechartLineChart>
         </ChartContainer>
       </CardContent>
@@ -102,11 +88,11 @@ export function LineChart({ title, labels, datasets }: LineChartProps) {
   );
 }
 
-type LineChartProps = {
+type LineChartProps<T extends string> = {
   title: string;
-  labels: string[];
-  datasets: {
-    label: string;
-    data: number[];
-  }[];
+  data: Array<Record<T, string | number>>;
+  lineConfig: Array<{ label: string; dataKey: T; color: string }>;
+  xAxisConfig: {
+    dataKey: T;
+  };
 };

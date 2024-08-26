@@ -3,31 +3,47 @@ import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import { statData } from "./stat-util";
+import { getMonthLabel, getMonthRange } from "./stat-util";
+import { z } from "zod";
+import { getStatsQuerySchema } from "./stat-dto";
+import "dayjs/locale/fr";
 
+dayjs.locale("fr");
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-export async function getStats(userId: string) {
+export async function getStats(
+  userId: string,
+  { startDate, endDate }: z.input<typeof getStatsQuerySchema>,
+) {
   const operations = await prisma.operation.findMany({
     where: {
       userId,
       createdAt: {
-        lte: dayjs().endOf("year").toDate(),
-        gte: dayjs().startOf("year").toDate(),
+        lte: endDate,
+        gte: startDate,
       },
     },
   });
 
-  const monthsOfYear = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  const expense: number[] = [];
-  const income: number[] = [];
+  const monthRange = getMonthRange({ startDate, endDate });
   let lastMonthOfOperation = 0;
 
-  for (const months of monthsOfYear) {
-    expense[months] = 0;
-    income[months] = 0;
-    const monthDayjs = dayjs().startOf("year").add(months, "month");
+  const data: {
+    month: string;
+    income: number;
+    expense: number;
+    retainedEarnings: number;
+  }[] = [];
+
+  for (const months of monthRange) {
+    const monthDayjs = dayjs(startDate).startOf("year").add(months, "month");
+    data[months] = {
+      month: getMonthLabel({ monthIndex: months, startDate, endDate }),
+      income: 0,
+      expense: 0,
+      retainedEarnings: 0,
+    };
     for (const operation of operations) {
       const createdAtDayjs = dayjs(operation.createdAt);
       if (
@@ -36,9 +52,9 @@ export async function getStats(userId: string) {
       ) {
         lastMonthOfOperation = months;
         if (operation.type === OperationType.depense) {
-          expense[months] = expense[months] + operation.amount.toNumber();
+          data[months].expense += operation.amount.toNumber();
         } else {
-          income[months] = income[months] + operation.amount.toNumber();
+          data[months].income += operation.amount.toNumber();
         }
       }
     }
@@ -48,7 +64,9 @@ export async function getStats(userId: string) {
     by: ["type"],
     where: {
       userId,
-      createdAt: { lte: dayjs().add(-1, "year").endOf("year").toDate() },
+      createdAt: {
+        lte: dayjs(startDate).add(-1, "year").endOf("year").toDate(),
+      },
     },
     _sum: { amount: true },
   });
@@ -62,23 +80,22 @@ export async function getStats(userId: string) {
       .find((el) => el.type === OperationType.revenue)
       ?._sum.amount?.toNumber() ?? 0;
 
-  const profit: number[] = [];
-  for (const month of monthsOfYear) {
+  // Calculate retained earnings
+  for (const month of monthRange) {
     if (month === 0) {
-      profit[0] = prevIncome + income[month] - (prevExpense + expense[month]);
+      data[0].retainedEarnings =
+        prevIncome + data[month].income - (prevExpense + data[month].expense);
     } else if (month <= lastMonthOfOperation) {
-      profit[month] = profit[month - 1] + (income[month] - expense[month]);
+      data[month].retainedEarnings =
+        data[month - 1].retainedEarnings +
+        (data[month].income - data[month].expense);
     } else {
-      profit[month] = 0;
+      data[month].retainedEarnings = 0;
     }
   }
 
   return {
-    datasets: [
-      { label: statData.incomePerMonth.label, data: income },
-      { label: statData.expensePerMonth.label, data: expense },
-      { label: statData.totalProfit.label, data: profit },
-    ],
+    results: data,
   };
 }
 
