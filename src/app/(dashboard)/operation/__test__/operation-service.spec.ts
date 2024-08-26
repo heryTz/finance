@@ -6,7 +6,7 @@ import {
   getOperations,
   updateOperation,
 } from "../operation-service";
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { buildSaveOperationInput } from "@/lib/factory";
 import { NotFoundException } from "@/lib/exception";
 

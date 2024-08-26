@@ -1,9 +1,9 @@
 import { ArrayElement } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { GetOperations } from "../operation-service";
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { Dot } from "@/components/dot";
-import { humanAmount, humanDate } from "@/lib";
+import { humanAmount, humanDate } from "@/lib/humanizer";
 import { Badge } from "@/components/ui/badge";
 import { OperationAction } from "./operation-action";
 

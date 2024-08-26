@@ -1,4 +1,4 @@
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";

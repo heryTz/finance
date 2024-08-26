@@ -1,4 +1,4 @@
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { zd } from "@/lib/zod";
 
 export const getOperationQuerySchema = zd.object({

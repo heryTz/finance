@@ -3,7 +3,7 @@ import { CreateInvoiceInput } from "@/app/(dashboard)/invoice/(index)/invoice-dt
 import { SaveClientInput } from "@/app/(dashboard)/invoice/client/client-dto";
 import { createClient } from "@/app/(dashboard)/invoice/client/client-service";
 import { createPaymentMode } from "@/app/(dashboard)/invoice/payment-mode/payment-mode-service";
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { faker } from "@faker-js/faker";
 
 export function buildSaveOperationInput(

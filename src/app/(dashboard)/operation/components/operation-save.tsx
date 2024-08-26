@@ -1,5 +1,5 @@
 "use client";
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { useForm } from "react-hook-form";
 import { useTags } from "../../tag/tag-query";
 import {

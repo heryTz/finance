@@ -1,4 +1,4 @@
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { Operation } from "@prisma/client";
 
 export function bilanGlobal(operations: Operation[]) {

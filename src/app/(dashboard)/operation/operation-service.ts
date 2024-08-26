@@ -1,4 +1,4 @@
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { prisma } from "@/lib/prisma";
 import { SaveOperationInput, GetOperationQuery } from "./operation-dto";
 import { Tag } from "@prisma/client";

@@ -4,7 +4,7 @@ import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { humanDate } from "@/lib";
+import { humanDate } from "@/lib/humanizer";
 import { CalendarIcon } from "lucide-react";
 
 export const CalendarField = forwardRef<HTMLDivElement, CalendarFieldProps>(

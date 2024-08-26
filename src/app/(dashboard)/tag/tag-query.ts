@@ -1,4 +1,4 @@
-import { httpClient } from "@/lib";
+import { httpClient } from "@/lib/http-client";
 import { useQuery } from "react-query";
 import type { GetTags } from "./tag-service";
 

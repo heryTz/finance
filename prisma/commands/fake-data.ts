@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { OperationType } from "../../src/entity";
+import { OperationType } from "../../src/entity/operation";
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 

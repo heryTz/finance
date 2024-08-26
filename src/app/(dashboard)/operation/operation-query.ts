@@ -1,4 +1,4 @@
-import { httpClient } from "@/lib";
+import { httpClient } from "@/lib/http-client";
 import { useMutation, useQuery } from "react-query";
 import type { GetOperationQuery, SaveOperationInput } from "./operation-dto";
 import type {

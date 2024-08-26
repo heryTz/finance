@@ -15,7 +15,7 @@ export default function OperationPage() {
   const { columns } = useOperationColumnDefs();
   const [openSave, setOpenSave] = useState(false);
 
-  useSeo({ title: "List" });
+  useSeo({ title: "Opération" });
 
   return (
     <Container

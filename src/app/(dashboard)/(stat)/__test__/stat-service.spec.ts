@@ -1,7 +1,7 @@
 import { buildSaveOperationInput } from "@/lib/factory";
 import { createOperation } from "../../operation/operation-service";
 import { createUser } from "../../user/user-service";
-import { OperationType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { getStats } from "../stat-service";
 import dayjs from "dayjs";
 import { statData } from "../stat-util";
@@ -40,34 +40,34 @@ describe("stat service", () => {
     const incomes = [
       buildSaveOperationInput({
         type: OperationType.revenue,
-        createdAt: createdAtMarch.toISOString(),
+        createdAt: createdAtMarch.toDate(),
         amount: 30,
       }),
       buildSaveOperationInput({
         type: OperationType.revenue,
-        createdAt: createdAtMarch.toISOString(),
+        createdAt: createdAtMarch.toDate(),
         amount: 40,
       }),
       buildSaveOperationInput({
         type: OperationType.revenue,
-        createdAt: createdAtApril.toISOString(),
+        createdAt: createdAtApril.toDate(),
         amount: 20,
       }),
     ];
     const expenses = [
       buildSaveOperationInput({
         type: OperationType.depense,
-        createdAt: createdAtMarch.toISOString(),
+        createdAt: createdAtMarch.toDate(),
         amount: 10,
       }),
       buildSaveOperationInput({
         type: OperationType.depense,
-        createdAt: createdAtMarch.toISOString(),
+        createdAt: createdAtMarch.toDate(),
         amount: 20,
       }),
       buildSaveOperationInput({
         type: OperationType.depense,
-        createdAt: createdAtApril.toISOString(),
+        createdAt: createdAtApril.toDate(),
         amount: 30,
       }),
     ];

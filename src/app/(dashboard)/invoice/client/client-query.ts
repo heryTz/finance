@@ -1,4 +1,4 @@
-import { httpClient } from "@/lib";
+import { httpClient } from "@/lib/http-client";
 import { Client } from "@prisma/client";
 import { useMutation, useQuery } from "react-query";
 import type { SaveClientInput } from "./client-dto";
