@@ -8,7 +8,7 @@ const db = bsqlite(path.resolve(__dirname, "../dev.db"), {
 
 async function run() {
   const user: any[] = await db.prepare(`SELECT * FROM User`).all();
-  const finance: any[] = await db.prepare(`SELECT * FROM Finance`).all();
+  const operation: any[] = await db.prepare(`SELECT * FROM Finance`).all();
   const tag: any[] = await db.prepare(`SELECT * FROM Tag`).all();
   const financeTag: any[] = await db
     .prepare(`SELECT * FROM _FinanceToTag`)
@@ -27,7 +27,7 @@ async function run() {
   await prisma.client.deleteMany();
   await prisma.paymentMode.deleteMany();
   await prisma.tag.deleteMany();
-  await prisma.finance.deleteMany();
+  await prisma.operation.deleteMany();
   await prisma.user.deleteMany();
 
   await prisma.user.createMany({
@@ -47,8 +47,8 @@ async function run() {
     })),
   });
 
-  for (const f of finance) {
-    await prisma.finance.create({
+  for (const f of operation) {
+    await prisma.operation.create({
       data: {
         ...f,
         createdAt: new Date(f.createdAt),

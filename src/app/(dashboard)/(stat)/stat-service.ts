@@ -1,4 +1,4 @@
-import { FinanceType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -9,7 +9,7 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 export async function getStats(userId: string) {
-  const finances = await prisma.finance.findMany({
+  const operations = await prisma.operation.findMany({
     where: {
       userId,
       createdAt: {
@@ -22,29 +22,29 @@ export async function getStats(userId: string) {
   const monthsOfYear = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   const expense: number[] = [];
   const income: number[] = [];
-  let lastMonthOfFinance = 0;
+  let lastMonthOfOperation = 0;
 
   for (const months of monthsOfYear) {
     expense[months] = 0;
     income[months] = 0;
     const monthDayjs = dayjs().startOf("year").add(months, "month");
-    for (const finance of finances) {
-      const createdAtDayjs = dayjs(finance.createdAt);
+    for (const operation of operations) {
+      const createdAtDayjs = dayjs(operation.createdAt);
       if (
         createdAtDayjs.isSameOrAfter(monthDayjs.startOf("month")) &&
         createdAtDayjs.isSameOrBefore(monthDayjs.endOf("month"))
       ) {
-        lastMonthOfFinance = months;
-        if (finance.type === FinanceType.depense) {
-          expense[months] = expense[months] + finance.amount.toNumber();
+        lastMonthOfOperation = months;
+        if (operation.type === OperationType.depense) {
+          expense[months] = expense[months] + operation.amount.toNumber();
         } else {
-          income[months] = income[months] + finance.amount.toNumber();
+          income[months] = income[months] + operation.amount.toNumber();
         }
       }
     }
   }
 
-  const prevAmount = await prisma.finance.groupBy({
+  const prevAmount = await prisma.operation.groupBy({
     by: ["type"],
     where: {
       userId,
@@ -55,18 +55,18 @@ export async function getStats(userId: string) {
 
   const prevExpense =
     prevAmount
-      .find((el) => el.type === FinanceType.depense)
+      .find((el) => el.type === OperationType.depense)
       ?._sum.amount?.toNumber() ?? 0;
   const prevIncome =
     prevAmount
-      .find((el) => el.type === FinanceType.revenue)
+      .find((el) => el.type === OperationType.revenue)
       ?._sum.amount?.toNumber() ?? 0;
 
   const profit: number[] = [];
   for (const month of monthsOfYear) {
     if (month === 0) {
       profit[0] = prevIncome + income[month] - (prevExpense + expense[month]);
-    } else if (month <= lastMonthOfFinance) {
+    } else if (month <= lastMonthOfOperation) {
       profit[month] = profit[month - 1] + (income[month] - expense[month]);
     } else {
       profit[month] = 0;

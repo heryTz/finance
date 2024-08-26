@@ -1,13 +1,13 @@
-import { FinanceType } from "@/entity";
+import { OperationType } from "@/entity/operation";
 import { prisma } from "@/lib/prisma";
-import { SaveFinanceInput, GetFinancesQuery } from "./finance-dto";
+import { SaveOperationInput, GetOperationQuery } from "./operation-dto";
 import { Tag } from "@prisma/client";
 import { NotFoundException } from "@/lib/exception";
 
-export async function getFinances(userId: string, query: GetFinancesQuery) {
+export async function getOperations(userId: string, query: GetOperationQuery) {
   const { distinct, q } = query;
 
-  const finances = await prisma.finance.findMany({
+  const operations = await prisma.operation.findMany({
     where: {
       userId,
       ...(q ? { label: { contains: q } } : {}),
@@ -17,7 +17,7 @@ export async function getFinances(userId: string, query: GetFinancesQuery) {
     distinct: distinct ? ["label"] : undefined,
   });
 
-  const amounts = await prisma.finance.groupBy({
+  const amounts = await prisma.operation.groupBy({
     by: ["type"],
     _sum: { amount: true },
     where: {
@@ -27,16 +27,16 @@ export async function getFinances(userId: string, query: GetFinancesQuery) {
 
   const expense =
     amounts
-      .find((el) => el.type === FinanceType.depense)
+      .find((el) => el.type === OperationType.depense)
       ?._sum.amount?.toNumber() ?? 0;
 
   const income =
     amounts
-      .find((el) => el.type === FinanceType.revenue)
+      .find((el) => el.type === OperationType.revenue)
       ?._sum.amount?.toNumber() ?? 0;
 
   return {
-    results: finances,
+    results: operations,
     stats: {
       expense,
       income,
@@ -44,9 +44,12 @@ export async function getFinances(userId: string, query: GetFinancesQuery) {
   };
 }
 
-export type GetFinances = Awaited<ReturnType<typeof getFinances>>;
+export type GetOperations = Awaited<ReturnType<typeof getOperations>>;
 
-export async function createFinance(userId: string, input: SaveFinanceInput) {
+export async function createOperation(
+  userId: string,
+  input: SaveOperationInput,
+) {
   let tags: Tag[] = [];
   if (input.tags.length) {
     await Promise.all(
@@ -63,7 +66,7 @@ export async function createFinance(userId: string, input: SaveFinanceInput) {
     });
   }
 
-  const finance = await prisma.finance.create({
+  const operation = await prisma.operation.create({
     data: {
       amount: input.amount,
       label: input.label,
@@ -77,45 +80,45 @@ export async function createFinance(userId: string, input: SaveFinanceInput) {
     },
   });
 
-  return finance;
+  return operation;
 }
 
-export type CreateFinance = Awaited<ReturnType<typeof createFinance>>;
+export type CreateOperation = Awaited<ReturnType<typeof createOperation>>;
 
-export async function getFinanceById(userId: string, id: string) {
-  const finance = await prisma.finance.findUnique({
+export async function getOperationById(userId: string, id: string) {
+  const operation = await prisma.operation.findUnique({
     where: { id, userId },
     include: { tags: true },
   });
-  if (!finance) throw new NotFoundException();
-  return finance;
+  if (!operation) throw new NotFoundException();
+  return operation;
 }
 
-export type GetFinanceById = Awaited<ReturnType<typeof getFinanceById>>;
+export type GetOperationById = Awaited<ReturnType<typeof getOperationById>>;
 
-export async function updateFinance(
+export async function updateOperation(
   userId: string,
   id: string,
-  input: SaveFinanceInput,
+  input: SaveOperationInput,
 ) {
-  const finance = await prisma.finance.findUnique({
+  const operation = await prisma.operation.findUnique({
     where: { id, userId },
     include: { tags: true },
   });
-  if (!finance) {
+  if (!operation) {
     throw new NotFoundException();
   }
 
   const tagToConnect: Tag[] = [];
   const tagToDisconnect: Tag[] = [];
 
-  for (const tag of finance.tags) {
+  for (const tag of operation.tags) {
     if (input.tags.includes(tag.name)) tagToConnect.push(tag);
     else tagToDisconnect.push(tag);
   }
 
   for (const tag of input.tags) {
-    if (!finance.tags.some((el) => el.name === tag)) {
+    if (!operation.tags.some((el) => el.name === tag)) {
       const newTag = await prisma.tag.upsert({
         where: { name_userId: { name: tag, userId } },
         create: { name: tag, userId },
@@ -125,7 +128,7 @@ export async function updateFinance(
     }
   }
 
-  const financeUpdated = await prisma.finance.update({
+  const operationUpdated = await prisma.operation.update({
     where: { id, userId },
     data: {
       amount: input.amount,
@@ -142,13 +145,13 @@ export async function updateFinance(
     },
   });
 
-  return financeUpdated;
+  return operationUpdated;
 }
 
-export type UpdateFinance = Awaited<ReturnType<typeof updateFinance>>;
+export type UpdateOperation = Awaited<ReturnType<typeof updateOperation>>;
 
-export async function deleteFinance(userId: string, id: string) {
-  return await prisma.finance.delete({ where: { id, userId } });
+export async function deleteOperation(userId: string, id: string) {
+  return await prisma.operation.delete({ where: { id, userId } });
 }
 
-export type DeleteFinance = Awaited<ReturnType<typeof deleteFinance>>;
+export type DeleteOperation = Awaited<ReturnType<typeof deleteOperation>>;

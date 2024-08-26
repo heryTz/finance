@@ -1,14 +1,14 @@
 import { ArrayElement } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { GetFinances } from "../finance-service";
-import { FinanceType } from "@/entity";
+import { GetOperations } from "../operation-service";
+import { OperationType } from "@/entity/operation";
 import { Dot } from "@/components/dot";
-import { humanAmount, humanDate } from "@/lib";
+import { humanAmount, humanDate } from "@/lib/humanizer";
 import { Badge } from "@/components/ui/badge";
-import { FinanceAction } from "./finance-action";
+import { OperationAction } from "./operation-action";
 
-export function useFinanceColumnDefs() {
-  const columns: ColumnDef<ArrayElement<GetFinances["results"]>>[] = [
+export function useOperationColumnDefs() {
+  const columns: ColumnDef<ArrayElement<GetOperations["results"]>>[] = [
     {
       accessorKey: "label",
       header: "Libellé",
@@ -23,7 +23,7 @@ export function useFinanceColumnDefs() {
         className: "w-[150px] text-center",
       },
       cell(props) {
-        return props.getValue() === FinanceType.depense ? (
+        return props.getValue() === OperationType.depense ? (
           <Dot className="bg-destructive" />
         ) : (
           <Dot className="bg-success" />
@@ -72,7 +72,7 @@ export function useFinanceColumnDefs() {
       accessorKey: "action",
       header: "",
       cell(props) {
-        return <FinanceAction row={props.row.original} />;
+        return <OperationAction row={props.row.original} />;
       },
     },
   ];

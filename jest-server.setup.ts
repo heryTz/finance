@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
 beforeEach(async () => {
-  await prisma.finance.deleteMany();
+  await prisma.operation.deleteMany();
   await prisma.tag.deleteMany();
   await prisma.product.deleteMany();
   await prisma.invoice.deleteMany();

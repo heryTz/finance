@@ -1,4 +1,4 @@
-import { humanDate } from "@/lib";
+import { humanDate } from "@/lib/humanizer";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrayElement } from "@/lib/types";
 import { GetClients } from "../client-service";

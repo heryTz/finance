@@ -1,4 +1,4 @@
-import { httpClient } from "@/lib";
+import { httpClient } from "@/lib/http-client";
 import { useMutation, useQuery } from "react-query";
 import type { SaveProviderInput } from "./provider-dto";
 import type { GetProvider, SaveProvider } from "./provider-service";

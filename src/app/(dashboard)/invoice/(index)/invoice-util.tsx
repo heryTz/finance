@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from "@/lib";
+import { capitalizeFirstLetter } from "@/lib/humanizer";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
 

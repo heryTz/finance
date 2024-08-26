@@ -1,25 +1,25 @@
 "use client";
-import { useFinances } from "./finance-query";
+import { useOperations } from "./operation-query";
 import { useState } from "react";
 import { Loader } from "@/components/loader";
 import { Container } from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { ErrorSection } from "@/components/error-section";
 import { useSeo } from "@/lib/use-seo";
-import { useFinanceColumnDefs } from "./components/finance-column-defs";
+import { useOperationColumnDefs } from "./components/operation-column-defs";
 import { DataTable } from "@/components/data-table";
-import { FinanceSave } from "./components/finance-save";
+import { OperationSave } from "./components/operation-save";
 
-export default function FinancePage() {
-  const { data, isLoading, error, refetch } = useFinances();
-  const { columns } = useFinanceColumnDefs();
+export default function OperationPage() {
+  const { data, isLoading, error, refetch } = useOperations();
+  const { columns } = useOperationColumnDefs();
   const [openSave, setOpenSave] = useState(false);
 
-  useSeo({ title: "List" });
+  useSeo({ title: "Opération" });
 
   return (
     <Container
-      title="Finance"
+      title="Opération"
       action={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
     >
       {isLoading ? (
@@ -30,7 +30,7 @@ export default function FinancePage() {
         <DataTable data={data.data.results} columns={columns} />
       )}
       {openSave && (
-        <FinanceSave
+        <OperationSave
           open={openSave}
           onOpenChange={setOpenSave}
           onFinish={refetch}

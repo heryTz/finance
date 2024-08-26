@@ -41,7 +41,7 @@ model User {
   email         String        @unique
   name          String?
   emailVerified DateTime?
-  finances      Finance[]
+  operations    Operation[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?     @updatedAt
   Account       Account[]
@@ -62,7 +62,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Finance {
+model Operation {
   id        String    @id @default(cuid())
   label     String
   amount    Decimal   @db.Decimal(10, 2)
@@ -75,13 +75,13 @@ model Finance {
 }
 
 model Tag {
-  id        String    @id @default(cuid())
-  name      String
-  finances  Finance[]
-  User      User      @relation(fields: [userId], references: [id])
-  userId    String    @default("iztvu9ziqfcozg14gmpskwwk")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  id         String      @id @default(cuid())
+  name       String
+  operations Operation[]
+  User       User        @relation(fields: [userId], references: [id])
+  userId     String      @default("iztvu9ziqfcozg14gmpskwwk")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime?   @updatedAt
 
   @@unique([name, userId])
 }

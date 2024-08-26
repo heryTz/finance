@@ -1,7 +1,7 @@
 "use client";
 
 import { AdminGuard } from "@/lib/admin-guard";
-import { ChartArea, Landmark, Wallet } from "lucide-react";
+import { ArrowLeftRightIcon, ChartArea, Wallet } from "lucide-react";
 import { Sidebar } from "@/components/sidebar";
 import { usePathname } from "next/navigation";
 import { Appbar } from "@/components/appbar";
@@ -17,10 +17,10 @@ export function Component({ children }: PropsWithChildren) {
       active: pathname === "/",
     },
     {
-      label: "Finance",
-      href: "/finance",
-      Icon: Landmark,
-      active: pathname.startsWith("/finance"),
+      label: "Opération",
+      href: "/operation",
+      Icon: ArrowLeftRightIcon,
+      active: pathname.startsWith("/operation"),
     },
     {
       label: "Facture",

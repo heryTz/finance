@@ -1,7 +1,7 @@
 import { GetProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { GetInvoiceById } from "../../../invoice-service";
 import dayjs from "dayjs";
-import { humanAmount } from "@/lib";
+import { humanAmount } from "@/lib/humanizer";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
