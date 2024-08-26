@@ -17,10 +17,10 @@ export function Component({ children }: PropsWithChildren) {
       active: pathname === "/",
     },
     {
-      label: "Finance",
-      href: "/finance",
+      label: "Opération",
+      href: "/operation",
       Icon: Landmark,
-      active: pathname.startsWith("/finance"),
+      active: pathname.startsWith("/operation"),
     },
     {
       label: "Facture",

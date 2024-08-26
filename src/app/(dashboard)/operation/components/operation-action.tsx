@@ -1,5 +1,5 @@
 import { ArrayElement } from "@/lib/types";
-import { GetFinances } from "../finance-service";
+import { GetOperations } from "../operation-service";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +10,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
-import { FinanceSave } from "./finance-save";
+import { OperationSave } from "./operation-save";
 import { useQueryClient } from "react-query";
-import { useFinanceDelete, useFinances } from "../finance-query";
+import { useOperationDelete, useOperations } from "../operation-query";
 import { ModalDelete } from "@/components/modal-delete";
 
-export function FinanceAction({ row }: FinanceActionProps) {
+export function OperationAction({ row }: OperationActionProps) {
   const queryClient = useQueryClient();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const deleteFn = useFinanceDelete();
+  const deleteFn = useOperationDelete();
 
   const onRefetch = () => {
-    queryClient.refetchQueries({ queryKey: [useFinances.name] });
+    queryClient.refetchQueries({ queryKey: [useOperations.name] });
   };
 
   return (
@@ -45,7 +45,7 @@ export function FinanceAction({ row }: FinanceActionProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       {openEdit && (
-        <FinanceSave
+        <OperationSave
           idToEdit={row.id}
           open={openEdit}
           onOpenChange={setOpenEdit}
@@ -67,6 +67,6 @@ export function FinanceAction({ row }: FinanceActionProps) {
   );
 }
 
-type FinanceActionProps = {
-  row: ArrayElement<GetFinances["results"]>;
+type OperationActionProps = {
+  row: ArrayElement<GetOperations["results"]>;
 };

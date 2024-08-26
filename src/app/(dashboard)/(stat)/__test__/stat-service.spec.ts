@@ -1,7 +1,7 @@
-import { buildSaveFinanceInput } from "@/lib/factory";
-import { createFinance } from "../../finance/finance-service";
+import { buildSaveOperationInput } from "@/lib/factory";
+import { createOperation } from "../../operation/operation-service";
 import { createUser } from "../../user/user-service";
-import { FinanceType } from "@/entity";
+import { OperationType } from "@/entity";
 import { getStats } from "../stat-service";
 import dayjs from "dayjs";
 import { statData } from "../stat-util";
@@ -10,9 +10,9 @@ describe("stat service", () => {
   it("can only view my stat", async () => {
     const user1 = await createUser({ email: "user1@example.com" });
     const user2 = await createUser({ email: "user2@example.com" });
-    await createFinance(
+    await createOperation(
       user1.id,
-      buildSaveFinanceInput({ type: FinanceType.revenue }),
+      buildSaveOperationInput({ type: OperationType.revenue }),
     );
     const user2Stat = await getStats(user2.id);
     expect(JSON.stringify(user2Stat.datasets)).toBe(
@@ -38,41 +38,41 @@ describe("stat service", () => {
     const createdAtMarch = dayjs().set("month", 2);
     const createdAtApril = dayjs().set("month", 3);
     const incomes = [
-      buildSaveFinanceInput({
-        type: FinanceType.revenue,
+      buildSaveOperationInput({
+        type: OperationType.revenue,
         createdAt: createdAtMarch.toISOString(),
         amount: 30,
       }),
-      buildSaveFinanceInput({
-        type: FinanceType.revenue,
+      buildSaveOperationInput({
+        type: OperationType.revenue,
         createdAt: createdAtMarch.toISOString(),
         amount: 40,
       }),
-      buildSaveFinanceInput({
-        type: FinanceType.revenue,
+      buildSaveOperationInput({
+        type: OperationType.revenue,
         createdAt: createdAtApril.toISOString(),
         amount: 20,
       }),
     ];
     const expenses = [
-      buildSaveFinanceInput({
-        type: FinanceType.depense,
+      buildSaveOperationInput({
+        type: OperationType.depense,
         createdAt: createdAtMarch.toISOString(),
         amount: 10,
       }),
-      buildSaveFinanceInput({
-        type: FinanceType.depense,
+      buildSaveOperationInput({
+        type: OperationType.depense,
         createdAt: createdAtMarch.toISOString(),
         amount: 20,
       }),
-      buildSaveFinanceInput({
-        type: FinanceType.depense,
+      buildSaveOperationInput({
+        type: OperationType.depense,
         createdAt: createdAtApril.toISOString(),
         amount: 30,
       }),
     ];
-    await Promise.all(incomes.map((el) => createFinance(user.id, el)));
-    await Promise.all(expenses.map((el) => createFinance(user.id, el)));
+    await Promise.all(incomes.map((el) => createOperation(user.id, el)));
+    await Promise.all(expenses.map((el) => createOperation(user.id, el)));
 
     const stats = await getStats(user.id);
     expect(JSON.stringify(stats.datasets)).toBe(

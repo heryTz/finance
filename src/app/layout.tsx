@@ -13,8 +13,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "FINANCE",
-  description: "FINANCE application",
+  title: "Finance",
+  description: "Finance application",
 };
 
 export default async function RootLayout({

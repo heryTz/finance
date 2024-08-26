@@ -1,4 +1,4 @@
-export enum FinanceType {
+export enum OperationType {
   revenue = "revenue",
   depense = "depense",
 }

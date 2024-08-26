@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { FinanceType } from "../../src/entity";
+import { OperationType } from "../../src/entity";
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 
@@ -27,18 +27,18 @@ async function run() {
     });
   }
 
-  const finances = await prisma.finance.findMany();
-  for (const finance of finances) {
-    await prisma.finance.update({
-      where: { id: finance.id },
+  const operations = await prisma.operation.findMany();
+  for (const operation of operations) {
+    await prisma.operation.update({
+      where: { id: operation.id },
       data: {
         label: faker.word.noun(),
         amount:
-          finance.type === FinanceType.depense
+          operation.type === OperationType.depense
             ? faker.number.int({ min: 1000, max: 1500 })
             : faker.number.int({ min: 3000, max: 10000 }),
-        createdAt: randomDayOfMonth(finance.createdAt),
-        updatedAt: randomDayOfMonth(finance.updatedAt),
+        createdAt: randomDayOfMonth(operation.createdAt),
+        updatedAt: randomDayOfMonth(operation.updatedAt),
       },
     });
   }

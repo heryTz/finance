@@ -1,21 +1,21 @@
-import { SaveFinanceInput } from "@/app/(dashboard)/finance/finance-dto";
+import { SaveOperationInput } from "@/app/(dashboard)/operation/operation-dto";
 import { CreateInvoiceInput } from "@/app/(dashboard)/invoice/(index)/invoice-dto";
 import { SaveClientInput } from "@/app/(dashboard)/invoice/client/client-dto";
 import { createClient } from "@/app/(dashboard)/invoice/client/client-service";
 import { createPaymentMode } from "@/app/(dashboard)/invoice/payment-mode/payment-mode-service";
-import { FinanceType } from "@/entity";
+import { OperationType } from "@/entity";
 import { faker } from "@faker-js/faker";
 
-export function buildSaveFinanceInput(
-  finance?: Partial<SaveFinanceInput>,
-): SaveFinanceInput {
+export function buildSaveOperationInput(
+  operation?: Partial<SaveOperationInput>,
+): SaveOperationInput {
   return {
     label: faker.commerce.product(),
     amount: +faker.commerce.price(),
     createdAt: new Date(),
     tags: [],
-    type: FinanceType.revenue,
-    ...finance,
+    type: OperationType.revenue,
+    ...operation,
   };
 }
 

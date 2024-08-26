@@ -1,19 +1,19 @@
 "use client";
-import { FinanceType } from "@/entity";
+import { OperationType } from "@/entity";
 import { useForm } from "react-hook-form";
 import { useTags } from "../../tag/tag-query";
 import {
-  useFinanceById,
-  useFinanceSave,
-  useFinanceUpdate,
-  useFinances,
-} from "../finance-query";
+  useOperationById,
+  useOperationSave,
+  useOperationUpdate,
+  useOperations,
+} from "../operation-query";
 import { useEffect } from "react";
 import { Modal } from "@/components/modal";
 import { Loader } from "@/components/loader";
 import { Form, FormField } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { saveFinanceInputSchema } from "../finance-dto";
+import { saveOperationInputSchema } from "../operation-dto";
 import { SelectField } from "@/components/select-field";
 import { InputField } from "@/components/input-field";
 import { CalendarField } from "@/components/calendar-field";
@@ -25,41 +25,41 @@ import { toast } from "sonner";
 // TODO: Fix focus for CalendarField, Button
 // TODO: Fix error js - press enter on input autocomplete and press arrow down
 
-type FormData = zd.infer<typeof saveFinanceInputSchema>;
+type FormData = zd.infer<typeof saveOperationInputSchema>;
 
-export function FinanceSave({
+export function OperationSave({
   open,
   onOpenChange,
   idToEdit,
   onFinish,
-}: FinanceSaveProps) {
+}: OperationSaveProps) {
   const tagsFn = useTags();
-  const financeFn = useFinanceById(idToEdit);
-  const finance = financeFn.data?.data;
-  const createFn = useFinanceSave();
-  const updateFn = useFinanceUpdate();
-  const financesFn = useFinances({ distinct: "true" });
+  const operationFn = useOperationById(idToEdit);
+  const operation = operationFn.data?.data;
+  const createFn = useOperationSave();
+  const updateFn = useOperationUpdate();
+  const operationsFn = useOperations({ distinct: "true" });
   const form = useForm<FormData>({
-    resolver: zodResolver(saveFinanceInputSchema),
+    resolver: zodResolver(saveOperationInputSchema),
     defaultValues: {
       label: "",
       amount: 0,
       tags: [],
-      type: FinanceType.depense,
+      type: OperationType.depense,
       createdAt: new Date(),
     },
   });
 
   useEffect(() => {
-    if (finance) {
-      const data = saveFinanceInputSchema.parse({
-        ...finance,
-        tags: finance.tags.map((el) => el.name),
+    if (operation) {
+      const data = saveOperationInputSchema.parse({
+        ...operation,
+        tags: operation.tags.map((el) => el.name),
       });
       form.reset(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finance]);
+  }, [operation]);
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
@@ -90,10 +90,10 @@ export function FinanceSave({
       submit={{
         onClick: onSubmit,
         disabled:
-          createFn.isLoading || financeFn.isLoading || updateFn.isLoading,
+          createFn.isLoading || operationFn.isLoading || updateFn.isLoading,
       }}
     >
-      {idToEdit && financeFn.isLoading ? (
+      {idToEdit && operationFn.isLoading ? (
         <Loader />
       ) : (
         <Form {...form}>
@@ -109,7 +109,7 @@ export function FinanceSave({
                   onChange={field.onChange}
                   hideEmptySuggestion
                   options={
-                    financesFn.data?.data.results.map((el) => ({
+                    operationsFn.data?.data.results.map((el) => ({
                       label: el.label,
                       value: el.label,
                     })) ?? []
@@ -126,8 +126,8 @@ export function FinanceSave({
                   onChange={field.onChange}
                   label="Type"
                   options={[
-                    { value: FinanceType.revenue, label: "Revenu" },
-                    { value: FinanceType.depense, label: "Dépense" },
+                    { value: OperationType.revenue, label: "Revenu" },
+                    { value: OperationType.depense, label: "Dépense" },
                   ]}
                 />
               )}
@@ -175,7 +175,7 @@ export function FinanceSave({
   );
 }
 
-type FinanceSaveProps = {
+type OperationSaveProps = {
   idToEdit?: string;
   onFinish?: () => void;
   open: boolean;
