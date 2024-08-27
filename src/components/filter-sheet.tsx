@@ -26,7 +26,7 @@ export function FilterSheet({
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
         <div className="flex-1 overflow-auto">{children}</div>
-        <SheetFooter className="shrink-0">
+        <SheetFooter className="shrink-0 gap-2 sm:gap-4">
           <Button {...clearAll} variant={"outline"}>
             Tout effacer
           </Button>
