@@ -106,7 +106,18 @@ export function OperationSave({
                   label="Libellé"
                   freeSolo
                   value={field.value}
-                  onChange={field.onChange}
+                  onChange={(value) => {
+                    field.onChange(value);
+                    const item = operationsFn.data?.data.results.find(
+                      (el) => el.label === value,
+                    );
+                    if (item) {
+                      form.setValue(
+                        "tags",
+                        item.tags.map((el) => el.name),
+                      );
+                    }
+                  }}
                   hideEmptySuggestion
                   options={
                     operationsFn.data?.data.results.map((el) => ({
