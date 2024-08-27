@@ -28,6 +28,7 @@ export function Autocomplete({
     if (exist) {
       onChange(exist.value);
       setSearch(exist.label);
+      popover.setOpen(false);
       return;
     }
 
@@ -35,6 +36,7 @@ export function Autocomplete({
     onChange(value);
     const oldOption = options.find((option) => option.value === value);
     if (oldOption) setSearch(oldOption.label);
+    popover.setOpen(false);
   };
 
   const handleChangeFreeSolo = (newSearch: string) => {
