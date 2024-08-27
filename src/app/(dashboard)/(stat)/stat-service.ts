@@ -14,19 +14,20 @@ dayjs.extend(isSameOrBefore);
 
 export async function getStats(
   userId: string,
-  { startDate, endDate }: z.input<typeof getStatsQuerySchema>,
+  { range }: z.input<typeof getStatsQuerySchema>,
 ) {
+  const { from, to } = range;
   const operations = await prisma.operation.findMany({
     where: {
       userId,
       createdAt: {
-        lte: endDate,
-        gte: startDate,
+        lte: to,
+        gte: from,
       },
     },
   });
 
-  const monthRange = getMonthRange({ startDate, endDate });
+  const monthRange = getMonthRange({ from, to });
   let lastMonthOfOperation = 0;
 
   const data: {
@@ -37,9 +38,9 @@ export async function getStats(
   }[] = [];
 
   for (const months of monthRange) {
-    const monthDayjs = dayjs(startDate).startOf("year").add(months, "month");
+    const monthDayjs = dayjs(from).startOf("year").add(months, "month");
     data[months] = {
-      month: getMonthLabel({ monthIndex: months, startDate, endDate }),
+      month: getMonthLabel({ monthIndex: months, from, to }),
       income: 0,
       expense: 0,
       retainedEarnings: 0,
@@ -65,7 +66,7 @@ export async function getStats(
     where: {
       userId,
       createdAt: {
-        lte: dayjs(startDate).add(-1, "year").endOf("year").toDate(),
+        lte: dayjs(from).add(-1, "year").endOf("year").toDate(),
       },
     },
     _sum: { amount: true },

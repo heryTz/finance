@@ -14,14 +14,14 @@ describe("stat service", () => {
       user1.id,
       buildSaveOperationInput({ type: OperationType.revenue }),
     );
-    const query = {
-      startDate: dayjs().startOf("year").toDate(),
-      endDate: dayjs().endOf("year").toDate(),
+    const range = {
+      from: dayjs().startOf("year").toDate(),
+      to: dayjs().endOf("year").toDate(),
     };
-    const user2Stat = await getStats(user2.id, query);
+    const user2Stat = await getStats(user2.id, { range });
     expect(user2Stat.results).toEqual(
-      getMonthRange(query).map((i) => ({
-        month: getMonthLabel({ monthIndex: i, ...query }),
+      getMonthRange(range).map((i) => ({
+        month: getMonthLabel({ monthIndex: i, ...range }),
         income: 0,
         expense: 0,
         retainedEarnings: 0,
@@ -70,13 +70,13 @@ describe("stat service", () => {
     await Promise.all(incomes.map((el) => createOperation(user.id, el)));
     await Promise.all(expenses.map((el) => createOperation(user.id, el)));
 
-    const query = {
-      startDate: dayjs().startOf("year").toDate(),
-      endDate: dayjs().endOf("year").toDate(),
+    const range = {
+      from: dayjs().startOf("year").toDate(),
+      to: dayjs().endOf("year").toDate(),
     };
-    const stats = await getStats(user.id, query);
+    const stats = await getStats(user.id, { range });
     expect(stats.results).toEqual(
-      getMonthRange(query).map((i) => {
+      getMonthRange(range).map((i) => {
         let income = 0;
         let expense = 0;
         let retainedEarnings = 0;
@@ -90,7 +90,7 @@ describe("stat service", () => {
           retainedEarnings = 30;
         }
         return {
-          month: getMonthLabel({ monthIndex: i, ...query }),
+          month: getMonthLabel({ monthIndex: i, ...range }),
           income,
           expense,
           retainedEarnings,
@@ -130,13 +130,13 @@ describe("stat service", () => {
     await Promise.all(incomes.map((el) => createOperation(user.id, el)));
     await Promise.all(expenses.map((el) => createOperation(user.id, el)));
 
-    const query = {
-      startDate: dayjs().startOf("year").toDate(),
-      endDate: dayjs().add(1, "year").endOf("year").toDate(),
+    const range = {
+      from: dayjs().startOf("year").toDate(),
+      to: dayjs().add(1, "year").endOf("year").toDate(),
     };
-    const stats = await getStats(user.id, query);
+    const stats = await getStats(user.id, { range });
     expect(stats.results).toEqual(
-      getMonthRange(query).map((i) => {
+      getMonthRange(range).map((i) => {
         let income = 0;
         let expense = 0;
         let retainedEarnings = 0;
@@ -153,10 +153,10 @@ describe("stat service", () => {
           retainedEarnings = 40;
         }
         return {
-          month: getMonthLabel({ monthIndex: i, ...query }),
           income,
           expense,
           retainedEarnings,
+          month: getMonthLabel({ monthIndex: i, ...range }),
         };
       }),
     );

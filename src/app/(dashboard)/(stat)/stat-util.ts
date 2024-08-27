@@ -14,23 +14,23 @@ export const statData = {
 } as const;
 
 // Month index start by 0
-export function getMonthRange(range: { startDate: Date; endDate: Date }) {
-  const startYear = range.startDate.getFullYear();
-  const endYear = range.endDate.getFullYear();
+export function getMonthRange(range: { from: Date; to: Date }) {
+  const startYear = range.from.getFullYear();
+  const endYear = range.to.getFullYear();
   const delta = endYear - startYear;
   return Array.from({ length: 12 * (delta + 1) }, (_, i) => i);
 }
 
 export function getMonthLabel(params: {
   monthIndex: number;
-  startDate: Date;
-  endDate: Date;
+  from: Date;
+  to: Date;
 }) {
   dayjs.locale("fr");
-  const startYear = params.startDate.getFullYear();
-  const endYear = params.endDate.getFullYear();
+  const startYear = params.from.getFullYear();
+  const endYear = params.to.getFullYear();
   const delta = endYear - startYear;
-  return dayjs(params.startDate)
+  return dayjs(params.from)
     .add(params.monthIndex, "month")
     .format(delta > 0 ? "MMMM YYYY" : "MMMM");
 }
