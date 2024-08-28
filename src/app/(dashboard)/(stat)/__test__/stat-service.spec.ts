@@ -168,7 +168,7 @@ describe("stat service", () => {
     );
   });
 
-  it("show stat between March and June", async () => {
+  it("show stats between March and June", async () => {
     const user = await createUser({ email: "user1@example.com" });
     const incomes = [0, 1, 2, 3, 4, 5, 6, 7].map((monthIndex) =>
       buildSaveOperationInput({
@@ -221,7 +221,7 @@ describe("stat service", () => {
     ]);
   });
 
-  it("show stat between for March", async () => {
+  it("show stats for March", async () => {
     const user = await createUser({ email: "user1@example.com" });
     const incomes = [0, 1, 2, 3].map((monthIndex) =>
       buildSaveOperationInput({
@@ -256,7 +256,7 @@ describe("stat service", () => {
     ]);
   });
 
-  it("stat between 31th (Month-1) and 1er (Month) should be all stat between 1er (Month-1) and 31th (Month)", async () => {
+  it("show stats between 31th (Month-1) and 1er (Month) should be all stat between 1er (Month-1) and 31th (Month)", async () => {
     const user = await createUser({ email: "user1@example.com" });
     const actualMonth = dayjs();
     const prevMonth = dayjs().add(-1, "month");

@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { getMonthLabel, getMonthRange } from "../stat-util";
 
 describe("stat util", () => {
-  it("should return 12 month of 2024 [0..11]", () => {
+  it("return all month index of 2024", () => {
     const range = getMonthRange({
       from: new Date("2024-01-01"),
       to: new Date("2024-12-31"),
@@ -11,7 +11,7 @@ describe("stat util", () => {
     expect(range).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   });
 
-  it("should return 24 month of 2024-2025 [0..23]", () => {
+  it("return all month index between 2024 and 2025", () => {
     const range = getMonthRange({
       from: new Date("2024-01-01"),
       to: new Date("2025-12-31"),
@@ -23,7 +23,7 @@ describe("stat util", () => {
     ]);
   });
 
-  it("should return between March and June month index", () => {
+  it("return all month index between March and June", () => {
     const range = getMonthRange({
       from: new Date("2024-03-01"),
       to: new Date("2024-06-01"),
@@ -32,7 +32,7 @@ describe("stat util", () => {
     expect(range).toEqual([2, 3, 4, 5]);
   });
 
-  it("should return between March index", () => {
+  it("return month index of March", () => {
     const range = getMonthRange({
       from: new Date("2024-03-01"),
       to: new Date("2024-03-02"),
@@ -41,7 +41,7 @@ describe("stat util", () => {
     expect(range).toEqual([2]);
   });
 
-  it("should return between December 2024 and January 2025 month index", () => {
+  it("return all month index between December 2024 and January 2025", () => {
     const range = getMonthRange({
       from: new Date("2024-12-31"),
       to: new Date("2025-01-01"),
@@ -50,7 +50,7 @@ describe("stat util", () => {
     expect(range).toEqual([11, 12]);
   });
 
-  it("should return between October 2023 and March 2024 month index", () => {
+  it("return all month index between October 2023 and March 2024", () => {
     const range = getMonthRange({
       from: new Date("2023-10-01"),
       to: new Date("2024-03-01"),
@@ -59,7 +59,7 @@ describe("stat util", () => {
     expect(range).toEqual([9, 10, 11, 12, 13, 14]);
   });
 
-  it("should return only month range before or same of the actual month", () => {
+  it("return all month index before or same of the current month", () => {
     const range = getMonthRange({
       from: dayjs().startOf("year").toDate(),
       to: dayjs().endOf("year").toDate(),
@@ -68,7 +68,7 @@ describe("stat util", () => {
     expect(range).toEqual(Array.from({ length: actualMonth + 1 }, (_, i) => i));
   });
 
-  it("month label should with year", () => {
+  it("return month label with year", () => {
     const label = getMonthLabel({
       monthIndex: 0,
       from: new Date("2024-01-01"),
@@ -77,7 +77,7 @@ describe("stat util", () => {
     expect(label).toBe("janvier 2024");
   });
 
-  it("month label should without year", () => {
+  it("return month label without year", () => {
     const label = getMonthLabel({
       monthIndex: 0,
       from: new Date("2024-01-01"),
@@ -86,7 +86,7 @@ describe("stat util", () => {
     expect(label).toBe("janvier");
   });
 
-  it("août month label", () => {
+  it("return Août month label", () => {
     const label = getMonthLabel({
       monthIndex: 7,
       from: new Date("2024-08-01"),
