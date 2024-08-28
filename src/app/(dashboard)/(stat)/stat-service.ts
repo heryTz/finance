@@ -16,7 +16,11 @@ export async function getStats(
   userId: string,
   { range }: z.input<typeof getStatsQuerySchema>,
 ) {
-  const { from, to } = range;
+  const { customActualDate } = range;
+  // We base only by month (not by date)
+  const from = dayjs(range.from).startOf("month").toDate();
+  const to = dayjs(range.to).endOf("month").toDate();
+
   const operations = await prisma.operation.findMany({
     where: {
       userId,
@@ -27,7 +31,7 @@ export async function getStats(
     },
   });
 
-  const monthRange = getMonthRange({ from, to });
+  const monthRange = getMonthRange({ from, to, customActualDate });
   let lastMonthOfOperation = 0;
 
   const data: {
@@ -37,9 +41,10 @@ export async function getStats(
     retainedEarnings: number;
   }[] = [];
 
-  for (const months of monthRange) {
+  for (let i = 0; i < monthRange.length; i++) {
+    const months = monthRange[i];
     const monthDayjs = dayjs(from).startOf("year").add(months, "month");
-    data[months] = {
+    data[i] = {
       month: getMonthLabel({ monthIndex: months, from, to }),
       income: 0,
       expense: 0,
@@ -53,9 +58,9 @@ export async function getStats(
       ) {
         lastMonthOfOperation = months;
         if (operation.type === OperationType.depense) {
-          data[months].expense += operation.amount.toNumber();
+          data[i].expense += operation.amount.toNumber();
         } else {
-          data[months].income += operation.amount.toNumber();
+          data[i].income += operation.amount.toNumber();
         }
       }
     }
@@ -66,7 +71,7 @@ export async function getStats(
     where: {
       userId,
       createdAt: {
-        lte: dayjs(from).add(-1, "year").endOf("year").toDate(),
+        lte: dayjs(from).add(-1, "month").endOf("month").toDate(),
       },
     },
     _sum: { amount: true },
@@ -82,16 +87,15 @@ export async function getStats(
       ?._sum.amount?.toNumber() ?? 0;
 
   // Calculate retained earnings
-  for (const month of monthRange) {
-    if (month === 0) {
+  for (let i = 0; i < monthRange.length; i++) {
+    if (i === 0) {
       data[0].retainedEarnings =
-        prevIncome + data[month].income - (prevExpense + data[month].expense);
-    } else if (month <= lastMonthOfOperation) {
-      data[month].retainedEarnings =
-        data[month - 1].retainedEarnings +
-        (data[month].income - data[month].expense);
+        prevIncome + data[i].income - (prevExpense + data[i].expense);
+    } else if (i <= lastMonthOfOperation) {
+      data[i].retainedEarnings =
+        data[i - 1].retainedEarnings + (data[i].income - data[i].expense);
     } else {
-      data[month].retainedEarnings = 0;
+      data[i].retainedEarnings = data[i - 1].retainedEarnings;
     }
   }
 

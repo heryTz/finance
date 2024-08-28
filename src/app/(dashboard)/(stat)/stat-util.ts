@@ -1,5 +1,10 @@
 import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import "dayjs/locale/fr";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 export const statData = {
   income: {
@@ -14,11 +19,25 @@ export const statData = {
 } as const;
 
 // Month index start by 0
-export function getMonthRange(range: { from: Date; to: Date }) {
-  const startYear = range.from.getFullYear();
-  const endYear = range.to.getFullYear();
-  const delta = endYear - startYear;
-  return Array.from({ length: 12 * (delta + 1) }, (_, i) => i);
+export function getMonthRange(range: {
+  from: Date;
+  to: Date;
+  customActualDate?: Date | null;
+}) {
+  const startYearDayjs = dayjs(range.from).startOf("month");
+  const endYearDayjs = dayjs(range.to).endOf("month");
+  const delta = endYearDayjs.get("year") - startYearDayjs.get("year") + 1;
+
+  return Array.from({ length: 12 * delta }, (_, i) => i).filter(
+    (monthIndex) => {
+      const monthDayjs = dayjs().startOf("year").add(monthIndex, "month");
+      return (
+        monthDayjs.isSameOrAfter(startYearDayjs) &&
+        monthDayjs.isSameOrBefore(endYearDayjs) &&
+        monthDayjs.isSameOrBefore(dayjs(range.customActualDate).endOf("month"))
+      );
+    },
+  );
 }
 
 export function getMonthLabel(params: {
@@ -31,6 +50,7 @@ export function getMonthLabel(params: {
   const endYear = params.to.getFullYear();
   const delta = endYear - startYear;
   return dayjs(params.from)
+    .startOf("year")
     .add(params.monthIndex, "month")
     .format(delta > 0 ? "MMMM YYYY" : "MMMM");
 }

@@ -6,6 +6,7 @@ export const getStatsQuerySchema = zd.object({
   range: zd.object({
     from: zd.coerce.date(),
     to: zd.coerce.date(),
+    customActualDate: zd.coerce.date().nullish(),
   }),
 });
 
