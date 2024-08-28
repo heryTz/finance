@@ -30,7 +30,9 @@ export function getMonthRange(range: {
 
   return Array.from({ length: 12 * delta }, (_, i) => i).filter(
     (monthIndex) => {
-      const monthDayjs = dayjs().startOf("year").add(monthIndex, "month");
+      const monthDayjs = dayjs(range.from)
+        .startOf("year")
+        .add(monthIndex, "month");
       return (
         monthDayjs.isSameOrAfter(startYearDayjs) &&
         monthDayjs.isSameOrBefore(endYearDayjs) &&

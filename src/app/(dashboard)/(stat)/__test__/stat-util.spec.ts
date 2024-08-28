@@ -50,6 +50,15 @@ describe("stat util", () => {
     expect(range).toEqual([11, 12]);
   });
 
+  it("should return between October 2023 and March 2024 month index", () => {
+    const range = getMonthRange({
+      from: new Date("2023-10-01"),
+      to: new Date("2024-03-01"),
+      customActualDate: new Date("2024-03-01"),
+    });
+    expect(range).toEqual([9, 10, 11, 12, 13, 14]);
+  });
+
   it("should return only month range before or same of the actual month", () => {
     const range = getMonthRange({
       from: dayjs().startOf("year").toDate(),
