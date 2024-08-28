@@ -12,14 +12,13 @@ dayjs.locale("fr");
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
+// TODO: Allow other xAxis label than month
+
 export async function getStats(
   userId: string,
   { range }: z.input<typeof getStatsQuerySchema>,
 ) {
-  const { customActualDate } = range;
-  // We base only by month (not by date)
-  const from = dayjs(range.from).startOf("month").toDate();
-  const to = dayjs(range.to).endOf("month").toDate();
+  const { to, from, customActualDate } = range;
 
   const operations = await prisma.operation.findMany({
     where: {

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { defaultGetStatsQuery, getStatsQuerySchema } from "../stat-dto";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField } from "@/components/ui/form";
-import { CalendarRangeField } from "@/components/calendar-range-field";
+import { MonthPickerField } from "@/components/month-picker-field";
 
 export function StatFilterSheet({
   open,
@@ -46,10 +46,12 @@ export function StatFilterSheet({
             control={form.control}
             name="range"
             render={({ field, formState }) => (
-              <CalendarRangeField
+              <MonthPickerField
                 label="Date de création"
                 value={field.value}
-                onChange={field.onChange}
+                onChange={(value) => {
+                  field.onChange(value);
+                }}
                 error={formState.errors.range}
               />
             )}
