@@ -11,10 +11,11 @@ dayjs.locale("fr");
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
-export function MonthPickerContent({
+export function MonthPickerContent<Type extends "range" | "simple">({
   value,
   onChange,
-}: MonthPickerContentProps) {
+  type,
+}: MonthPickerContentProps<Type>) {
   const [currentYear, setCurrentYear] = useState(dayjs().get("year"));
 
   const onClickMonth = (monthIndex: number, reset = false) => {
@@ -22,6 +23,10 @@ export function MonthPickerContent({
       .set("year", currentYear)
       .startOf("year")
       .set("month", monthIndex);
+    if (type === "simple") {
+      onChange(month.toDate());
+      return;
+    }
 
     if (!value || reset) {
       onChange({ from: month.startOf("month").toDate() });
@@ -64,19 +69,28 @@ export function MonthPickerContent({
               .set("year", currentYear)
               .startOf("year")
               .add(monthIndex, "month");
-            let isSelected = false;
-            if (value?.from && value.to) {
-              isSelected =
-                dayjs(value.from).isSameOrBefore(month) &&
-                dayjs(value.to).isSameOrAfter(month);
-            }
 
-            const isFirst = value?.from
-              ? dayjs(value.from).isSame(month.startOf("month"))
-              : false;
-            const isLast = value?.to
-              ? dayjs(value.to).isSame(month.endOf("month"))
-              : false;
+            let isSelected = false;
+            let isFirst = false;
+            let isLast = false;
+
+            if (type === "simple") {
+              isSelected = value ? dayjs(value).isSame(month) : false;
+            } else {
+              if (value?.from && value.to) {
+                isSelected =
+                  dayjs(value.from).isSameOrBefore(month) &&
+                  dayjs(value.to).isSameOrAfter(month);
+              }
+
+              isFirst = value?.from
+                ? dayjs(value.from).isSame(month.startOf("month"))
+                : false;
+
+              isLast = value?.to
+                ? dayjs(value.to).isSame(month.endOf("month"))
+                : false;
+            }
 
             return (
               <Button
@@ -109,7 +123,15 @@ export type MonthRange = {
   to?: Date;
 };
 
-type MonthPickerContentProps = {
-  value?: MonthRange | null;
-  onChange: (value: MonthRange) => void;
-};
+type MonthPickerContentProps<Type extends "range" | "simple"> =
+  Type extends "range"
+    ? {
+        type: Type;
+        value?: MonthRange | null;
+        onChange: (value: MonthRange) => void;
+      }
+    : {
+        type: Type;
+        value?: Date | null;
+        onChange: (value: Date) => void;
+      };

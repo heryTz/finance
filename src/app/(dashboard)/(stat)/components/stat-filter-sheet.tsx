@@ -47,6 +47,7 @@ export function StatFilterSheet({
             name="range"
             render={({ field, formState }) => (
               <MonthPickerField
+                type="range"
                 label="Date de création"
                 value={field.value}
                 onChange={(value) => {
