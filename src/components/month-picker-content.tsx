@@ -31,12 +31,10 @@ export function MonthPickerContent({
       throw new Error(
         `This should never be happened. "value.to" should set after "value.from"`,
       );
-    } else {
-      if (dayjs(value.from).isBefore(month)) {
-        onChange({ ...value, to: month.endOf("month").toDate() });
-      } else if (dayjs(value.from).isAfter(month)) {
-        onChange({ ...value, from: month.startOf("month").toDate() });
-      }
+    } else if (dayjs(value.from).isBefore(month)) {
+      onChange({ ...value, to: month.endOf("month").toDate() });
+    } else if (dayjs(value.from).isAfter(month)) {
+      onChange({ ...value, from: month.startOf("month").toDate() });
     }
   };
 
