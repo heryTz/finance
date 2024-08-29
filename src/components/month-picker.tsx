@@ -11,6 +11,7 @@ export function MonthPicker({
   value,
   onChange,
   buttonProps,
+  type,
 }: MonthPickerProps) {
   return (
     <Popover>
@@ -24,7 +25,9 @@ export function MonthPicker({
           StartIcon={CalendarDaysIcon}
           {...buttonProps}
         >
-          {value?.from ? (
+          {!value && <span>{placeholder ?? "Prend une date"}</span>}
+          {value && type === "simple" && humanMonthDate(value)}
+          {value && type === "range" && value.from ? (
             value.to ? (
               <>
                 {humanMonthDate(value.from)} - {humanMonthDate(value.to)}
@@ -32,13 +35,16 @@ export function MonthPicker({
             ) : (
               humanMonthDate(value.from)
             )
-          ) : (
-            <span>{placeholder ?? "Prend une date"}</span>
-          )}
+          ) : null}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <MonthPickerContent value={value} onChange={onChange} />
+        {/* WTF! to satify TypeScript */}
+        {type === "simple" ? (
+          <MonthPickerContent type={type} value={value} onChange={onChange} />
+        ) : (
+          <MonthPickerContent type={type} value={value} onChange={onChange} />
+        )}
       </PopoverContent>
     </Popover>
   );
