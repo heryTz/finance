@@ -16,7 +16,7 @@ dayjs.extend(isSameOrBefore);
 
 export async function getStats(
   userId: string,
-  { range }: z.input<typeof getStatsQuerySchema>,
+  { range, label, tags }: z.input<typeof getStatsQuerySchema>,
 ) {
   const { to, from, customActualDate } = range;
 
@@ -27,6 +27,8 @@ export async function getStats(
         lte: to,
         gte: from,
       },
+      label: label ? { contains: label } : undefined,
+      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
     },
   });
 

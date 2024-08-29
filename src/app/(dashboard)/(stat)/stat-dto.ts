@@ -8,13 +8,16 @@ export const getStatsQuerySchema = zd.object({
     to: zd.coerce.date(),
     customActualDate: zd.coerce.date().nullish(),
   }),
+  label: zd.string().nullish(),
+  tags: zd.array(zd.string()),
 });
 
-export const defaultGetStatsQuery = {
+export const defaultGetStatsQuery: zd.infer<typeof getStatsQuerySchema> = {
   range: {
     from: dayjs().startOf("year").toDate(),
     to: dayjs().endOf("year").toDate(),
   },
+  tags: [],
 };
 
 export function getStatsQuerySerializer() {
