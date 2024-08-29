@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, RotateCcwIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { StatFilterSheet } from "./stat-filter-sheet";
 import { createSerializer, useQueryState } from "nuqs";
@@ -40,8 +40,12 @@ export function StatFilter({ defaultFilter }: StatFilterProps) {
   return (
     <>
       <div className="flex items-center flex-wrap gap-4">
+        <Button StartIcon={PlusIcon} onClick={() => setOpen(true)}>
+          Filtrer
+        </Button>
         {filter.range && (
           <ChipFilter
+            ClearIcon={RotateCcwIcon}
             title="Date de création"
             value={`${humanDate(filter.range.from)} - ${humanDate(filter.range.to)}`}
             onClear={() =>
@@ -49,9 +53,6 @@ export function StatFilter({ defaultFilter }: StatFilterProps) {
             }
           />
         )}
-        <Button StartIcon={PlusIcon} onClick={() => setOpen(true)}>
-          Filtrer
-        </Button>
         <StatFilterSheet
           open={open}
           onOpenChange={setOpen}
