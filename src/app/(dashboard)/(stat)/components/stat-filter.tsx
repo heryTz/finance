@@ -12,6 +12,7 @@ import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { ChipFilter } from "@/components/chip-filter";
 import { humanDate } from "@/lib/humanizer";
+import { Separator } from "@/components/ui/separator";
 
 const querySerializer = getStatsQuerySerializer();
 
@@ -51,6 +52,21 @@ export function StatFilter({ defaultFilter }: StatFilterProps) {
             onClear={() =>
               onApply({ ...filter, range: defaultGetStatsQuery.range })
             }
+          />
+        )}
+        <Separator orientation="vertical" className="h-6" />
+        {filter.label && (
+          <ChipFilter
+            title="Libellé"
+            value={filter.label}
+            onClear={() => onApply({ ...filter, label: undefined })}
+          />
+        )}
+        {filter.tags.length > 0 && (
+          <ChipFilter
+            title="Tags"
+            value={filter.tags.join(", ")}
+            onClear={() => onApply({ ...filter, tags: [] })}
           />
         )}
         <StatFilterSheet

@@ -10,12 +10,14 @@ import { MultiSelect } from "./multi-select";
 export const MultiSelectField = forwardRef<
   HTMLDivElement,
   MultiSelectFieldProps
->(({ label, ...props }, ref) => {
+>(({ label, inputProps, ...props }, ref) => {
   return (
     <FormItem ref={ref}>
       <FormLabel>{label}</FormLabel>
       <FormControlWithArea
-        component={(area) => <MultiSelect {...props} inputProps={area} />}
+        component={(area) => (
+          <MultiSelect {...props} inputProps={{ ...inputProps, ...area }} />
+        )}
       />
       <FormMessage />
     </FormItem>
