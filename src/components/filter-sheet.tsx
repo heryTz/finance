@@ -22,7 +22,7 @@ export function FilterSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="flex flex-col sm:max-w-[500px]">
         <SheetHeader className="">
-          <SheetTitle>{title ?? "Ajout des filtres"}</SheetTitle>
+          <SheetTitle>{title ?? "Ajouter des filtres"}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
         <div className="flex-1 overflow-auto">{children}</div>
