@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
@@ -60,10 +60,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        <>
-          {StartIcon && <StartIcon className="h-4 w-4 mr-2" />}
-          {children}
-        </>
+        {StartIcon && <StartIcon className="h-4 w-4 mr-2" />}
+        <Slottable>{children}</Slottable>
       </Comp>
     );
   },
