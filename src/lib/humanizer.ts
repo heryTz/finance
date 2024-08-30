@@ -23,3 +23,7 @@ export function humanMonthDate(date: Date | string | null) {
 export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function humanFromLastMonth(value: number) {
+  return `${value >= 0 ? "+" : "-"}${value.toFixed(2)}% du mois dernier`;
+}

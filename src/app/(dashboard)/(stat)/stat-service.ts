@@ -13,6 +13,8 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 // TODO: Allow other xAxis label than month
+// TODO: Extract expenses and revenues calculation to a function
+// TODO: Extract retained earnings calculation to a function
 
 export async function getStats(
   userId: string,
@@ -100,8 +102,25 @@ export async function getStats(
     }
   }
 
+  const lastMonthIncome = data.at(-1)?.income || 0;
+  const lastMonthExpense = data.at(-1)?.expense || 0;
+
   return {
     results: data,
+    monthCountStat: {
+      income: {
+        value: 0,
+        fromPreviousMonthInPercent: 0,
+      },
+      expense: {
+        value: 0,
+        fromPreviousMonthInPercent: 0,
+      },
+      retainedEarnings: {
+        value: 0,
+        fromPreviousMonthInPercent: 0,
+      },
+    },
   };
 }
 

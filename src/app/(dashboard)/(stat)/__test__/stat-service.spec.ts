@@ -413,4 +413,50 @@ describe("stat service", () => {
       },
     ]);
   });
+
+  it.only(`show count stats`, async () => {
+    const user = await createUser({ email: "user1@example.com" });
+    const data: SaveOperationInput[] = [];
+    for (let i = 0; i < 3; i++) {
+      data.push(
+        buildSaveOperationInput({
+          type: OperationType.revenue,
+          createdAt: dayjs().set("month", i).toDate(),
+          amount: 20,
+          label: `label${i}`,
+        }),
+        buildSaveOperationInput({
+          type: OperationType.depense,
+          createdAt: dayjs().set("month", i).toDate(),
+          amount: 10,
+          label: `label${i}`,
+        }),
+      );
+    }
+    await Promise.all(data.map((el) => createOperation(user.id, el)));
+
+    const range = {
+      from: dayjs().set("month", 0).startOf("month").toDate(),
+      to: dayjs().set("month", 2).endOf("month").toDate(),
+      customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
+    };
+    const stats = await getStats(user.id, {
+      range,
+      tags: [],
+    });
+    expect(stats.monthCountStat).toEqual({
+      income: {
+        value: 20,
+        fromPreviousMonthInPercent: 100,
+      },
+      expense: {
+        value: 30,
+        fromPreviousMonthInPercent: 100,
+      },
+      retainedEarnings: {
+        value: 0,
+        fromPreviousMonthInPercent: 100,
+      },
+    });
+  });
 });
