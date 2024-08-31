@@ -13,8 +13,8 @@ export const statData = {
   expense: {
     label: "Dépense par mois",
   },
-  solde: {
-    label: "Solde",
+  balance: {
+    label: "Balance",
   },
 } as const;
 

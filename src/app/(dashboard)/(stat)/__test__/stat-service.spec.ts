@@ -26,7 +26,7 @@ describe("stat service", () => {
         month: getMonthLabel({ monthIndex: i, ...range }),
         income: 0,
         expense: 0,
-        solde: 0,
+        balance: 0,
       })),
     );
   });
@@ -82,23 +82,23 @@ describe("stat service", () => {
       getMonthRange(range).map((i) => {
         let income = 0;
         let expense = 0;
-        let solde = 0;
+        let balance = 0;
         if (i === 2) {
           income = 70;
           expense = 30;
-          solde = 40;
+          balance = 40;
         } else if (i === 3) {
           income = 20;
           expense = 30;
-          solde = 30;
+          balance = 30;
         } else if (i > 3) {
-          solde = 30;
+          balance = 30;
         }
         return {
           month: getMonthLabel({ monthIndex: i, ...range }),
           income,
           expense,
-          solde,
+          balance,
         };
       }),
     );
@@ -145,7 +145,7 @@ describe("stat service", () => {
       getMonthRange(range).map((i) => {
         let income = 0;
         let expense = 0;
-        let solde = 0;
+        let balance = 0;
         if (i === 2) {
           income = 30;
           expense = 10;
@@ -154,14 +154,14 @@ describe("stat service", () => {
           expense = 20;
         }
         if (i >= 2 && i < 15) {
-          solde = 20;
+          balance = 20;
         } else if (i >= 15) {
-          solde = 40;
+          balance = 40;
         }
         return {
           income,
           expense,
-          solde,
+          balance,
           month: getMonthLabel({ monthIndex: i, ...range }),
         };
       }),
@@ -198,25 +198,25 @@ describe("stat service", () => {
         month: getMonthLabel({ monthIndex: 2, ...range }),
         income: 20,
         expense: 10,
-        solde: 30,
+        balance: 30,
       },
       {
         month: getMonthLabel({ monthIndex: 3, ...range }),
         income: 20,
         expense: 10,
-        solde: 40,
+        balance: 40,
       },
       {
         month: getMonthLabel({ monthIndex: 4, ...range }),
         income: 20,
         expense: 10,
-        solde: 50,
+        balance: 50,
       },
       {
         month: getMonthLabel({ monthIndex: 5, ...range }),
         income: 20,
         expense: 10,
-        solde: 60,
+        balance: 60,
       },
     ]);
   });
@@ -251,7 +251,7 @@ describe("stat service", () => {
         month: getMonthLabel({ monthIndex: 2, ...range }),
         income: 20,
         expense: 10,
-        solde: 30,
+        balance: 30,
       },
     ]);
   });
@@ -288,19 +288,19 @@ describe("stat service", () => {
         month: getMonthLabel({ monthIndex: 0, ...range }),
         income: 0,
         expense: 0,
-        solde: 0,
+        balance: 0,
       },
       {
         month: getMonthLabel({ monthIndex: 1, ...range }),
         income: 20,
         expense: 10,
-        solde: 10,
+        balance: 10,
       },
       {
         month: getMonthLabel({ monthIndex: 2, ...range }),
         income: 0,
         expense: 0,
-        solde: 10,
+        balance: 10,
       },
     ]);
   });
@@ -342,19 +342,19 @@ describe("stat service", () => {
         month: getMonthLabel({ monthIndex: 0, ...range }),
         income: 0,
         expense: 0,
-        solde: 0,
+        balance: 0,
       },
       {
         month: getMonthLabel({ monthIndex: 1, ...range }),
         income: 20,
         expense: 10,
-        solde: 10,
+        balance: 10,
       },
       {
         month: getMonthLabel({ monthIndex: 2, ...range }),
         income: 20,
         expense: 10,
-        solde: 20,
+        balance: 20,
       },
     ]);
   });
@@ -397,19 +397,19 @@ describe("stat service", () => {
         month: getMonthLabel({ monthIndex: 0, ...range }),
         income: 0,
         expense: 0,
-        solde: 0,
+        balance: 0,
       },
       {
         month: getMonthLabel({ monthIndex: 1, ...range }),
         income: 20,
         expense: 10,
-        solde: 10,
+        balance: 10,
       },
       {
         month: getMonthLabel({ monthIndex: 2, ...range }),
         income: 0,
         expense: 0,
-        solde: 10,
+        balance: 10,
       },
     ]);
   });
@@ -453,7 +453,7 @@ describe("stat service", () => {
         value: 30,
         fromPreviousMonthInPercent: 100,
       },
-      solde: {
+      balance: {
         value: 0,
         fromPreviousMonthInPercent: 100,
       },

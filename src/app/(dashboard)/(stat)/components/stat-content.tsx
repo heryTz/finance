@@ -17,12 +17,12 @@ export function StatContent({ data }: StatContentProps) {
       <div className="grid gap-4">
         <div className="grid grid-cols-3 gap-4">
           <CountChartCard
-            title="Solde"
+            title="Balance"
             statusText={humanFromLastMonth(
-              data.monthCountStat.solde.fromPreviousMonthInPercent,
+              data.monthCountStat.balance.fromPreviousMonthInPercent,
             )}
             Icon={BanknoteIcon}
-            value={humanAmount(data.monthCountStat.solde.value)}
+            value={humanAmount(data.monthCountStat.balance.value)}
           />
           <CountChartCard
             title="Revenu du mois"
@@ -57,8 +57,8 @@ export function StatContent({ data }: StatContentProps) {
                 color: "hsl(var(--chart-2))",
               },
               {
-                dataKey: "solde",
-                label: statData.solde.label,
+                dataKey: "balance",
+                label: statData.balance.label,
                 color: "hsl(var(--chart-1))",
               },
             ]}
