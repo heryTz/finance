@@ -19,10 +19,10 @@ export function StatContent({ data }: StatContentProps) {
           <CountChartCard
             title="Solde"
             statusText={humanFromLastMonth(
-              data.monthCountStat.retainedEarnings.fromPreviousMonthInPercent,
+              data.monthCountStat.solde.fromPreviousMonthInPercent,
             )}
             Icon={BanknoteIcon}
-            value={humanAmount(data.monthCountStat.retainedEarnings.value)}
+            value={humanAmount(data.monthCountStat.solde.value)}
           />
           <CountChartCard
             title="Revenu du mois"
@@ -57,8 +57,8 @@ export function StatContent({ data }: StatContentProps) {
                 color: "hsl(var(--chart-2))",
               },
               {
-                dataKey: "retainedEarnings",
-                label: statData.retainedEarnings.label,
+                dataKey: "solde",
+                label: statData.solde.label,
                 color: "hsl(var(--chart-1))",
               },
             ]}

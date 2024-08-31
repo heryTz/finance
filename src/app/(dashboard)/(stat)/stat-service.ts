@@ -41,7 +41,7 @@ export async function getStats(
     month: string;
     income: number;
     expense: number;
-    retainedEarnings: number;
+    solde: number;
   }[] = [];
 
   for (let i = 0; i < monthRange.length; i++) {
@@ -51,7 +51,7 @@ export async function getStats(
       month: getMonthLabel({ monthIndex: months, from, to }),
       income: 0,
       expense: 0,
-      retainedEarnings: 0,
+      solde: 0,
     };
     for (const operation of operations) {
       const createdAtDayjs = dayjs(operation.createdAt);
@@ -92,13 +92,12 @@ export async function getStats(
   // Calculate retained earnings
   for (let i = 0; i < monthRange.length; i++) {
     if (i === 0) {
-      data[0].retainedEarnings =
+      data[0].solde =
         prevIncome + data[i].income - (prevExpense + data[i].expense);
     } else if (i <= lastMonthOfOperation) {
-      data[i].retainedEarnings =
-        data[i - 1].retainedEarnings + (data[i].income - data[i].expense);
+      data[i].solde = data[i - 1].solde + (data[i].income - data[i].expense);
     } else {
-      data[i].retainedEarnings = data[i - 1].retainedEarnings;
+      data[i].solde = data[i - 1].solde;
     }
   }
 
@@ -116,7 +115,7 @@ export async function getStats(
         value: 0,
         fromPreviousMonthInPercent: 0,
       },
-      retainedEarnings: {
+      solde: {
         value: 0,
         fromPreviousMonthInPercent: 0,
       },
