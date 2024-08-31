@@ -7,6 +7,7 @@ import { getMonthLabel, getMonthRange } from "./stat-util";
 import { z } from "zod";
 import { getStatsQuerySchema } from "./stat-dto";
 import "dayjs/locale/fr";
+import { variationPercentage } from "@/lib/operation-stat";
 
 dayjs.locale("fr");
 dayjs.extend(isSameOrAfter);
@@ -102,23 +103,36 @@ export async function getStats(
     }
   }
 
-  const lastMonthIncome = data.at(-1)?.income || 0;
-  const lastMonthExpense = data.at(-1)?.expense || 0;
+  const currentMonthIncome = data.at(-1)?.income || 0;
+  const previousMonthIncome = data.at(-2)?.income || 0;
+  const currentMonthExpense = data.at(-1)?.expense || 0;
+  const previousMonthExpense = data.at(-2)?.expense || 0;
+  const currentBalance = data.at(-1)?.balance || 0;
+  const previousBalance = data.at(-2)?.balance || 0;
 
   return {
     results: data,
-    monthCountStat: {
-      income: {
-        value: 0,
-        fromPreviousMonthInPercent: 0,
+    countStat: {
+      currentIncome: {
+        value: currentMonthIncome,
+        fromPreviousMonthInPercent: variationPercentage(
+          currentMonthIncome,
+          previousMonthIncome,
+        ),
       },
-      expense: {
-        value: 0,
-        fromPreviousMonthInPercent: 0,
+      currentExpense: {
+        value: currentMonthExpense,
+        fromPreviousMonthInPercent: variationPercentage(
+          currentMonthExpense,
+          previousMonthExpense,
+        ),
       },
-      balance: {
-        value: 0,
-        fromPreviousMonthInPercent: 0,
+      currentBalance: {
+        value: currentBalance,
+        fromPreviousMonthInPercent: variationPercentage(
+          currentBalance,
+          previousBalance,
+        ),
       },
     },
   };

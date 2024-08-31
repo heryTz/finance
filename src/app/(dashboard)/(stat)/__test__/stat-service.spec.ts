@@ -414,7 +414,7 @@ describe("stat service", () => {
     ]);
   });
 
-  it.only(`show count stats`, async () => {
+  it(`show count stats`, async () => {
     const user = await createUser({ email: "user1@example.com" });
     const data: SaveOperationInput[] = [];
     for (let i = 0; i < 3; i++) {
@@ -422,13 +422,13 @@ describe("stat service", () => {
         buildSaveOperationInput({
           type: OperationType.revenue,
           createdAt: dayjs().set("month", i).toDate(),
-          amount: 20,
+          amount: 20 + i,
           label: `label${i}`,
         }),
         buildSaveOperationInput({
           type: OperationType.depense,
           createdAt: dayjs().set("month", i).toDate(),
-          amount: 10,
+          amount: 10 + i,
           label: `label${i}`,
         }),
       );
@@ -444,18 +444,18 @@ describe("stat service", () => {
       range,
       tags: [],
     });
-    expect(stats.monthCountStat).toEqual({
-      income: {
-        value: 20,
-        fromPreviousMonthInPercent: 100,
+    expect(stats.countStat).toEqual({
+      currentIncome: {
+        value: 22,
+        fromPreviousMonthInPercent: ((22 - 21) / 22) * 100,
       },
-      expense: {
+      currentExpense: {
+        value: 12,
+        fromPreviousMonthInPercent: ((12 - 11) / 12) * 100,
+      },
+      currentBalance: {
         value: 30,
-        fromPreviousMonthInPercent: 100,
-      },
-      balance: {
-        value: 0,
-        fromPreviousMonthInPercent: 100,
+        fromPreviousMonthInPercent: ((30 - 20) / 30) * 100,
       },
     });
   });

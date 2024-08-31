@@ -19,26 +19,26 @@ export function StatContent({ data }: StatContentProps) {
           <CountChartCard
             title="Balance"
             statusText={humanFromLastMonth(
-              data.monthCountStat.balance.fromPreviousMonthInPercent,
+              data.countStat.currentBalance.fromPreviousMonthInPercent,
             )}
             Icon={BanknoteIcon}
-            value={humanAmount(data.monthCountStat.balance.value)}
+            value={humanAmount(data.countStat.currentBalance.value)}
           />
           <CountChartCard
             title="Revenu du mois"
             statusText={humanFromLastMonth(
-              data.monthCountStat.income.fromPreviousMonthInPercent,
+              data.countStat.currentIncome.fromPreviousMonthInPercent,
             )}
             Icon={BanknoteIcon}
-            value={humanAmount(data.monthCountStat.income.value)}
+            value={humanAmount(data.countStat.currentIncome.value)}
           />
           <CountChartCard
             title="Dépense du mois"
             statusText={humanFromLastMonth(
-              data.monthCountStat.expense.fromPreviousMonthInPercent,
+              data.countStat.currentExpense.fromPreviousMonthInPercent,
             )}
             Icon={BanknoteIcon}
-            value={humanAmount(data.monthCountStat.expense.value)}
+            value={humanAmount(data.countStat.currentExpense.value)}
           />
         </div>
         <ChartCard title="Aperçu">
