@@ -14,6 +14,16 @@ export function humanDate(date: Date | string | null) {
   return dayjs(date).format("DD MMM YYYY");
 }
 
+export function humanMonthDate(date: Date | string | null) {
+  if (!date) return "";
+  dayjs.locale("fr");
+  return dayjs(date).format("MMM YYYY");
+}
+
 export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export function humanFromLastMonth(value: number) {
+  return `${value >= 0 ? "+" : "-"}${Math.abs(value).toFixed(2)}% du mois dernier`;
 }

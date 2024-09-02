@@ -13,3 +13,7 @@ export function bilanGlobal(operations: Operation[]) {
       .reduce((prev, acc) => prev + acc, 0),
   };
 }
+
+export function variationPercentage(value1: number, value0: number) {
+  return ((value1 - value0) / (value0 || 1)) * 100;
+}

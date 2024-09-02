@@ -33,9 +33,9 @@ export function Autocomplete({
     }
 
     // keep previous value
-    onChange(value);
     const oldOption = options.find((option) => option.value === value);
-    if (oldOption) setSearch(oldOption.label);
+    onChange(oldOption?.value ?? "");
+    setSearch(oldOption?.label ?? "");
     popover.setOpen(false);
   };
 
@@ -44,8 +44,16 @@ export function Autocomplete({
     onChange(newSearch);
   };
 
-  const filteredOptions = options.filter((option) =>
-    option.label.toLowerCase().includes(search.toLowerCase()),
+  const onClear = () => {
+    setSearch("");
+    onChange("");
+    popover.setOpen(false);
+  };
+
+  const filteredOptions = options.filter(
+    (option) =>
+      option.label.toLowerCase().includes(search.toLowerCase()) &&
+      option.label !== search,
   );
 
   return (
@@ -62,6 +70,7 @@ export function Autocomplete({
           setSearch(e.target.value);
           if (!popover.open) popover.setOpen(true);
         }}
+        onClear={onClear}
         {...inputProps}
       />
       {popover.open &&

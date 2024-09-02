@@ -56,7 +56,7 @@ export async function createOperation(
       input.tags.map((el) =>
         prisma.tag.upsert({
           create: { name: el, userId },
-          update: {},
+          update: { name: el, userId },
           where: { name_userId: { name: el, userId } },
         }),
       ),

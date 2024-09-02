@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -24,9 +24,9 @@ export default function VerifyRequestPage() {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button className="w-full" asChild>
-          <Link href="/">Entrer dans le dashboard</Link>
-        </Button>
+        <Link className={buttonVariants({ className: "w-full" })} href="/">
+          Entrer dans le dashboard
+        </Link>
       </CardFooter>
     </Card>
   );
