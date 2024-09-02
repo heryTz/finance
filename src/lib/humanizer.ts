@@ -25,5 +25,5 @@ export function capitalizeFirstLetter(string: string) {
 }
 
 export function humanFromLastMonth(value: number) {
-  return `${value >= 0 ? "+" : "-"}${value.toFixed(2)}% du mois dernier`;
+  return `${value >= 0 ? "+" : "-"}${Math.abs(value).toFixed(2)}% du mois dernier`;
 }
