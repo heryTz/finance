@@ -50,8 +50,6 @@ export function MonthPickerContent<Type extends "range" | "simple">({
     }
   };
 
-  console.log(value);
-
   return (
     <div className="p-3">
       <div className="grid gap-3">
