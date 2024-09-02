@@ -446,23 +446,23 @@ describe("stat service", () => {
     expect(stats.countStat).toEqual({
       currentIncome: {
         value: 20,
-        fromPreviousMonthInPercent: ((20 - 21) / 20) * 100,
+        fromPreviousMonthInPercent: ((20 - 21) / 21) * 100,
       },
       currentExpense: {
         value: 10,
-        fromPreviousMonthInPercent: ((10 - 11) / 10) * 100,
+        fromPreviousMonthInPercent: ((10 - 11) / 11) * 100,
       },
       currentBalance: {
         value: 30,
-        fromPreviousMonthInPercent: ((30 - 20) / 30) * 100,
+        fromPreviousMonthInPercent: ((30 - 20) / 20) * 100,
       },
       totalIncome: {
         value: 63,
-        fromPreviousMonthInPercent: ((63 - 43) / 63) * 100,
+        fromPreviousMonthInPercent: ((63 - 43) / 43) * 100,
       },
       totalExpense: {
         value: 33,
-        fromPreviousMonthInPercent: ((33 - 23) / 33) * 100,
+        fromPreviousMonthInPercent: ((33 - 23) / 23) * 100,
       },
     });
   });

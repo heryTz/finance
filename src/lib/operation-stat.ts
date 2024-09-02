@@ -15,5 +15,5 @@ export function bilanGlobal(operations: Operation[]) {
 }
 
 export function variationPercentage(value1: number, value0: number) {
-  return ((value1 - value0) / (value1 || 1)) * 100;
+  return ((value1 - value0) / (value0 || 1)) * 100;
 }
