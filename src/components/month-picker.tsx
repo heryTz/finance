@@ -18,12 +18,13 @@ export function MonthPicker({
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
+          {...buttonProps}
           className={cn(
             "flex justify-start w-full pl-3 text-left font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:text-destructive",
             !value && "text-muted-foreground",
+            buttonProps?.className,
           )}
           StartIcon={CalendarDaysIcon}
-          {...buttonProps}
         >
           {!value && <span>{placeholder ?? "Prend une date"}</span>}
           {value && type === "simple" && humanMonthDate(value)}
