@@ -421,13 +421,13 @@ describe("stat service", () => {
       data.push(
         buildSaveOperationInput({
           type: OperationType.revenue,
-          createdAt: dayjs().set("month", i).toDate(),
+          createdAt: dayjs().add(-i, "month").toDate(),
           amount: 20 + i,
           label: `label${i}`,
         }),
         buildSaveOperationInput({
           type: OperationType.depense,
-          createdAt: dayjs().set("month", i).toDate(),
+          createdAt: dayjs().add(-i, "month").toDate(),
           amount: 10 + i,
           label: `label${i}`,
         }),
@@ -436,9 +436,8 @@ describe("stat service", () => {
     await Promise.all(data.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().set("month", 0).startOf("month").toDate(),
-      to: dayjs().set("month", 2).endOf("month").toDate(),
-      customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
+      from: dayjs().add(-2, "month").startOf("month").toDate(),
+      to: dayjs().endOf("month").toDate(),
     };
     const stats = await getStats(user.id, {
       range,
@@ -446,12 +445,12 @@ describe("stat service", () => {
     });
     expect(stats.countStat).toEqual({
       currentIncome: {
-        value: 22,
-        fromPreviousMonthInPercent: ((22 - 21) / 22) * 100,
+        value: 20,
+        fromPreviousMonthInPercent: ((20 - 21) / 20) * 100,
       },
       currentExpense: {
-        value: 12,
-        fromPreviousMonthInPercent: ((12 - 11) / 12) * 100,
+        value: 10,
+        fromPreviousMonthInPercent: ((10 - 11) / 10) * 100,
       },
       currentBalance: {
         value: 30,

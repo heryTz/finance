@@ -19,7 +19,20 @@ dayjs.extend(isSameOrBefore);
 
 export async function getStats(
   userId: string,
-  { range, label, tags }: z.input<typeof getStatsQuerySchema>,
+  query: z.input<typeof getStatsQuerySchema>,
+) {
+  const results = await getOverviewStat(userId, query);
+  const countStat = await getCountStat(userId, query);
+
+  return {
+    results,
+    countStat,
+  };
+}
+
+async function getOverviewStat(
+  userId: string,
+  { range, tags, label }: z.infer<typeof getStatsQuerySchema>,
 ) {
   const { from, customActualDate } = range;
   const to = range.to || dayjs(from).endOf("month").toDate();
@@ -104,37 +117,119 @@ export async function getStats(
     }
   }
 
-  const currentMonthIncome = data.at(-1)?.income || 0;
-  const previousMonthIncome = data.at(-2)?.income || 0;
-  const currentMonthExpense = data.at(-1)?.expense || 0;
-  const previousMonthExpense = data.at(-2)?.expense || 0;
-  const currentBalance = data.at(-1)?.balance || 0;
-  const previousBalance = data.at(-2)?.balance || 0;
+  return data;
+}
+
+async function getCountStat(
+  userId: string,
+  { label, tags }: Omit<z.infer<typeof getStatsQuerySchema>, "range">,
+) {
+  const sumAmount = await prisma.operation.groupBy({
+    by: ["type"],
+    where: {
+      userId,
+      label: label ? { contains: label } : undefined,
+      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+    },
+    _sum: { amount: true },
+  });
+  const currentExpense =
+    sumAmount
+      .find((el) => el.type === OperationType.depense)
+      ?._sum.amount?.toNumber() ?? 0;
+  const currentIncome =
+    sumAmount
+      .find((el) => el.type === OperationType.revenue)
+      ?._sum.amount?.toNumber() ?? 0;
+
+  const previousSumAmount = await prisma.operation.groupBy({
+    by: ["type"],
+    where: {
+      userId,
+      label: label ? { contains: label } : undefined,
+      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      createdAt: {
+        lte: dayjs().add(-1, "month").endOf("month").toDate(),
+      },
+    },
+    _sum: { amount: true },
+  });
+  const previousExpense =
+    previousSumAmount
+      .find((el) => el.type === OperationType.depense)
+      ?._sum.amount?.toNumber() ?? 0;
+  const previousIncome =
+    previousSumAmount
+      .find((el) => el.type === OperationType.revenue)
+      ?._sum.amount?.toNumber() ?? 0;
+
+  const currentBalance = currentIncome - currentExpense;
+  const previousBalance = previousIncome - previousExpense;
+
+  const currentMonthSumAmount = await prisma.operation.groupBy({
+    by: ["type"],
+    where: {
+      userId,
+      label: label ? { contains: label } : undefined,
+      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      createdAt: {
+        gte: dayjs().startOf("month").toDate(),
+      },
+    },
+    _sum: { amount: true },
+  });
+  const currentMonthExpense =
+    currentMonthSumAmount
+      .find((el) => el.type === OperationType.depense)
+      ?._sum.amount?.toNumber() ?? 0;
+  const currentMonthIncome =
+    currentMonthSumAmount
+      .find((el) => el.type === OperationType.revenue)
+      ?._sum.amount?.toNumber() ?? 0;
+
+  const previousMonthSumAmount = await prisma.operation.groupBy({
+    by: ["type"],
+    where: {
+      userId,
+      label: label ? { contains: label } : undefined,
+      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      createdAt: {
+        gte: dayjs().add(-1, "month").startOf("month").toDate(),
+        lte: dayjs().add(-1, "month").endOf("month").toDate(),
+      },
+    },
+    _sum: { amount: true },
+  });
+  const previousMonthExpense =
+    previousMonthSumAmount
+      .find((el) => el.type === OperationType.depense)
+      ?._sum.amount?.toNumber() ?? 0;
+  const previousMonthIncome =
+    previousMonthSumAmount
+      .find((el) => el.type === OperationType.revenue)
+      ?._sum.amount?.toNumber() ?? 0;
 
   return {
-    results: data,
-    countStat: {
-      currentIncome: {
-        value: currentMonthIncome,
-        fromPreviousMonthInPercent: variationPercentage(
-          currentMonthIncome,
-          previousMonthIncome,
-        ),
-      },
-      currentExpense: {
-        value: currentMonthExpense,
-        fromPreviousMonthInPercent: variationPercentage(
-          currentMonthExpense,
-          previousMonthExpense,
-        ),
-      },
-      currentBalance: {
-        value: currentBalance,
-        fromPreviousMonthInPercent: variationPercentage(
-          currentBalance,
-          previousBalance,
-        ),
-      },
+    currentIncome: {
+      value: currentMonthIncome,
+      fromPreviousMonthInPercent: variationPercentage(
+        currentMonthIncome,
+        previousMonthIncome,
+      ),
+    },
+    currentExpense: {
+      value: currentMonthExpense,
+      fromPreviousMonthInPercent: variationPercentage(
+        currentMonthExpense,
+        previousMonthExpense,
+      ),
+    },
+    currentBalance: {
+      value: currentBalance,
+      fromPreviousMonthInPercent: variationPercentage(
+        currentBalance,
+        previousBalance,
+      ),
     },
   };
 }
