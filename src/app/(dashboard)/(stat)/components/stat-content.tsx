@@ -9,14 +9,13 @@ import { getStatsQuerySchema, getStatsQuerySerializer } from "../stat-dto";
 import { ChartCard } from "@/components/chart-card";
 import { humanAmount, humanFromLastMonth } from "@/lib/humanizer";
 import { CountChartCard } from "@/components/count-chart-card";
-import { BanknoteIcon, EyeIcon } from "lucide-react";
+import { BanknoteIcon } from "lucide-react";
 import { MonthPicker } from "@/components/month-picker";
 import { useEffect } from "react";
 import { createSerializer, useQueryState } from "nuqs";
 import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { StatFilter } from "./stat-filter";
-import { Button } from "@/components/ui/button";
 import { StatDisplay } from "./stat-display";
 
 const querySerializer = getStatsQuerySerializer();
@@ -50,7 +49,7 @@ export function StatContent({ data, defaultFilter }: StatContentProps) {
       action={<StatDisplay display={filter.display} onApply={onApply} />}
     >
       <div className="grid gap-4">
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
           {[...statDisplayConfig]
             .filter((el) => filter.display.includes(el.name))
             .sort((a, b) => a.order - b.order)
