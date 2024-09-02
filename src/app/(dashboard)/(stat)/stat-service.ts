@@ -88,6 +88,8 @@ async function getOverviewStat(
     by: ["type"],
     where: {
       userId,
+      label: label ? { contains: label } : undefined,
+      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
       createdAt: {
         lte: dayjs(from).add(-1, "month").endOf("month").toDate(),
       },
