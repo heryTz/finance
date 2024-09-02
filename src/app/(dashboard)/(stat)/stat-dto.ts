@@ -5,7 +5,7 @@ import { parseAsJson } from "nuqs";
 export const getStatsQuerySchema = zd.object({
   range: zd.object({
     from: zd.coerce.date(),
-    to: zd.coerce.date(),
+    to: zd.coerce.date().nullish(),
     customActualDate: zd.coerce.date().nullish(),
   }),
   label: zd.string().nullish(),

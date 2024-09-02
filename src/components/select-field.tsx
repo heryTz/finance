@@ -1,37 +1,22 @@
-import { forwardRef } from "react";
+import { ComponentProps, forwardRef } from "react";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import { FormControl, FormItem, FormLabel, FormMessage } from "./ui/form";
+  FormControlWithArea,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { AppSelect } from "./app-select";
 
 export const SelectField = forwardRef<HTMLDivElement, SelectFieldProps>(
-  ({ placeholder, value, label, onChange, options }, ref) => {
+  ({ label, triggerProps, ...props }, ref) => {
     return (
       <FormItem ref={ref}>
         <FormLabel>{label}</FormLabel>
-        <Select value={value} onValueChange={onChange}>
-          <FormControl>
-            <SelectTrigger className="w-full">
-              <SelectValue
-                placeholder={placeholder ?? "Sélectionner une option"}
-              />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectGroup>
-              {options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <FormControlWithArea
+          component={(area) => (
+            <AppSelect {...props} triggerProps={{ ...area, ...triggerProps }} />
+          )}
+        />
         <FormMessage />
       </FormItem>
     );
@@ -41,9 +26,5 @@ export const SelectField = forwardRef<HTMLDivElement, SelectFieldProps>(
 SelectField.displayName = "SelectField";
 
 type SelectFieldProps = {
-  placeholder?: string;
   label: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: Array<{ label: string; value: string }>;
-};
+} & ComponentProps<typeof AppSelect>;

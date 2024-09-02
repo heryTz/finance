@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { defaultGetStatsQuery, getStatsQuerySchema } from "../stat-dto";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField } from "@/components/ui/form";
-import { MonthPickerField } from "@/components/month-picker-field";
 import { AutocompleteField } from "@/components/autocomplete-field";
 import { MultiSelectField } from "@/components/multi-select-field";
 import { useOperations } from "../../operation/operation-query";
@@ -27,7 +26,7 @@ export function StatFilterSheet({
   useEffect(() => {
     form.reset(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value.range.from, value.range.to]);
+  }, [value]);
 
   const onSubmit = form.handleSubmit((data) => {
     onApply(data);
@@ -49,21 +48,6 @@ export function StatFilterSheet({
     >
       <Form {...form}>
         <form className="grid gap-4">
-          <FormField
-            control={form.control}
-            name="range"
-            render={({ field, formState }) => (
-              <MonthPickerField
-                type="range"
-                label="Date de création"
-                value={field.value}
-                onChange={(value) => {
-                  field.onChange(value);
-                }}
-                error={formState.errors.range}
-              />
-            )}
-          />
           <FormField
             control={form.control}
             name="label"

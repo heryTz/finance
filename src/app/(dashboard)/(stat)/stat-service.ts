@@ -21,7 +21,8 @@ export async function getStats(
   userId: string,
   { range, label, tags }: z.input<typeof getStatsQuerySchema>,
 ) {
-  const { to, from, customActualDate } = range;
+  const { from, customActualDate } = range;
+  const to = range.to || dayjs(from).endOf("month").toDate();
 
   const operations = await prisma.operation.findMany({
     where: {
