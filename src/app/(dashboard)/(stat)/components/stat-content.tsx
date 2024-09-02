@@ -2,20 +2,21 @@
 
 import { LineChart } from "@/components/line-chart";
 import { GetStats } from "../stat-service";
-import { statData } from "../stat-util";
+import { statData, statDisplayConfig } from "../stat-util";
 import { Container } from "@/components/container";
 import { z } from "zod";
 import { getStatsQuerySchema, getStatsQuerySerializer } from "../stat-dto";
 import { ChartCard } from "@/components/chart-card";
 import { humanAmount, humanFromLastMonth } from "@/lib/humanizer";
 import { CountChartCard } from "@/components/count-chart-card";
-import { BanknoteIcon } from "lucide-react";
+import { BanknoteIcon, EyeIcon } from "lucide-react";
 import { MonthPicker } from "@/components/month-picker";
 import { useEffect } from "react";
 import { createSerializer, useQueryState } from "nuqs";
 import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { StatFilter } from "./stat-filter";
+import { Button } from "@/components/ui/button";
 
 const querySerializer = getStatsQuerySerializer();
 
@@ -23,7 +24,11 @@ const serializer = createSerializer({
   [querySerializer.key]: querySerializer.parser,
 });
 
-export function StatContent({ data, defaultFilter }: StatContentProps) {
+export function StatContent({
+  data,
+  defaultFilter,
+  display,
+}: StatContentProps) {
   const router = useRouter();
   const [filter, setFilter] = useQueryState(
     querySerializer.key,
@@ -45,33 +50,27 @@ export function StatContent({ data, defaultFilter }: StatContentProps) {
     <Container
       title="Dashboard"
       filter={<StatFilter filter={filter} onApply={onApply} />}
+      action={
+        <Button variant={"outline"} StartIcon={EyeIcon}>
+          Affichage
+        </Button>
+      }
     >
       <div className="grid gap-4">
-        <div className="grid grid-cols-3 gap-4">
-          <CountChartCard
-            title="Balance"
-            statusText={humanFromLastMonth(
-              data.countStat.currentBalance.fromPreviousMonthInPercent,
-            )}
-            Icon={BanknoteIcon}
-            value={humanAmount(data.countStat.currentBalance.value)}
-          />
-          <CountChartCard
-            title="Revenu du mois"
-            statusText={humanFromLastMonth(
-              data.countStat.currentIncome.fromPreviousMonthInPercent,
-            )}
-            Icon={BanknoteIcon}
-            value={humanAmount(data.countStat.currentIncome.value)}
-          />
-          <CountChartCard
-            title="Dépense du mois"
-            statusText={humanFromLastMonth(
-              data.countStat.currentExpense.fromPreviousMonthInPercent,
-            )}
-            Icon={BanknoteIcon}
-            value={humanAmount(data.countStat.currentExpense.value)}
-          />
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+          {[...statDisplayConfig]
+            .sort((a, b) => a.order - b.order)
+            .map((el) => (
+              <CountChartCard
+                key={el.name}
+                title={el.title}
+                statusText={humanFromLastMonth(
+                  data.countStat[el.name].fromPreviousMonthInPercent,
+                )}
+                Icon={el.Icon ?? BanknoteIcon}
+                value={humanAmount(data.countStat[el.name].value)}
+              />
+            ))}
         </div>
         <ChartCard
           title="Aperçu"
@@ -116,4 +115,5 @@ export function StatContent({ data, defaultFilter }: StatContentProps) {
 type StatContentProps = {
   data: GetStats;
   defaultFilter: z.infer<typeof getStatsQuerySchema>;
+  display: Array<keyof GetStats["countStat"]>;
 };

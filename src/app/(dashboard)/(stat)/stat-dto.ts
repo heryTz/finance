@@ -10,6 +10,15 @@ export const getStatsQuerySchema = zd.object({
   }),
   label: zd.string().nullish(),
   tags: zd.array(zd.string()),
+  display: zd.array(
+    zd.enum([
+      "currentBalance",
+      "currentIncome",
+      "currentExpense",
+      "totalIncome",
+      "totalExpense",
+    ]),
+  ),
 });
 
 export const defaultGetStatsQuery: zd.infer<typeof getStatsQuerySchema> = {
@@ -18,6 +27,7 @@ export const defaultGetStatsQuery: zd.infer<typeof getStatsQuerySchema> = {
     to: dayjs().endOf("year").toDate(),
   },
   tags: [],
+  display: ["currentBalance", "currentIncome", "currentExpense"],
 };
 
 export function getStatsQuerySerializer() {

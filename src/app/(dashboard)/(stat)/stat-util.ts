@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import "dayjs/locale/fr";
+import { BanknoteIcon } from "lucide-react";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
@@ -56,3 +57,26 @@ export function getMonthLabel(params: {
     .add(params.monthIndex, "month")
     .format(delta > 0 ? "MMMM YYYY" : "MMMM");
 }
+
+export const statDisplayConfig = [
+  { name: "currentBalance", title: "Balance", Icon: BanknoteIcon, order: 1 },
+  {
+    name: "currentIncome",
+    title: "Revenu du mois",
+    Icon: BanknoteIcon,
+    order: 2,
+  },
+  {
+    name: "currentExpense",
+    title: "Dépense du mois",
+    Icon: BanknoteIcon,
+    order: 3,
+  },
+  { name: "totalIncome", title: "Revenu total", Icon: BanknoteIcon, order: 4 },
+  {
+    name: "totalExpense",
+    title: "Dépense totale",
+    Icon: BanknoteIcon,
+    order: 5,
+  },
+] as const;
