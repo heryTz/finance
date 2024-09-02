@@ -456,6 +456,14 @@ describe("stat service", () => {
         value: 30,
         fromPreviousMonthInPercent: ((30 - 20) / 30) * 100,
       },
+      totalIncome: {
+        value: 63,
+        fromPreviousMonthInPercent: ((63 - 43) / 63) * 100,
+      },
+      totalExpense: {
+        value: 33,
+        fromPreviousMonthInPercent: ((33 - 23) / 33) * 100,
+      },
     });
   });
 });

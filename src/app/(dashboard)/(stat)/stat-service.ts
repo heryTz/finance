@@ -231,6 +231,20 @@ async function getCountStat(
         previousBalance,
       ),
     },
+    totalIncome: {
+      value: currentIncome,
+      fromPreviousMonthInPercent: variationPercentage(
+        currentIncome,
+        previousIncome,
+      ),
+    },
+    totalExpense: {
+      value: currentExpense,
+      fromPreviousMonthInPercent: variationPercentage(
+        currentExpense,
+        previousExpense,
+      ),
+    },
   };
 }
 
