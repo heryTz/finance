@@ -1,4 +1,4 @@
-import { buildSaveOperationInput } from "@/lib/factory";
+import { buildGetStatQuery, buildSaveOperationInput } from "@/lib/factory";
 import { createOperation } from "../../operation/operation-service";
 import { createUser } from "../../user/user-service";
 import { OperationType } from "@/entity/operation";
@@ -20,7 +20,7 @@ describe("stat service", () => {
       to: dayjs().endOf("year").toDate(),
       customActualDate: dayjs().endOf("year").toDate(),
     };
-    const user2Stat = await getStats(user2.id, { range, tags: [] });
+    const user2Stat = await getStats(user2.id, buildGetStatQuery({ range }));
     expect(user2Stat.results).toEqual(
       getMonthRange(range).map((i) => ({
         month: getMonthLabel({ monthIndex: i, ...range }),
@@ -77,7 +77,7 @@ describe("stat service", () => {
       to: dayjs().endOf("year").toDate(),
       customActualDate: dayjs().endOf("year").toDate(),
     };
-    const stats = await getStats(user.id, { range, tags: [] });
+    const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual(
       getMonthRange(range).map((i) => {
         let income = 0;
@@ -140,7 +140,7 @@ describe("stat service", () => {
       to: dayjs().add(1, "year").endOf("year").toDate(),
       customActualDate: dayjs().add(1, "year").endOf("year").toDate(),
     };
-    const stats = await getStats(user.id, { range, tags: [] });
+    const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual(
       getMonthRange(range).map((i) => {
         let income = 0;
@@ -192,7 +192,7 @@ describe("stat service", () => {
       to: dayjs().set("month", 5).endOf("month").toDate(),
       customActualDate: dayjs().set("month", 5).endOf("month").toDate(),
     };
-    const stats = await getStats(user.id, { range, tags: [] });
+    const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual([
       {
         month: getMonthLabel({ monthIndex: 2, ...range }),
@@ -245,7 +245,7 @@ describe("stat service", () => {
       to: dayjs().set("month", 2).endOf("month").toDate(),
       customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
     };
-    const stats = await getStats(user.id, { range, tags: [] });
+    const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual([
       {
         month: getMonthLabel({ monthIndex: 2, ...range }),
@@ -282,7 +282,10 @@ describe("stat service", () => {
       to: dayjs().set("month", 2).endOf("month").toDate(),
       customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
     };
-    const stats = await getStats(user.id, { range, tags: [], label: "label1" });
+    const stats = await getStats(
+      user.id,
+      buildGetStatQuery({ range, label: "label1" }),
+    );
     expect(stats.results).toEqual([
       {
         month: getMonthLabel({ monthIndex: 0, ...range }),
@@ -333,10 +336,13 @@ describe("stat service", () => {
       to: dayjs().set("month", 2).endOf("month").toDate(),
       customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
     };
-    const stats = await getStats(user.id, {
-      range,
-      tags: ["tag2"],
-    });
+    const stats = await getStats(
+      user.id,
+      buildGetStatQuery({
+        range,
+        tags: ["tag2"],
+      }),
+    );
     expect(stats.results).toEqual([
       {
         month: getMonthLabel({ monthIndex: 0, ...range }),
@@ -387,11 +393,14 @@ describe("stat service", () => {
       to: dayjs().set("month", 2).endOf("month").toDate(),
       customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
     };
-    const stats = await getStats(user.id, {
-      range,
-      label: "label1",
-      tags: ["tag1"],
-    });
+    const stats = await getStats(
+      user.id,
+      buildGetStatQuery({
+        range,
+        label: "label1",
+        tags: ["tag1"],
+      }),
+    );
     expect(stats.results).toEqual([
       {
         month: getMonthLabel({ monthIndex: 0, ...range }),
@@ -439,10 +448,19 @@ describe("stat service", () => {
       from: dayjs().add(-2, "month").startOf("month").toDate(),
       to: dayjs().endOf("month").toDate(),
     };
-    const stats = await getStats(user.id, {
-      range,
-      tags: [],
-    });
+    const stats = await getStats(
+      user.id,
+      buildGetStatQuery({
+        range,
+        display: [
+          "currentIncome",
+          "currentExpense",
+          "currentBalance",
+          "totalExpense",
+          "totalIncome",
+        ],
+      }),
+    );
     expect(stats.countStat).toEqual({
       currentIncome: {
         value: 20,

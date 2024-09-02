@@ -20,6 +20,9 @@ importers:
       '@radix-ui/react-accordion':
         specifier: ^1.2.0
         version: 1.2.0(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-checkbox':
+        specifier: ^1.1.1
+        version: 1.1.1(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-dialog':
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -702,6 +705,19 @@ packages:
 
   '@radix-ui/react-arrow@1.1.0':
     resolution: {integrity: sha512-FmlW1rCg7hBpEBwFbjHwCW6AmWLQM6g/v0Sn8XbP9NvmSZ2San1FpQeyPtufzOMSIx7Y4dzjlHoifhp+7NkZhw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-checkbox@1.1.1':
+    resolution: {integrity: sha512-0i/EKJ222Afa1FE0C6pNJxDq1itzcl3HChE9DwskA4th4KRse8ojx8a1nVcOjwJdbpDLcz7uol77yYnQNMHdKw==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
@@ -5035,6 +5051,22 @@ snapshots:
       '@types/react': 18.2.20
       '@types/react-dom': 18.2.7
 
+  '@radix-ui/react-checkbox@1.1.1(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@radix-ui/primitive': 1.1.0
+      '@radix-ui/react-compose-refs': 1.1.0(@types/react@18.2.20)(react@18.2.0)
+      '@radix-ui/react-context': 1.1.0(@types/react@18.2.20)(react@18.2.0)
+      '@radix-ui/react-presence': 1.1.0(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-primitive': 2.0.0(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-use-controllable-state': 1.1.0(@types/react@18.2.20)(react@18.2.0)
+      '@radix-ui/react-use-previous': 1.1.0(@types/react@18.2.20)(react@18.2.0)
+      '@radix-ui/react-use-size': 1.1.0(@types/react@18.2.20)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.20
+      '@types/react-dom': 18.2.7
+
   '@radix-ui/react-collapsible@1.1.0(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@radix-ui/primitive': 1.1.0
@@ -6634,7 +6666,7 @@ snapshots:
       eslint: 8.47.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.47.0))(eslint@8.47.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1)(eslint@8.47.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.47.0))(eslint@8.47.0))(eslint@8.47.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.47.0)
       eslint-plugin-react: 7.33.2(eslint@8.47.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.47.0)
@@ -6658,7 +6690,7 @@ snapshots:
       enhanced-resolve: 5.15.0
       eslint: 8.47.0
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.47.0))(eslint@8.47.0))(eslint@8.47.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1)(eslint@8.47.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.47.0))(eslint@8.47.0))(eslint@8.47.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.2
       is-core-module: 2.13.1
@@ -6680,7 +6712,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1)(eslint@8.47.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.18.0(eslint@8.47.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.47.0))(eslint@8.47.0))(eslint@8.47.0):
     dependencies:
       array-includes: 3.1.7
       array.prototype.findlastindex: 1.2.3

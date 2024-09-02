@@ -58,6 +58,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        suppressHydrationWarning
         {...props}
       >
         {StartIcon && <StartIcon className="h-4 w-4 mr-2" />}

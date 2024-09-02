@@ -17,6 +17,7 @@ import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { StatFilter } from "./stat-filter";
 import { Button } from "@/components/ui/button";
+import { StatDisplay } from "./stat-display";
 
 const querySerializer = getStatsQuerySerializer();
 
@@ -24,11 +25,7 @@ const serializer = createSerializer({
   [querySerializer.key]: querySerializer.parser,
 });
 
-export function StatContent({
-  data,
-  defaultFilter,
-  display,
-}: StatContentProps) {
+export function StatContent({ data, defaultFilter }: StatContentProps) {
   const router = useRouter();
   const [filter, setFilter] = useQueryState(
     querySerializer.key,
@@ -50,15 +47,12 @@ export function StatContent({
     <Container
       title="Dashboard"
       filter={<StatFilter filter={filter} onApply={onApply} />}
-      action={
-        <Button variant={"outline"} StartIcon={EyeIcon}>
-          Affichage
-        </Button>
-      }
+      action={<StatDisplay display={filter.display} onApply={onApply} />}
     >
       <div className="grid gap-4">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
           {[...statDisplayConfig]
+            .filter((el) => filter.display.includes(el.name))
             .sort((a, b) => a.order - b.order)
             .map((el) => (
               <CountChartCard
@@ -115,5 +109,4 @@ export function StatContent({
 type StatContentProps = {
   data: GetStats;
   defaultFilter: z.infer<typeof getStatsQuerySchema>;
-  display: Array<keyof GetStats["countStat"]>;
 };

@@ -5,6 +5,8 @@ import { createClient } from "@/app/(dashboard)/invoice/client/client-service";
 import { createPaymentMode } from "@/app/(dashboard)/invoice/payment-mode/payment-mode-service";
 import { OperationType } from "@/entity/operation";
 import { faker } from "@faker-js/faker";
+import { z } from "zod";
+import { getStatsQuerySchema } from "@/app/(dashboard)/(stat)/stat-dto";
 
 export function buildSaveOperationInput(
   operation?: Partial<SaveOperationInput>,
@@ -50,5 +52,19 @@ export async function buildCreateInvoiceInput(
     products: [{ name: "p1", price: 100, qte: 1 }],
     createdAt: new Date(),
     ...invoice,
+  };
+}
+
+export function buildGetStatQuery(
+  query: Partial<z.infer<typeof getStatsQuerySchema>>,
+): z.infer<typeof getStatsQuerySchema> {
+  return {
+    tags: [],
+    display: [],
+    range: {
+      from: new Date(),
+      to: new Date(),
+    },
+    ...query,
   };
 }
