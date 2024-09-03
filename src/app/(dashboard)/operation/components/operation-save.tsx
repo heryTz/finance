@@ -9,7 +9,7 @@ import {
   useOperations,
 } from "../operation-query";
 import { useEffect } from "react";
-import { Modal } from "@/components/modal";
+import { Modal } from "@/components/modal_";
 import { Loader } from "@/components/loader";
 import { Form, FormField } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
