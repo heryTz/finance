@@ -3,7 +3,6 @@ import { Button, ButtonProps } from "./ui/button";
 import {
   Credenza,
   CredenzaBody,
-  CredenzaClose,
   CredenzaContent,
   CredenzaDescription,
   CredenzaFooter,
@@ -35,18 +34,14 @@ export function Modal({
         <CredenzaBody>{children}</CredenzaBody>
         <CredenzaFooter>
           {cancel && (
-            <CredenzaClose asChild>
-              <Button variant={"outline"} {...cancel}>
-                {cancel.children ?? "Fermer"}
-              </Button>
-            </CredenzaClose>
+            <Button variant={"outline"} {...cancel}>
+              {cancel.children ?? "Fermer"}
+            </Button>
           )}
           {submit && (
-            <CredenzaClose asChild>
-              <Button variant={"default"} {...submit}>
-                {submit.children ?? "Valider"}
-              </Button>
-            </CredenzaClose>
+            <Button variant={"default"} {...submit}>
+              {submit.children ?? "Valider"}
+            </Button>
           )}
         </CredenzaFooter>
       </CredenzaContent>

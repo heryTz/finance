@@ -43,6 +43,7 @@ export default async function RootLayout({
           <AppProvider session={session}>{children}</AppProvider>
         </div>
         <Toaster />
+        <div id="ReactModalPortal" />
       </body>
     </html>
   );

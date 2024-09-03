@@ -42,6 +42,7 @@ export function Autocomplete({
   const handleChangeFreeSolo = (newSearch: string) => {
     setSearch(newSearch);
     onChange(newSearch);
+    popover.setOpen(false);
   };
 
   const onClear = () => {
