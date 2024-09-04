@@ -44,25 +44,21 @@ export function OperationAction({ row }: OperationActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {openEdit && (
-        <OperationSave
-          idToEdit={row.id}
-          open={openEdit}
-          onOpenChange={setOpenEdit}
-          onFinish={onRefetch}
-        />
-      )}
-      {openDelete && (
-        <ModalDelete
-          open={openDelete}
-          onOpenChange={setOpenDelete}
-          label={row.label}
-          onDelete={async () => {
-            await deleteFn.mutateAsync(row.id);
-            onRefetch();
-          }}
-        />
-      )}
+      <OperationSave
+        idToEdit={row.id}
+        open={openEdit}
+        onOpenChange={setOpenEdit}
+        onFinish={onRefetch}
+      />
+      <ModalDelete
+        open={openDelete}
+        onOpenChange={setOpenDelete}
+        label={row.label}
+        onDelete={async () => {
+          await deleteFn.mutateAsync(row.id);
+          onRefetch();
+        }}
+      />
     </>
   );
 }

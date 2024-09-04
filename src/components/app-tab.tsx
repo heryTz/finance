@@ -19,11 +19,11 @@ export function AppTab({ tabs }: AppTabProps) {
   return (
     <Tabs value={tab} onValueChange={onValueChange}>
       <TabsList
-        className="grid w-full max-w-[700px]"
+        className="grid w-full max-w-[calc(100dvw-32px)] lg:max-w-[700px] overflow-auto justify-start"
         style={{ gridTemplateColumns: `repeat(${tabs.length},1fr)` }}
       >
         {tabs.map((el) => (
-          <TabsTrigger key={el.name} value={el.name}>
+          <TabsTrigger key={el.name} value={el.name} className="shrink-0">
             {el.title}
           </TabsTrigger>
         ))}

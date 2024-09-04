@@ -23,11 +23,16 @@ export function InvoiceDownload({
     resolver: zodResolver(schema),
   });
 
+  const reset = () => {
+    form.reset({ filename: defaultFilename });
+  };
+
   const onSubmit = form.handleSubmit((data) => {
     startTransition(async () => {
       try {
         await onDownload(data.filename);
         onOpenChange(false);
+        reset();
       } catch (error) {
         toast.error(
           "Une erreur est survenue lors du téléchargement de votre facture.",
@@ -36,17 +41,22 @@ export function InvoiceDownload({
     });
   });
 
+  const cancel = () => {
+    onOpenChange(false);
+    reset();
+  };
+
   return (
     <Modal
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={(v) => !v && cancel()}
       title="Téléchargement de votre facture"
       submit={{
         children: "Télécharger",
         disabled: isPending,
         onClick: onSubmit,
       }}
-      cancel={{ onClick: () => onOpenChange(false) }}
+      cancel={{ onClick: cancel }}
     >
       <Form {...form}>
         <FormField

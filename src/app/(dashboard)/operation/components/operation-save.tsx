@@ -22,7 +22,6 @@ import { AutocompleteField } from "@/components/autocomplete-field";
 import { zd } from "@/lib/zod";
 import { toast } from "sonner";
 
-// TODO: Fix focus for CalendarField, Button
 // TODO: Fix error js - press enter on input autocomplete and press arrow down
 
 type FormData = zd.infer<typeof saveOperationInputSchema>;
@@ -51,15 +50,21 @@ export function OperationSave({
   });
 
   useEffect(() => {
+    reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [operation]);
+
+  const reset = () => {
     if (operation) {
       const data = saveOperationInputSchema.parse({
         ...operation,
         tags: operation.tags.map((el) => el.name),
       });
       form.reset(data);
+    } else {
+      form.reset();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [operation]);
+  };
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
@@ -72,6 +77,7 @@ export function OperationSave({
       }
       onOpenChange(false);
       onFinish?.();
+      reset();
     } catch (error) {
       toast.error("Une erreur s'est produite");
     }
@@ -79,6 +85,7 @@ export function OperationSave({
 
   const onCancel = () => {
     onOpenChange(false);
+    reset();
   };
 
   return (

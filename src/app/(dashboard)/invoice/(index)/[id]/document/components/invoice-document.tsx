@@ -35,42 +35,40 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   return (
     <>
       <div className="grid gap-4 mx-auto">
-        <InvoicePreview
-          invoice={invoice}
-          provider={provider}
-          invoiceClassName="invoice-pdf"
-        />
+        <div className="max-w-[calc(100dvw-32px)] overflow-auto">
+          <InvoicePreview
+            invoice={invoice}
+            provider={provider}
+            invoiceClassName="invoice-pdf"
+          />
+        </div>
         <div className="flex justify-center items-center gap-4">
           <Button onClick={() => setOpenDownload(true)}>Télécharger</Button>
           <Button onClick={() => setOpenMail(true)}>Envoyer par email</Button>
         </div>
       </div>
-      {openDownload && (
-        <InvoiceDownload
-          defaultFilename={defaultFilename}
-          open={openDownload}
-          onOpenChange={setOpenDownload}
-          onDownload={async (filename) => {
-            const doc = await printFile();
-            doc.save(filename);
-          }}
-        />
-      )}
-      {openMail && (
-        <InvoiceMailing
-          open={openMail}
-          onOpenChange={setOpenMail}
-          id={invoice.id}
-          onSubmit={async (data) => {
-            const doc = await printFile();
-            const docBase64 = doc.output("datauristring");
-            await sendInvoiceMailAction(invoice.id, {
-              ...data,
-              file: docBase64,
-            });
-          }}
-        />
-      )}
+      <InvoiceDownload
+        defaultFilename={defaultFilename}
+        open={openDownload}
+        onOpenChange={setOpenDownload}
+        onDownload={async (filename) => {
+          const doc = await printFile();
+          doc.save(filename);
+        }}
+      />
+      <InvoiceMailing
+        open={openMail}
+        onOpenChange={setOpenMail}
+        id={invoice.id}
+        onSubmit={async (data) => {
+          const doc = await printFile();
+          const docBase64 = doc.output("datauristring");
+          await sendInvoiceMailAction(invoice.id, {
+            ...data,
+            file: docBase64,
+          });
+        }}
+      />
     </>
   );
 }
