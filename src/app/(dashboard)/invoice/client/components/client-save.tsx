@@ -32,11 +32,13 @@ export function ClientSave({
   });
 
   useEffect(() => {
-    if (client) {
-      form.reset(saveClientInputSchema.parse(client));
-    }
+    reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client]);
+
+  const reset = () => {
+    form.reset(client ? saveClientInputSchema.parse(client) : {});
+  };
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
@@ -49,6 +51,7 @@ export function ClientSave({
       }
       onOpenChange(false);
       onFinish?.();
+      reset();
     } catch (error) {
       toast.error("Une erreur s'est produite");
     }
@@ -56,6 +59,7 @@ export function ClientSave({
 
   const onCancel = () => {
     onOpenChange(false);
+    reset();
   };
 
   return (

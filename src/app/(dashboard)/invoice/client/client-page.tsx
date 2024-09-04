@@ -24,9 +24,7 @@ export default function ClientPage({ clients }: ClientPageProps) {
       >
         <DataTable data={clients.results} columns={columns} />
       </Container>
-      {open && (
-        <ClientSave open={open} onOpenChange={setOpen} onFinish={refresh} />
-      )}
+      <ClientSave open={open} onOpenChange={setOpen} onFinish={refresh} />
     </>
   );
 }
