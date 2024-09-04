@@ -32,11 +32,17 @@ export function PaymentModeSave({
   });
 
   useEffect(() => {
-    if (paymentMode) {
-      form.reset(createPaymentModeSchema.parse(paymentMode));
-    }
+    reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMode]);
+
+  const reset = () => {
+    if (paymentMode) {
+      form.reset(createPaymentModeSchema.parse(paymentMode));
+    } else {
+      form.reset();
+    }
+  };
 
   const onSubmit = form.handleSubmit((data) => {
     startTransition(async () => {
@@ -50,6 +56,7 @@ export function PaymentModeSave({
         }
         onOpenChange(false);
         onFinish?.();
+        reset();
       } catch (error) {
         toast.error("Erreur s'est produite");
       }
@@ -58,6 +65,7 @@ export function PaymentModeSave({
 
   const onCancel = () => {
     onOpenChange(false);
+    reset();
   };
 
   return (

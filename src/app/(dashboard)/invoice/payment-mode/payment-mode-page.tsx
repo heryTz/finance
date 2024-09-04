@@ -23,13 +23,11 @@ export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
       >
         <DataTable data={paymentsMode.results} columns={columns} />
       </Container>
-      {openSave && (
-        <PaymentModeSave
-          open={openSave}
-          onOpenChange={setOpenSave}
-          onFinish={router.refresh}
-        />
-      )}
+      <PaymentModeSave
+        open={openSave}
+        onOpenChange={setOpenSave}
+        onFinish={router.refresh}
+      />
     </>
   );
 }
