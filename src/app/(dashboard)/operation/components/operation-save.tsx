@@ -22,7 +22,6 @@ import { AutocompleteField } from "@/components/autocomplete-field";
 import { zd } from "@/lib/zod";
 import { toast } from "sonner";
 
-// TODO: Fix focus for CalendarField, Button
 // TODO: Fix error js - press enter on input autocomplete and press arrow down
 
 type FormData = zd.infer<typeof saveOperationInputSchema>;

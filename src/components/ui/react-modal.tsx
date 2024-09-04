@@ -106,10 +106,22 @@ export const ReactModalContent = forwardRef<
       {...props}
       isOpen={!!context.open}
       onRequestClose={() => context.onOpenChange(false)}
-      data-open={context.open ? "open" : "closed"}
+      contentElement={(p, children) => (
+        <div {...p} data-state={context.open ? "open" : "closed"}>
+          {children}
+        </div>
+      )}
+      overlayElement={(p, children) => (
+        <div {...p} data-state={context.open ? "open" : "closed"}>
+          {children}
+        </div>
+      )}
     >
       {props.children}
-      <ReactModalClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+      <ReactModalClose
+        data-state={context.open ? "open" : "closed"}
+        className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+      >
         <XIcon className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </ReactModalClose>
