@@ -39,6 +39,11 @@ export function InvoiceMailing({
   });
 
   useEffect(() => {
+    reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [providerFn?.data, invoiceFn?.data]);
+
+  const reset = () => {
     if (providerFn?.data && invoiceFn?.data) {
       form.reset({
         subject: defaultInvoiceSubject(),
@@ -48,9 +53,10 @@ export function InvoiceMailing({
         file: "placeholder",
         filename: invoiceDetaultFilename(invoiceFn.data),
       });
+    } else {
+      form.reset();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [providerFn?.data, invoiceFn?.data]);
+  };
 
   const submit = form.handleSubmit((data) => {
     startTransition(async () => {
@@ -58,25 +64,31 @@ export function InvoiceMailing({
         await onSubmit(data);
         toast.success("Votre facture a été envoyé");
         onOpenChange(false);
+        reset();
       } catch (error) {
         toast.error("Une erreur est survenue lors de l'envoi de votre facture");
       }
     });
   });
 
+  const cancel = () => {
+    onOpenChange(false);
+    reset();
+  };
+
   const isLoading = providerFn.isLoading || invoiceFn.isLoading;
 
   return (
     <Modal
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={(v) => !v && cancel()}
       title={`Envoyer la facture n° ${invoiceFn?.data?.ref ?? "..."} par mail`}
       submit={{
         children: "Envoyer",
         onClick: submit,
         disabled: isPending || isLoading,
       }}
-      cancel={{ onClick: () => onOpenChange(false) }}
+      cancel={{ onClick: cancel }}
     >
       {isLoading ? (
         <Loader />
