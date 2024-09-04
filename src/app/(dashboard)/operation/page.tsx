@@ -29,13 +29,11 @@ export default function OperationPage() {
       ) : (
         <DataTable data={data.data.results} columns={columns} />
       )}
-      {openSave && (
-        <OperationSave
-          open={openSave}
-          onOpenChange={setOpenSave}
-          onFinish={refetch}
-        />
-      )}
+      <OperationSave
+        open={openSave}
+        onOpenChange={setOpenSave}
+        onFinish={refetch}
+      />
     </Container>
   );
 }
