@@ -17,10 +17,7 @@ export default function Layout({ children }: PropsWithChildren) {
               size={"icon"}
               className="rounded-full"
             >
-              <Link
-                href={"https://github.com/heryTz/operation"}
-                target="_blank"
-              >
+              <Link href={"https://github.com/heryTz/finance"} target="_blank">
                 <GithubIcon />
               </Link>
             </Button>
