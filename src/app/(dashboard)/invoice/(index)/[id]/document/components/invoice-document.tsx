@@ -35,11 +35,13 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   return (
     <>
       <div className="grid gap-4 mx-auto">
-        <InvoicePreview
-          invoice={invoice}
-          provider={provider}
-          invoiceClassName="invoice-pdf"
-        />
+        <div className="max-w-[calc(100dvw-32px)] overflow-auto">
+          <InvoicePreview
+            invoice={invoice}
+            provider={provider}
+            invoiceClassName="invoice-pdf"
+          />
+        </div>
         <div className="flex justify-center items-center gap-4">
           <Button onClick={() => setOpenDownload(true)}>Télécharger</Button>
           <Button onClick={() => setOpenMail(true)}>Envoyer par email</Button>
