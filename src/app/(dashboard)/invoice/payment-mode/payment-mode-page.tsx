@@ -16,19 +16,18 @@ export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
   useSeo({ title: "Mode de paiements" });
 
   return (
-    <>
-      <Container
-        title="Mode de paiements"
-        action={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
-      >
-        <DataTable data={paymentsMode.results} columns={columns} />
-      </Container>
+    <Container
+      title="Mode de paiements"
+      action={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
+      breadcrumb={[{ label: "Mode de paiements" }]}
+    >
+      <DataTable data={paymentsMode.results} columns={columns} />
       <PaymentModeSave
         open={openSave}
         onOpenChange={setOpenSave}
         onFinish={router.refresh}
       />
-    </>
+    </Container>
   );
 }
 

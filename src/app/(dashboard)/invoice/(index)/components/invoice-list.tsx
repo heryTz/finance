@@ -17,6 +17,7 @@ export default function InvoiceList({ invoices }: InvoiceListProps) {
     <Container
       title="Facture"
       action={<Button onClick={() => push("/invoice/new")}>Ajouter</Button>}
+      breadcrumb={[{ label: "Facture" }]}
     >
       <DataTable data={invoices.results} columns={columns} />
     </Container>

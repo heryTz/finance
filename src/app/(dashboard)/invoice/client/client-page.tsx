@@ -17,15 +17,14 @@ export default function ClientPage({ clients }: ClientPageProps) {
   useSeo({ title: "Clients" });
 
   return (
-    <>
-      <Container
-        title="Clients"
-        action={<Button onClick={() => setOpen(true)}>Ajouter</Button>}
-      >
-        <DataTable data={clients.results} columns={columns} />
-      </Container>
+    <Container
+      title="Clients"
+      action={<Button onClick={() => setOpen(true)}>Ajouter</Button>}
+      breadcrumb={[{ label: "Clients" }]}
+    >
+      <DataTable data={clients.results} columns={columns} />
       <ClientSave open={open} onOpenChange={setOpen} onFinish={refresh} />
-    </>
+    </Container>
   );
 }
 

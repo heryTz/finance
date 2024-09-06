@@ -10,6 +10,7 @@ import { invoiceDetaultFilename } from "../../../components/invoice-list";
 import { Button } from "@/components/ui/button";
 import { InvoiceDownload } from "./invoice-download";
 import { InvoiceMailing } from "./invoice-mailing";
+import { Container } from "@/components/container";
 
 export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   const defaultFilename = invoiceDetaultFilename(invoice);
@@ -33,7 +34,13 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   };
 
   return (
-    <>
+    <Container
+      title="Détails de la facture"
+      breadcrumb={[
+        { label: "Facture", path: "/invoice?tab=invoice" },
+        { label: "Détails" },
+      ]}
+    >
       <div className="grid gap-4 mx-auto">
         <div className="max-w-[calc(100dvw-32px)] overflow-auto">
           <InvoicePreview
@@ -69,7 +76,7 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
           });
         }}
       />
-    </>
+    </Container>
   );
 }
 

@@ -71,6 +71,10 @@ export function InvoiceSave({
           ? `Modification de la facture "No ${invoice.ref}"`
           : "Créer une facture"
       }
+      breadcrumb={[
+        { label: "Facture", path: "/invoice?tab=invoice" },
+        { label: invoice ? "Modification" : "Création" },
+      ]}
     >
       <Form {...form}>
         <form className="grid gap-4">

@@ -46,7 +46,10 @@ export default function ProviderPage({ provider }: ProviderPageProps) {
   };
 
   return (
-    <Container title="Information du prestataire">
+    <Container
+      title="Information du prestataire"
+      breadcrumb={[{ label: "Prestataire" }]}
+    >
       <Form {...form}>
         <form className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
