@@ -31,11 +31,11 @@ export function Component({ children }: PropsWithChildren) {
   ];
 
   return (
-    <div className="grid min-h-dvh w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <Sidebar menus={menus} />
-      <div className="flex flex-col">
+      <div className="flex flex-col h-dvh">
         <Appbar menus={menus} />
-        <main className="flex flex-1 flex-col p-4 lg:p-6 max-h-[calc(100dvh_-_56px)] lg:max-h-[calc(100dvh_-_60px)] h-full overflow-auto">
+        <main className="flex flex-1 flex-col p-4 lg:p-6 overflow-auto">
           {children}
         </main>
       </div>
