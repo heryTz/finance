@@ -20,6 +20,7 @@ import { CalendarField } from "@/components/calendar-field";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { routes } from "@/app/routes";
 
 export function InvoiceSave({
   clients,
@@ -72,7 +73,7 @@ export function InvoiceSave({
           : "Créer une facture"
       }
       breadcrumb={[
-        { label: "Facture", path: "/invoice?tab=invoice" },
+        { label: "Facture", path: routes.invoice() },
         { label: invoice ? "Modification" : "Création" },
       ]}
     >

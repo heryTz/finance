@@ -1,5 +1,6 @@
 "use client";
 
+import { routes } from "@/app/routes";
 import { Feedback } from "@/components/feedback";
 import { InputField } from "@/components/input-field";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ export function LoginForm() {
   const onSubmit = form.handleSubmit(async (data: Input) => {
     const response = await signIn("email", {
       email: data.email,
-      callbackUrl: "/",
+      callbackUrl: routes.dashboard(),
     });
   });
 

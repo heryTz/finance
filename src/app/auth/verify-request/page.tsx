@@ -1,3 +1,4 @@
+import { routes } from "@/app/routes";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -24,7 +25,10 @@ export default function VerifyRequestPage() {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link className={buttonVariants({ className: "w-full" })} href="/">
+        <Link
+          className={buttonVariants({ className: "w-full" })}
+          href={routes.dashboard()}
+        >
           Entrer dans le dashboard
         </Link>
       </CardFooter>

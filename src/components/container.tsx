@@ -1,5 +1,6 @@
 import { ComponentProps, PropsWithChildren, ReactNode } from "react";
 import { AppBreadcrumb } from "./app-breadcrumb";
+import { routes } from "@/app/routes";
 
 export function Container({
   breadcrumb,
@@ -13,7 +14,7 @@ export function Container({
       <div className="grid gap-2 mb-4">
         {breadcrumb && (
           <AppBreadcrumb
-            links={[{ label: "Home", path: "/" }, ...breadcrumb]}
+            links={[{ label: "Home", path: routes.dashboard() }, ...breadcrumb]}
           />
         )}
         <div className="flex justify-between items-center gap-4">

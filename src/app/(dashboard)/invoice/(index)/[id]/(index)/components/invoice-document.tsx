@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { InvoiceDownload } from "./invoice-download";
 import { InvoiceMailing } from "./invoice-mailing";
 import { Container } from "@/components/container";
+import { routes } from "@/app/routes";
 
 export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
   const defaultFilename = invoiceDetaultFilename(invoice);
@@ -37,7 +38,7 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
     <Container
       title="Détails de la facture"
       breadcrumb={[
-        { label: "Facture", path: "/invoice?tab=invoice" },
+        { label: "Facture", path: routes.invoice() },
         { label: "Détails" },
       ]}
     >

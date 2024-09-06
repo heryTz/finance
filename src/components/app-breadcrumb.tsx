@@ -9,6 +9,7 @@ import {
 } from "./ui/breadcrumb";
 import Link from "next/link";
 import { Fragment } from "react";
+import { routes } from "@/app/routes";
 
 export function AppBreadcrumb({ links }: AppBreadcrumbProps) {
   return (
@@ -21,7 +22,7 @@ export function AppBreadcrumb({ links }: AppBreadcrumbProps) {
                 {link.path ? (
                   <BreadcrumbLink asChild>
                     <Link href={link.path}>
-                      {link.path === "/" ? (
+                      {link.path === routes.dashboard() ? (
                         <HomeIcon className="w-4 h-4" />
                       ) : (
                         link.label
