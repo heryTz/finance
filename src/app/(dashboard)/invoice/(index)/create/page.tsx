@@ -4,7 +4,7 @@ import { getPaymentsMode } from "../../payment-mode/payment-mode-service";
 import { InvoiceSave } from "../components/invoice-save";
 import { getProducts } from "../invoice-service";
 
-export default async function InvoiceNewPage() {
+export default async function InvoiceCreatePage() {
   const { user } = await apiGuard();
   const clients = await getClients(user.id);
   const products = await getProducts(user.id);

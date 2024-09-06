@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
 import { useSeo } from "@/lib/use-seo";
 import { useColumnDefs } from "./invoice-colum-defs";
+import { routes } from "@/app/routes";
 
 export default function InvoiceList({ invoices }: InvoiceListProps) {
   const { push } = useRouter();
@@ -16,7 +17,10 @@ export default function InvoiceList({ invoices }: InvoiceListProps) {
   return (
     <Container
       title="Facture"
-      action={<Button onClick={() => push("/invoice/new")}>Ajouter</Button>}
+      action={
+        <Button onClick={() => push(routes.invoiceCreate())}>Ajouter</Button>
+      }
+      breadcrumb={[{ label: "Facture" }]}
     >
       <DataTable data={invoices.results} columns={columns} />
     </Container>

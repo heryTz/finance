@@ -1,4 +1,5 @@
 import { Empty } from "@/components/empty";
+import { routes } from "./routes";
 
 export default function NotFoundPage() {
   return (
@@ -7,7 +8,7 @@ export default function NotFoundPage() {
         title="Page introuvable"
         description="Impossible de trouver la ressource demandée."
         cta={{
-          href: "/",
+          href: routes.dashboard(),
           label: "Revenir dans le dashboard",
         }}
       />

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "./user-menu";
 import { useState } from "react";
+import { routes } from "@/app/routes";
 
 export function Appbar({ menus }: AppbarProps) {
   const [open, setOpen] = useState(false);
@@ -23,7 +24,11 @@ export function Appbar({ menus }: AppbarProps) {
         </SheetTrigger>
         <SheetContent side="left" className="p-4">
           <nav className="font-medium flex flex-col h-dvh">
-            <Link href="/" className="px-2" onClick={() => setOpen(false)}>
+            <Link
+              href={routes.dashboard()}
+              className="px-2"
+              onClick={() => setOpen(false)}
+            >
               <Logo />
             </Link>
             <div className="flex-1 overflow-auto mt-4">

@@ -2,12 +2,13 @@ import EmailProvider from "next-auth/providers/email";
 import { AuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import { routes } from "@/app/routes";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   pages: {
-    signIn: "/auth/login",
-    verifyRequest: "/auth/verify-request",
+    signIn: routes.authLogin(),
+    verifyRequest: routes.authVerifyRequest(),
   },
   providers: [
     EmailProvider({

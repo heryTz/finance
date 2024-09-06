@@ -15,13 +15,14 @@ import {
   sendInvoiceMail,
   updateInvoice,
 } from "./invoice-service";
+import { routes } from "@/app/routes";
 
 export async function createInvoiceAction(input: CreateInvoiceInput) {
   const { user } = await apiGuard();
   const data = createInvoiceSchema.parse(input);
   await createInvoice(user.id, data);
-  revalidatePath("/invoice");
-  redirect("/invoice");
+  revalidatePath(routes.invoice());
+  redirect(routes.invoice());
 }
 
 export async function updateInvoiceAction(
@@ -31,14 +32,14 @@ export async function updateInvoiceAction(
   const { user } = await apiGuard();
   const data = createInvoiceSchema.parse(input);
   await updateInvoice(user.id, id, data);
-  revalidatePath("/invoice");
-  redirect("/invoice");
+  revalidatePath(routes.invoice());
+  redirect(routes.invoice());
 }
 
 export async function deleteInvoiceAction(id: string) {
   const { user } = await apiGuard();
   await deleteInvoice(user.id, id);
-  revalidatePath("/invoice");
+  revalidatePath(routes.invoice());
 }
 
 export async function sendInvoiceMailAction(

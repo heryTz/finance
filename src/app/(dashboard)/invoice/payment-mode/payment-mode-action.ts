@@ -11,12 +11,13 @@ import {
   deletePaymentMode,
   updatePaymentMode,
 } from "./payment-mode-service";
+import { routes } from "@/app/routes";
 
 export async function createPaymentModeAction(input: CreatePaymentModeInput) {
   const { user } = await apiGuard();
   const data = createPaymentModeSchema.parse(input);
   const payment = await createPaymentMode(user.id, data);
-  revalidatePath("/invoice");
+  revalidatePath(routes.invoice());
   return payment;
 }
 
@@ -27,13 +28,13 @@ export async function updatePaymentModeAction(
   const { user } = await apiGuard();
   const data = createPaymentModeSchema.parse(input);
   const payment = await updatePaymentMode(user.id, id, data);
-  revalidatePath("/invoice");
+  revalidatePath(routes.invoice());
   return payment;
 }
 
 export async function deletePaymentModeAction(id: string) {
   const { user } = await apiGuard();
   const payment = await deletePaymentMode(user.id, id);
-  revalidatePath("/invoice");
+  revalidatePath(routes.invoice());
   return payment;
 }

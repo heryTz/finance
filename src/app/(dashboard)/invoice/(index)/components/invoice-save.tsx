@@ -20,6 +20,7 @@ import { CalendarField } from "@/components/calendar-field";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { routes } from "@/app/routes";
 
 export function InvoiceSave({
   clients,
@@ -71,6 +72,10 @@ export function InvoiceSave({
           ? `Modification de la facture "No ${invoice.ref}"`
           : "Créer une facture"
       }
+      breadcrumb={[
+        { label: "Facture", path: routes.invoice() },
+        { label: invoice ? "Modification" : "Création" },
+      ]}
     >
       <Form {...form}>
         <form className="grid gap-4">

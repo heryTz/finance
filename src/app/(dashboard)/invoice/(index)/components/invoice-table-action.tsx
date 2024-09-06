@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { GetInvoices } from "../invoice-service";
 import { ModalDelete } from "@/components/modal-delete";
 import { deleteInvoiceAction } from "../invoice-action";
+import { routes } from "@/app/routes";
 
 export function InvoiceTableAction({ row }: InvoiceTableActionProps) {
   const { push, refresh } = useRouter();
@@ -31,10 +32,10 @@ export function InvoiceTableAction({ row }: InvoiceTableActionProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => push(`/invoice/${row.id}/document`)}>
+          <DropdownMenuItem onClick={() => push(routes.invoiceShow(row.id))}>
             Télécharger
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => push(`/invoice/${row.id}/edit`)}>
+          <DropdownMenuItem onClick={() => push(routes.invoiceEdit(row.id))}>
             Editer
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpenDelete(true)}>

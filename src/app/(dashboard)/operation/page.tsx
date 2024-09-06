@@ -21,6 +21,7 @@ export default function OperationPage() {
     <Container
       title="Opération"
       action={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
+      breadcrumb={[{ label: "Opération" }]}
     >
       {isLoading ? (
         <Loader />

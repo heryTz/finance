@@ -6,27 +6,28 @@ import { Sidebar } from "@/components/sidebar";
 import { usePathname } from "next/navigation";
 import { Appbar } from "@/components/appbar";
 import { PropsWithChildren } from "react";
+import { routes } from "../routes";
 
 export function Component({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const menus = [
     {
       label: "Dashboard",
-      href: "/",
+      href: routes.dashboard(),
       Icon: ChartArea,
-      active: pathname === "/",
+      active: pathname === routes.dashboard(),
     },
     {
       label: "Opération",
-      href: "/operation",
+      href: routes.operation(),
       Icon: ArrowLeftRightIcon,
-      active: pathname.startsWith("/operation"),
+      active: pathname.startsWith(routes.operation()),
     },
     {
       label: "Facture",
-      href: "/invoice",
+      href: routes.invoice(),
       Icon: Wallet,
-      active: pathname.startsWith("/invoice"),
+      active: pathname.startsWith(routes.invoice()),
     },
   ];
 
