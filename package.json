@@ -72,6 +72,7 @@
     "@commitlint/cli": "^19.4.1",
     "@commitlint/config-conventional": "^19.4.1",
     "@faker-js/faker": "^8.3.1",
+    "@release-it/conventional-changelog": "^8.0.1",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@types/better-sqlite3": "^7.6.8",
