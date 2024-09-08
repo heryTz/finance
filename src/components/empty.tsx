@@ -3,12 +3,22 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-export function Empty({ withBorder, title, description, cta }: EmptyProps) {
+export function Empty({
+  className,
+  withBorder,
+  title,
+  description,
+  cta,
+}: EmptyProps) {
   return (
     <div
-      className={cn("flex flex-1 items-center justify-center", {
-        "border border-dashed rounded-lg shadow-sm": withBorder,
-      })}
+      className={cn(
+        "flex flex-1 items-center justify-center",
+        {
+          "border border-dashed rounded-lg shadow-sm": withBorder,
+        },
+        className,
+      )}
     >
       <div className="flex flex-col items-center gap-1 text-center">
         <h3 className="text-2xl font-bold tracking-tight">{title}</h3>
@@ -29,6 +39,7 @@ export function Empty({ withBorder, title, description, cta }: EmptyProps) {
 }
 
 type EmptyProps = {
+  className?: string;
   withBorder?: boolean;
   title: string;
   description: ReactNode;

@@ -1,5 +1,6 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -17,9 +18,13 @@ export function AppTab({ tabs }: AppTabProps) {
   };
 
   return (
-    <Tabs value={tab} onValueChange={onValueChange}>
+    <Tabs
+      value={tab}
+      onValueChange={onValueChange}
+      className="flex flex-col flex-1"
+    >
       <TabsList
-        className="grid w-full max-w-[calc(100dvw-32px)] lg:max-w-[700px] overflow-auto justify-start"
+        className="grid w-full max-w-[calc(100dvw-32px)] lg:max-w-[700px] overflow-auto justify-start mb-2"
         style={{ gridTemplateColumns: `repeat(${tabs.length},1fr)` }}
       >
         {tabs.map((el) => (
@@ -29,7 +34,11 @@ export function AppTab({ tabs }: AppTabProps) {
         ))}
       </TabsList>
       {tabs.map((el) => (
-        <TabsContent key={el.name} value={el.name}>
+        <TabsContent
+          key={el.name}
+          value={el.name}
+          className={cn({ "flex flex-col flex-1": el.name === tab })}
+        >
           {el.component}
         </TabsContent>
       ))}
