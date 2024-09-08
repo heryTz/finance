@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "@/components/modal";
 import { Form, FormField } from "@/components/ui/form";
 import { InputField } from "@/components/input-field";
+import { Client } from "@prisma/client";
 
 type FormValue = zd.infer<typeof saveClientInputSchema>;
 
@@ -42,15 +43,18 @@ export function ClientSave({
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
+      let client: Client;
       if (idToEdit) {
-        await updateFn.mutateAsync(data);
+        const resp = await updateFn.mutateAsync(data);
+        client = resp.data;
         toast.success("Modification effectuée avec succès");
       } else {
-        await createFn.mutateAsync(data);
+        const resp = await createFn.mutateAsync(data);
+        client = resp.data;
         toast.success("Ajout effectué avec succès");
       }
       onOpenChange(false);
-      onFinish?.();
+      onFinish?.(client);
       reset();
     } catch (error) {
       toast.error("Une erreur s'est produite");
@@ -143,6 +147,6 @@ export function ClientSave({
 type ClientSaveProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onFinish?: () => void;
+  onFinish?: (client: Client) => void;
   idToEdit?: string;
 };

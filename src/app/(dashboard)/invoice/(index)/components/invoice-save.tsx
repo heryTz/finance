@@ -8,7 +8,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { GetPaymentsMode } from "../../payment-mode/payment-mode-service";
 import { Container } from "@/components/container";
 import { toast } from "sonner";
@@ -18,9 +18,11 @@ import { InputField } from "@/components/input-field";
 import { SelectField } from "@/components/select-field";
 import { CalendarField } from "@/components/calendar-field";
 import { Button } from "@/components/ui/button";
-import { TrashIcon } from "lucide-react";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { routes } from "@/app/routes";
+import { ClientSave } from "../../client/components/client-save";
+import { CommandItem } from "@/components/ui/command";
 
 export function InvoiceSave({
   clients,
@@ -30,6 +32,7 @@ export function InvoiceSave({
 }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
+  const [openClientModal, setOpenClientModal] = useState(false);
   const invoiceParsed = invoice
     ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
     : null;
@@ -91,6 +94,19 @@ export function InvoiceSave({
                   value: el.id,
                   label: el.name,
                 }))}
+                suggestionFooter={
+                  <CommandItem
+                    className="cursor-pointer"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onSelect={() => setOpenClientModal(true)}
+                  >
+                    <PlusIcon className="mr-2 w-4 h-4" />
+                    <span>Ajouter un client</span>
+                  </CommandItem>
+                }
               />
             )}
           />
@@ -221,6 +237,13 @@ export function InvoiceSave({
           </div>
         </form>
       </Form>
+      <ClientSave
+        open={openClientModal}
+        onOpenChange={setOpenClientModal}
+        onFinish={(newClient) => {
+          form.setValue("clientId", newClient.id);
+        }}
+      />
     </Container>
   );
 }
