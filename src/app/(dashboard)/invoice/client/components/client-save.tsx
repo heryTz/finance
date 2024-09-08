@@ -37,6 +37,7 @@ export function ClientSave({
   }, [client]);
 
   const reset = () => {
+    console.log({ client });
     form.reset(client ? saveClientInputSchema.parse(client) : {});
   };
 
