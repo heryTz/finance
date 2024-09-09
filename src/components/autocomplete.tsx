@@ -9,7 +9,6 @@ import {
   CommandSeparator,
 } from "./ui/command";
 import { Command } from "cmdk";
-import { Button } from "./ui/button";
 
 export function Autocomplete({
   hideEmptySuggestion,
@@ -18,7 +17,7 @@ export function Autocomplete({
   onChange,
   inputProps,
   freeSolo,
-  suggestionFooter,
+  actions,
 }: AutocompleteProps) {
   const [search, setSearch] = useState("");
   const popover = usePopoverV2<HTMLInputElement>();
@@ -62,7 +61,7 @@ export function Autocomplete({
   const filteredOptions = options.filter(
     (option) =>
       option.label.toLowerCase().includes(search.toLowerCase()) &&
-      option.label !== search,
+      (freeSolo ? option.label.toLowerCase() !== search.toLowerCase() : true),
   );
 
   return (
@@ -88,30 +87,32 @@ export function Autocomplete({
           <PopoverV2 {...popover} className="p-1">
             <CommandEmpty>Aucun résultat.</CommandEmpty>
             <CommandList>
-              <CommandGroup heading="Suggestions">
-                {filteredOptions.map((option) => (
-                  <CommandItem
-                    key={option.value}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    value={option.value}
-                    onSelect={() => handleChange(option.value)}
-                    className={"cursor-pointer"}
-                  >
-                    {option.label}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-              {suggestionFooter && (
-                <>
-                  <CommandSeparator className="mt-1" />
-                  <CommandGroup heading="Actions">
-                    {suggestionFooter}
-                  </CommandGroup>
-                </>
-              )}
+              <div className="max-h-[300px] flex flex-col">
+                <div className="flex-1 overflow-auto">
+                  {filteredOptions.map((option) => (
+                    <CommandItem
+                      key={option.value}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      value={option.value}
+                      onSelect={() => handleChange(option.value)}
+                      className={"cursor-pointer"}
+                    >
+                      {option.label}
+                    </CommandItem>
+                  ))}
+                </div>
+                {actions && (
+                  <>
+                    <CommandSeparator className="mt-1 shrink-0" />
+                    <CommandGroup heading="Actions" className="shrink-0">
+                      {actions}
+                    </CommandGroup>
+                  </>
+                )}
+              </div>
             </CommandList>
           </PopoverV2>
         )}
@@ -126,5 +127,5 @@ type AutocompleteProps = {
   hideEmptySuggestion?: boolean;
   inputProps?: ComponentProps<typeof Input>;
   freeSolo?: boolean;
-  suggestionFooter?: ReactNode;
+  actions?: ReactNode;
 };

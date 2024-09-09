@@ -1,6 +1,5 @@
 "use client";
 
-import { GetClients } from "../../client/client-service";
 import { GetInvoiceById, GetProducts } from "../invoice-service";
 import { createInvoiceAction, updateInvoiceAction } from "../invoice-action";
 import { getCurrency, Currency } from "../invoice-util";
@@ -23,15 +22,17 @@ import { Separator } from "@/components/ui/separator";
 import { routes } from "@/app/routes";
 import { ClientSave } from "../../client/components/client-save";
 import { CommandItem } from "@/components/ui/command";
+import { useSeo } from "@/lib/use-seo";
+import { useGetInvoiceClients } from "../../client/client-query";
 
 export function InvoiceSave({
-  clients,
   products,
   paymentsMode,
   invoice,
 }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
+  const clientsFn = useGetInvoiceClients();
   const [openClientModal, setOpenClientModal] = useState(false);
   const invoiceParsed = invoice
     ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
@@ -68,13 +69,15 @@ export function InvoiceSave({
     });
   });
 
+  const title = invoice
+    ? `Modification de la facture "No ${invoice.ref}"`
+    : "Créer une facture";
+
+  useSeo({ title });
+
   return (
     <Container
-      title={
-        invoice
-          ? `Modification de la facture "No ${invoice.ref}"`
-          : "Créer une facture"
-      }
+      title={title}
       breadcrumb={[
         { label: "Facture", path: routes.invoice() },
         { label: invoice ? "Modification" : "Création" },
@@ -90,11 +93,13 @@ export function InvoiceSave({
                 label="Client *"
                 value={field.value}
                 onChange={field.onChange}
-                options={clients.results.map((el) => ({
-                  value: el.id,
-                  label: el.name,
-                }))}
-                suggestionFooter={
+                options={
+                  clientsFn.data?.results.map((el) => ({
+                    value: el.id,
+                    label: el.name,
+                  })) ?? []
+                }
+                actions={
                   <CommandItem
                     className="cursor-pointer"
                     onMouseDown={(e) => {
@@ -242,6 +247,7 @@ export function InvoiceSave({
         onOpenChange={setOpenClientModal}
         onFinish={(newClient) => {
           form.setValue("clientId", newClient.id);
+          clientsFn.refetch();
         }}
       />
     </Container>
@@ -249,7 +255,6 @@ export function InvoiceSave({
 }
 
 type InvoiceSaveFormProps = {
-  clients: GetClients;
   products: GetProducts;
   paymentsMode: GetPaymentsMode["results"];
   invoice?: GetInvoiceById;

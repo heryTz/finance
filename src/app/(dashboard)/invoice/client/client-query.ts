@@ -35,3 +35,9 @@ export function useInvoiceDeleteClient(id: string | null) {
     httpClient.delete<Client>(`/invoice/client/${id}`),
   );
 }
+
+export function useGetInvoiceClients() {
+  return useQuery(useGetInvoiceClients.name, () =>
+    httpClient.get<GetClients>("/invoice/client").then((res) => res.data),
+  );
+}
