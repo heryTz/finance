@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
 import { useState, useTransition } from "react";
-import { GetPaymentsMode } from "../../payment-mode/payment-mode-service";
 import { Container } from "@/components/container";
 import { toast } from "sonner";
 import { Form, FormField } from "@/components/ui/form";
@@ -24,16 +23,16 @@ import { ClientSave } from "../../client/components/client-save";
 import { CommandItem } from "@/components/ui/command";
 import { useSeo } from "@/lib/use-seo";
 import { useGetInvoiceClients } from "../../client/client-query";
+import { useGetPaymentModes } from "../../payment-mode/payment-mode-query";
+import { PaymentModeSave } from "../../payment-mode/components/payment-mode-save";
 
-export function InvoiceSave({
-  products,
-  paymentsMode,
-  invoice,
-}: InvoiceSaveFormProps) {
+export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
   const clientsFn = useGetInvoiceClients();
+  const paymentModesFn = useGetPaymentModes();
   const [openClientModal, setOpenClientModal] = useState(false);
+  const [openPaymentModeModal, setOpenPaymentModeModal] = useState(false);
   const invoiceParsed = invoice
     ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
     : null;
@@ -147,10 +146,25 @@ export function InvoiceSave({
                 label="Mode de paiement *"
                 value={field.value}
                 onChange={field.onChange}
-                options={paymentsMode.map((el) => ({
-                  label: el.name,
-                  value: el.id,
-                }))}
+                options={
+                  paymentModesFn.data?.results.map((el) => ({
+                    label: el.name,
+                    value: el.id,
+                  })) ?? []
+                }
+                actions={
+                  <CommandItem
+                    className="cursor-pointer"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onSelect={() => setOpenPaymentModeModal(true)}
+                  >
+                    <PlusIcon className="mr-2 w-4 h-4" />
+                    <span>Ajouter un mode de paiement</span>
+                  </CommandItem>
+                }
               />
             )}
           />
@@ -250,12 +264,19 @@ export function InvoiceSave({
           clientsFn.refetch();
         }}
       />
+      <PaymentModeSave
+        open={openPaymentModeModal}
+        onOpenChange={setOpenPaymentModeModal}
+        onFinish={(newPaymentMode) => {
+          form.setValue("paymentModeId", newPaymentMode.id);
+          paymentModesFn.refetch();
+        }}
+      />
     </Container>
   );
 }
 
 type InvoiceSaveFormProps = {
   products: GetProducts;
-  paymentsMode: GetPaymentsMode["results"];
   invoice?: GetInvoiceById;
 };

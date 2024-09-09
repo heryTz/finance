@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useTransition } from "react";
 import { Loader } from "@/components/loader";
-import { useGetPaymentsMode } from "../payment-mode-query";
+import { useGetPaymentModeById } from "../payment-mode-query";
 import {
   CreatePaymentModeInput,
   createPaymentModeSchema,
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Modal } from "@/components/modal";
 import { Form, FormField } from "@/components/ui/form";
 import { InputField } from "@/components/input-field";
+import { PaymentMode } from "@prisma/client";
 
 type FormValue = CreatePaymentModeInput;
 
@@ -25,7 +26,7 @@ export function PaymentModeSave({
   onFinish,
 }: PaymentModeSaveProps) {
   const [isPending, startTransition] = useTransition();
-  const paymentModeFn = useGetPaymentsMode(idToEdit);
+  const paymentModeFn = useGetPaymentModeById(idToEdit);
   const paymentMode = paymentModeFn.data;
   const form = useForm<FormValue>({
     resolver: zodResolver(createPaymentModeSchema),
@@ -47,15 +48,16 @@ export function PaymentModeSave({
   const onSubmit = form.handleSubmit((data) => {
     startTransition(async () => {
       try {
+        let newPaymentMode: PaymentMode;
         if (idToEdit) {
-          await updatePaymentModeAction(idToEdit, data);
+          newPaymentMode = await updatePaymentModeAction(idToEdit, data);
           toast.success("Modification effectué avec succès");
         } else {
-          await createPaymentModeAction(data);
+          newPaymentMode = await createPaymentModeAction(data);
           toast.success("Ajout effectué avec succès");
         }
         onOpenChange(false);
-        onFinish?.();
+        onFinish?.(newPaymentMode);
         reset();
       } catch (error) {
         toast.error("Erreur s'est produite");
@@ -117,5 +119,5 @@ type PaymentModeSaveProps = {
   idToEdit?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onFinish?: () => void;
+  onFinish?: (newPaymentMode: PaymentMode) => void;
 };

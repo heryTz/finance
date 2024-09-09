@@ -1,14 +1,27 @@
 import { httpClient } from "@/lib/http-client";
 import { useQuery } from "react-query";
-import type { GetPaymentModeById } from "./payment-mode-service";
+import type {
+  GetPaymentModeById,
+  GetPaymentsMode,
+} from "./payment-mode-service";
 
-export function useGetPaymentsMode(id?: string | null) {
+export function useGetPaymentModeById(id?: string | null) {
   return useQuery({
     queryKey: ["invoice.payments.mode.get", id],
     enabled: !!id,
     queryFn: () =>
       httpClient
         .get<GetPaymentModeById>(`/invoice/payments-mode/${id}`)
+        .then((resp) => resp.data),
+  });
+}
+
+export function useGetPaymentModes() {
+  return useQuery({
+    queryKey: [useGetPaymentModes.name],
+    queryFn: () =>
+      httpClient
+        .get<GetPaymentsMode>(`/invoice/payments-mode`)
         .then((resp) => resp.data),
   });
 }
