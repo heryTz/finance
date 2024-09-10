@@ -1,6 +1,6 @@
 import { InvoiceDocument } from "./components/invoice-document";
 import { getInvoiceById } from "../../invoice-service";
-import { getProvider } from "../../../provider/provider-service";
+import { getProviderById } from "../../../provider/provider-service";
 import { apiGuard } from "@/lib/api-guard";
 import { Empty } from "@/components/empty";
 import { Metadata } from "next";
@@ -16,7 +16,7 @@ export default async function InvoiceDocumentPage({
 }: InvoiceDocumentPageProps) {
   const { user } = await apiGuard();
   const invoice = await getInvoiceById(user.id, params.id);
-  const provider = await getProvider(user.id);
+  const provider = await getProviderById(user.id);
   if (!provider) {
     return (
       <Empty

@@ -2,7 +2,7 @@ import { NotFoundException } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
 import { CreateInvoiceInput, SendInvoiceMailInput } from "./invoice-dto";
 import { sendEmail } from "@/lib/mailer";
-import { getProvider } from "../provider/provider-service";
+import { getProviderById } from "../provider/provider-service";
 
 export async function getProducts(userId: string) {
   const products = await prisma.product.findMany({
@@ -104,7 +104,7 @@ export async function sendInvoiceMail(
   input: SendInvoiceMailInput,
 ) {
   try {
-    const provider = await getProvider(userId);
+    const provider = await getProviderById(userId);
     if (!provider) throw new Error(`Empty provider`);
 
     const invoice = await getInvoiceById(userId, id);

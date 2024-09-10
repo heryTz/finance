@@ -1,32 +1,54 @@
 import { prisma } from "@/lib/prisma";
 import { SaveProviderInput } from "./provider-dto";
-import { Provider } from "@prisma/client";
+import { NotFoundException } from "@/lib/exception";
 
-export async function getProvider(userId: string) {
-  return await prisma.provider.findFirst({
-    where: { ownerId: userId },
+export async function getProviderById(userId: string, id: string) {
+  const provider = await prisma.provider.findFirst({
+    where: { ownerId: userId, id },
   });
-}
-
-export type GetProvider = Awaited<ReturnType<typeof getProvider>>;
-
-export async function saveProvider(userId: string, input: SaveProviderInput) {
-  const data = { ...input, ownerId: userId };
-  const existConfig = await prisma.provider.findFirst({
-    where: { ownerId: userId },
-  });
-
-  let provider: Provider;
-  if (existConfig) {
-    provider = await prisma.provider.update({
-      where: { id: existConfig.id },
-      data,
-    });
-  } else {
-    provider = await prisma.provider.create({ data });
-  }
-
+  if (!provider) throw new NotFoundException();
   return provider;
 }
 
-export type SaveProvider = Awaited<ReturnType<typeof saveProvider>>;
+export type GetProviderById = Awaited<ReturnType<typeof getProviderById>>;
+
+export async function getProviders(userId: string) {
+  const results = await prisma.provider.findMany({
+    where: { ownerId: userId },
+  });
+  return { results };
+}
+
+export type GetProviders = Awaited<ReturnType<typeof getProviders>>;
+
+export async function createProvider(userId: string, input: SaveProviderInput) {
+  const provider = await prisma.provider.create({
+    data: { ...input, ownerId: userId },
+  });
+  return provider;
+}
+
+export type CreateProvider = Awaited<ReturnType<typeof createProvider>>;
+
+export async function updateProvider(
+  userId: string,
+  id: string,
+  input: SaveProviderInput,
+) {
+  const provider = await prisma.provider.update({
+    data: input,
+    where: { id, ownerId: userId },
+  });
+  return provider;
+}
+
+export type UpdateProvider = Awaited<ReturnType<typeof updateProvider>>;
+
+export async function deleteProvider(userId: string, id: string) {
+  const provider = await prisma.provider.delete({
+    where: { id: id, ownerId: userId },
+  });
+  return provider;
+}
+
+export type DeleteProvider = Awaited<ReturnType<typeof deleteProvider>>;

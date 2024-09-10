@@ -7,7 +7,7 @@ import {
   saveProviderInputSchema,
   type SaveProviderInput,
 } from "./provider-dto";
-import { GetProvider } from "./provider-service";
+import { GetProviderById } from "./provider-service";
 import { toast } from "sonner";
 import { Container } from "@/components/container";
 import { Form, FormField } from "@/components/ui/form";
@@ -116,5 +116,5 @@ export default function ProviderPage({ provider }: ProviderPageProps) {
 }
 
 type ProviderPageProps = {
-  provider: GetProvider;
+  provider: GetProviderById;
 };

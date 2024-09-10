@@ -1,16 +1,16 @@
 import { httpClient } from "@/lib/http-client";
 import { useMutation, useQuery } from "react-query";
 import type { SaveProviderInput } from "./provider-dto";
-import type { GetProvider, SaveProvider } from "./provider-service";
+import type { GetProviderById, CreateProvider } from "./provider-service";
 
 export function useSaveProvider() {
   return useMutation("invoice.save.provider", (data: SaveProviderInput) =>
-    httpClient.post<SaveProvider>("/invoice/provider", data),
+    httpClient.post<CreateProvider>("/invoice/provider", data),
   );
 }
 
 export function useGetProvider() {
   return useQuery("invoice.provider", () =>
-    httpClient.get<GetProvider>("/invoice/provider"),
+    httpClient.get<GetProviderById>("/invoice/provider"),
   );
 }

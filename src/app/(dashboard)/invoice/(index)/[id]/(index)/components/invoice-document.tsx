@@ -3,7 +3,7 @@
 import jsPDF from "jspdf";
 import { useState } from "react";
 import { GetInvoiceById } from "../../../invoice-service";
-import { GetProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
+import { GetProviderById } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { InvoicePreview } from "./invoice-preview";
 import { sendInvoiceMailAction } from "../../../invoice-action";
 import { invoiceDetaultFilename } from "../../../components/invoice-list";
@@ -83,5 +83,5 @@ export function InvoiceDocument({ invoice, provider }: InvoiceDocumentProps) {
 
 type InvoiceDocumentProps = {
   invoice: GetInvoiceById;
-  provider: NonNullable<GetProvider>;
+  provider: NonNullable<GetProviderById>;
 };

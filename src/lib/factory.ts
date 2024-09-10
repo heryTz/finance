@@ -7,6 +7,8 @@ import { OperationType } from "@/entity/operation";
 import { faker } from "@faker-js/faker";
 import { z } from "zod";
 import { getStatsQuerySchema } from "@/app/(dashboard)/(stat)/stat-dto";
+import { createProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
+import { SaveProviderInput } from "@/app/(dashboard)/invoice/provider/provider-dto";
 
 export function buildSaveOperationInput(
   operation?: Partial<SaveOperationInput>,
@@ -32,6 +34,17 @@ export function buildSaveClientInput(
   };
 }
 
+export function buildSaveProviderInput(
+  provider?: Partial<SaveProviderInput>,
+): SaveProviderInput {
+  return {
+    address: "address",
+    email: "client@client.com",
+    name: "name",
+    ...provider,
+  };
+}
+
 export async function buildCreateInvoiceInput(
   userId: string,
   invoice?: Partial<CreateInvoiceInput>,
@@ -44,6 +57,11 @@ export async function buildCreateInvoiceInput(
     email: faker.string.alpha() + "@test.com",
     name: faker.person.fullName(),
   });
+  const provider = await createProvider(userId, {
+    address: faker.commerce.department(),
+    email: faker.string.alpha() + "@test.com",
+    name: faker.person.fullName(),
+  });
   return {
     clientId: client.id,
     currency: "Ar",
@@ -51,6 +69,7 @@ export async function buildCreateInvoiceInput(
     tva: 0,
     products: [{ name: "p1", price: 100, qte: 1 }],
     createdAt: new Date(),
+    providerId: provider.id,
     ...invoice,
   };
 }
