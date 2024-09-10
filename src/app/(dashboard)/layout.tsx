@@ -1,12 +1,15 @@
 "use client";
 
 import { AdminGuard } from "@/lib/admin-guard";
-import { ArrowLeftRightIcon, ChartArea, Wallet } from "lucide-react";
+import { ArrowLeftRightIcon, ChartArea, LinkIcon, Wallet } from "lucide-react";
 import { Sidebar } from "@/components/sidebar";
 import { usePathname } from "next/navigation";
 import { Appbar } from "@/components/appbar";
 import { PropsWithChildren } from "react";
 import { routes } from "../routes";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function Component({ children }: PropsWithChildren) {
   const pathname = usePathname();
@@ -39,6 +42,22 @@ export function Component({ children }: PropsWithChildren) {
         <main className="flex flex-1 flex-col p-4 lg:p-6 overflow-auto">
           {children}
         </main>
+        <footer className="px-4 pt-1 lg:px-6 lg:pt-1">
+          <p className="text-sm text-muted-foreground text-right">
+            Open source:{" "}
+            <Link
+              target="_blank"
+              href={"https://github.com/heryTz/finance"}
+              className={cn(
+                buttonVariants({ variant: "link" }),
+                "p-0 text-muted-foreground",
+              )}
+            >
+              GitHub
+              <LinkIcon className="inline-block ml-1 w-3 h-3" />
+            </Link>
+          </p>
+        </footer>
       </div>
     </div>
   );
