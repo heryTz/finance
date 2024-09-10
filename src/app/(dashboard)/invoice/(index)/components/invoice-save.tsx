@@ -25,6 +25,7 @@ import { useSeo } from "@/lib/use-seo";
 import { useGetInvoiceClients } from "../../client/client-query";
 import { useGetPaymentModes } from "../../payment-mode/payment-mode-query";
 import { PaymentModeSave } from "../../payment-mode/components/payment-mode-save";
+import { ComboboxField } from "@/components/combobox-field";
 
 export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
@@ -88,8 +89,11 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
             control={form.control}
             name="clientId"
             render={({ field }) => (
-              <AutocompleteField
+              <ComboboxField
                 label="Client *"
+                placeholder="Sélectionner un client"
+                searchPlaceholder="Chercher un client"
+                emptySearchMessage="Aucun client"
                 value={field.value}
                 onChange={field.onChange}
                 options={
@@ -116,22 +120,13 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
           />
           <FormField
             control={form.control}
-            name="tva"
-            render={({ field }) => (
-              <InputField
-                type="number"
-                label="TVA (%)"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
             name={`currency`}
             render={({ field }) => (
-              <SelectField
-                label="Devis *"
+              <ComboboxField
+                label="Devise *"
+                placeholder="Sélectionner une devise"
+                searchPlaceholder="Chercher une devise"
+                emptySearchMessage="Aucune devise"
                 value={field.value}
                 onChange={field.onChange}
                 options={getCurrency().map((el) => ({ value: el, label: el }))}
@@ -142,8 +137,11 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
             control={form.control}
             name="paymentModeId"
             render={({ field }) => (
-              <AutocompleteField
+              <ComboboxField
                 label="Mode de paiement *"
+                placeholder="Sélectionner un mode de paiement"
+                searchPlaceholder="Chercher un mode de paiement"
+                emptySearchMessage="Aucun mode de paiement"
                 value={field.value}
                 onChange={field.onChange}
                 options={
@@ -165,6 +163,18 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
                     <span>Ajouter un mode de paiement</span>
                   </CommandItem>
                 }
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tva"
+            render={({ field }) => (
+              <InputField
+                type="number"
+                label="TVA (%)"
+                value={field.value}
+                onChange={field.onChange}
               />
             )}
           />
@@ -196,8 +206,6 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
                     name={`products.${index}.name`}
                     render={({ field: fieldName }) => (
                       <AutocompleteField
-                        freeSolo
-                        hideEmptySuggestion
                         label="Nom *"
                         formItemProps={{ className: "flex-1" }}
                         value={fieldName.value}

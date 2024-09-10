@@ -1,18 +1,13 @@
-import { PropsWithChildren, useRef, useState } from "react";
+import { PropsWithChildren } from "react";
 import Tippy from "@tippyjs/react/headless";
 import { cn } from "@/lib/utils";
-
-export function usePopoverV2<T extends Element>() {
-  const [open, setOpen] = useState(false);
-  const anchor = useRef<T>(null);
-  return { open, setOpen, anchor };
-}
+import { usePopover } from "@/lib/use-popover";
 
 type PopoverV2Props = PropsWithChildren<{
   className?: string;
   triggerComponent?: React.ReactNode;
 }> &
-  ReturnType<typeof usePopoverV2>;
+  ReturnType<typeof usePopover>;
 
 export function PopoverV2({
   className,

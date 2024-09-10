@@ -53,9 +53,8 @@ export function StatFilterSheet({
             name="label"
             render={({ field }) => (
               <AutocompleteField
-                hideEmptySuggestion
                 label="Libellé"
-                inputProps={{ placeholder: "Rechercher..." }}
+                inputProps={{ placeholder: "Chercher..." }}
                 options={
                   operationsFn.data?.data.results.map((el) => ({
                     value: el.label,

@@ -111,7 +111,6 @@ export function OperationSave({
               render={({ field }) => (
                 <AutocompleteField
                   label="Libellé"
-                  freeSolo
                   value={field.value}
                   onChange={(value) => {
                     field.onChange(value);
@@ -125,7 +124,6 @@ export function OperationSave({
                       );
                     }
                   }}
-                  hideEmptySuggestion
                   options={
                     operationsFn.data?.data.results.map((el) => ({
                       label: el.label,
