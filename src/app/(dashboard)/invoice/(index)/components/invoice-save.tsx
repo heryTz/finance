@@ -10,7 +10,7 @@ import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
 import { useState, useTransition } from "react";
 import { Container } from "@/components/container";
 import { toast } from "sonner";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormMessageError } from "@/components/ui/form";
 import { AutocompleteField } from "@/components/autocomplete-field";
 import { InputField } from "@/components/input-field";
 import { SelectField } from "@/components/select-field";
@@ -26,6 +26,7 @@ import { useGetInvoiceClients } from "../../client/client-query";
 import { useGetPaymentModes } from "../../payment-mode/payment-mode-query";
 import { PaymentModeSave } from "../../payment-mode/components/payment-mode-save";
 import { ComboboxField } from "@/components/combobox-field";
+import { cn } from "@/lib/utils";
 
 export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
@@ -48,6 +49,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
     },
     resolver: zodResolver(createInvoiceSchema),
   });
+  const { errors } = form.formState;
   const productsField = useFieldArray({
     control: form.control,
     name: "products",
@@ -189,7 +191,16 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
               />
             )}
           />
-          <p className="font-semibold text-lg underline mt-2">Produits</p>
+          <p
+            className={cn("font-semibold text-lg underline mt-2", {
+              "text-destructive": errors.products?.message,
+            })}
+          >
+            Produits
+          </p>
+          {errors.products?.message && (
+            <FormMessageError>{errors.products.message}</FormMessageError>
+          )}
           <div className="grid gap-4">
             {productsField.fields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-4">
