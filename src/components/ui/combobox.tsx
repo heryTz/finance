@@ -82,13 +82,15 @@ export function Combobox({
                     </CommandItem>
                   ))}
                 </CommandGroup>
-                {actions && (
-                  <>
-                    <CommandSeparator />
-                    <CommandGroup heading="Actions">{actions}</CommandGroup>
-                  </>
-                )}
               </div>
+              {actions && (
+                <>
+                  <CommandSeparator className="shrink-0" />
+                  <CommandGroup heading="Actions" className="shrink-0">
+                    {actions}
+                  </CommandGroup>
+                </>
+              )}
             </div>
           </CommandList>
         </Command>
