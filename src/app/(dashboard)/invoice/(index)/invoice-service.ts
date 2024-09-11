@@ -2,7 +2,6 @@ import { NotFoundException } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
 import { CreateInvoiceInput, SendInvoiceMailInput } from "./invoice-dto";
 import { sendEmail } from "@/lib/mailer";
-import { getProvider } from "../provider/provider-service";
 
 export async function getProducts(userId: string) {
   const products = await prisma.product.findMany({
@@ -29,7 +28,7 @@ export type GetInvoices = Awaited<ReturnType<typeof getInvoices>>;
 export async function getInvoiceById(userId: string, id: string) {
   const invoice = await prisma.invoice.findFirst({
     where: { id, ownerId: userId },
-    include: { Products: true, Client: true, Payment: true },
+    include: { Products: true, Client: true, Payment: true, Provider: true },
   });
   if (!invoice) throw new NotFoundException();
   return invoice;
@@ -104,11 +103,9 @@ export async function sendInvoiceMail(
   input: SendInvoiceMailInput,
 ) {
   try {
-    const provider = await getProvider(userId);
-    if (!provider) throw new Error(`Empty provider`);
-
     const invoice = await getInvoiceById(userId, id);
     const content = input.content.replace(/(?:\r\n|\r|\n)/g, "<br>");
+    const provider = invoice.Provider;
     await sendEmail({
       ...input,
       content,

@@ -5,7 +5,7 @@ import { Product } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { InfoIcon } from "lucide-react";
 import { GetInvoices } from "../invoice-service";
-import { InvoiceTableAction } from "./invoice-table-action";
+import { InvoiceAction } from "./invoice-action";
 
 export function useColumnDefs() {
   const columns: ColumnDef<ArrayElement<GetInvoices["results"]>>[] = [
@@ -79,7 +79,7 @@ export function useColumnDefs() {
       meta: {
         className: "w-[150px]",
       },
-      cell: ({ row: { original } }) => <InvoiceTableAction row={original} />,
+      cell: ({ row: { original } }) => <InvoiceAction row={original} />,
     },
   ];
 

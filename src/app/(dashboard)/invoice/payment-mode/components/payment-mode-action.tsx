@@ -15,7 +15,7 @@ import { GetPaymentsMode } from "../payment-mode-service";
 import { PaymentModeSave } from "./payment-mode-save";
 import { deletePaymentModeAction } from "../payment-mode-action";
 
-export function PaymentModeTableAction({ row }: PaymentModeTableActionProps) {
+export function PaymentModeAction({ row }: PaymentModeActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -61,6 +61,6 @@ export function PaymentModeTableAction({ row }: PaymentModeTableActionProps) {
     </>
   );
 }
-type PaymentModeTableActionProps = {
+type PaymentModeActionProps = {
   row: ArrayElement<GetPaymentsMode["results"]>;
 };

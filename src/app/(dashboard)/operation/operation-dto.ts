@@ -12,7 +12,7 @@ export const saveOperationInputSchema = zd.object({
   label: zd.string().min(1),
   type: zd.nativeEnum(OperationType),
   tags: zd.array(zd.string()),
-  amount: zd.coerce.number().min(1),
+  amount: zd.coerce.number().min(0),
   createdAt: zd.coerce.date(),
 });
 

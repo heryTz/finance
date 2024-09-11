@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField } from "@/components/ui/form";
 import { AutocompleteField } from "@/components/autocomplete-field";
 import { MultiSelectField } from "@/components/multi-select-field";
-import { useOperations } from "../../operation/operation-query";
+import { useGetOperations } from "../../operation/operation-query";
 import { useTags } from "../../tag/tag-query";
 
 export function StatFilterSheet({
@@ -16,7 +16,7 @@ export function StatFilterSheet({
   onApply,
   value,
 }: StatFilterSheetProps) {
-  const operationsFn = useOperations({ distinct: "true" });
+  const operationsFn = useGetOperations({ distinct: "true" });
   const tagsFn = useTags();
 
   const form = useForm<zd.infer<typeof getStatsQuerySchema>>({
@@ -53,11 +53,10 @@ export function StatFilterSheet({
             name="label"
             render={({ field }) => (
               <AutocompleteField
-                hideEmptySuggestion
                 label="Libellé"
-                inputProps={{ placeholder: "Rechercher..." }}
+                inputProps={{ placeholder: "Chercher..." }}
                 options={
-                  operationsFn.data?.data.results.map((el) => ({
+                  operationsFn.data?.results.map((el) => ({
                     value: el.label,
                     label: el.label,
                   })) ?? []

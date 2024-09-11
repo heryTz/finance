@@ -2,13 +2,8 @@
 import { OperationType } from "@/entity/operation";
 import { useForm } from "react-hook-form";
 import { useTags } from "../../tag/tag-query";
-import {
-  useOperationById,
-  useOperationSave,
-  useOperationUpdate,
-  useOperations,
-} from "../operation-query";
-import { useEffect } from "react";
+import { useGetOperationById, useGetOperations } from "../operation-query";
+import { useEffect, useTransition } from "react";
 import { Modal } from "@/components/modal";
 import { Loader } from "@/components/loader";
 import { Form, FormField } from "@/components/ui/form";
@@ -21,6 +16,10 @@ import { MultiSelectField } from "@/components/multi-select-field";
 import { AutocompleteField } from "@/components/autocomplete-field";
 import { zd } from "@/lib/zod";
 import { toast } from "sonner";
+import {
+  createOperationAction,
+  updateOperationAction,
+} from "../operation-action";
 
 // TODO: Fix error js - press enter on input autocomplete and press arrow down
 
@@ -32,12 +31,11 @@ export function OperationSave({
   idToEdit,
   onFinish,
 }: OperationSaveProps) {
+  const [isPending, startTransition] = useTransition();
   const tagsFn = useTags();
-  const operationFn = useOperationById(idToEdit);
+  const operationFn = useGetOperationById(idToEdit);
   const operation = operationFn.data?.data;
-  const createFn = useOperationSave();
-  const updateFn = useOperationUpdate();
-  const operationsFn = useOperations({ distinct: "true" });
+  const operationsFn = useGetOperations({ distinct: "true" });
   const form = useForm<FormData>({
     resolver: zodResolver(saveOperationInputSchema),
     defaultValues: {
@@ -66,22 +64,24 @@ export function OperationSave({
     }
   };
 
-  const onSubmit = form.handleSubmit(async (data) => {
-    try {
-      if (idToEdit) {
-        await updateFn.mutateAsync({ ...data, id: idToEdit });
-        toast.success("Modification effectuée avec succès");
-      } else {
-        await createFn.mutateAsync(data);
-        toast.success("Ajout effectué avec succès");
+  const onSubmit = form.handleSubmit((data) =>
+    startTransition(async () => {
+      try {
+        if (idToEdit) {
+          await updateOperationAction(idToEdit, data);
+          toast.success("Modification effectuée avec succès");
+        } else {
+          await createOperationAction(data);
+          toast.success("Ajout effectué avec succès");
+        }
+        onOpenChange(false);
+        onFinish?.();
+        reset();
+      } catch (error) {
+        toast.error("Une erreur s'est produite");
       }
-      onOpenChange(false);
-      onFinish?.();
-      reset();
-    } catch (error) {
-      toast.error("Une erreur s'est produite");
-    }
-  });
+    }),
+  );
 
   const onCancel = () => {
     onOpenChange(false);
@@ -96,8 +96,7 @@ export function OperationSave({
       cancel={{ onClick: onCancel }}
       submit={{
         onClick: onSubmit,
-        disabled:
-          createFn.isLoading || operationFn.isLoading || updateFn.isLoading,
+        disabled: isPending || operationFn.isLoading,
       }}
     >
       {idToEdit && operationFn.isLoading ? (
@@ -111,11 +110,10 @@ export function OperationSave({
               render={({ field }) => (
                 <AutocompleteField
                   label="Libellé"
-                  freeSolo
                   value={field.value}
                   onChange={(value) => {
                     field.onChange(value);
-                    const item = operationsFn.data?.data.results.find(
+                    const item = operationsFn.data?.results.find(
                       (el) => el.label === value,
                     );
                     if (item) {
@@ -125,9 +123,8 @@ export function OperationSave({
                       );
                     }
                   }}
-                  hideEmptySuggestion
                   options={
-                    operationsFn.data?.data.results.map((el) => ({
+                    operationsFn.data?.results.map((el) => ({
                       label: el.label,
                       value: el.label,
                     })) ?? []

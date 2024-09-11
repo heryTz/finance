@@ -1,37 +1,24 @@
 import { httpClient } from "@/lib/http-client";
 import { Client } from "@prisma/client";
-import { useMutation, useQuery } from "react-query";
-import type { SaveClientInput } from "./client-dto";
+import { useQuery } from "react-query";
 import { GetClients } from "./client-service";
 
-export function useCreateInvoiceClient() {
-  return useMutation("invoice.client.create", (data: SaveClientInput) =>
-    httpClient.post<Client>("/invoice/client", data),
-  );
-}
-
-export function useGetInvoiceClient() {
-  return useQuery("invoice.client.get", () =>
+export function useGetClient() {
+  return useQuery(useGetClient.name, () =>
     httpClient.get<GetClients>("/invoice/client"),
   );
 }
 
-export function useGetByIdInvoiceClient(id?: string | null) {
+export function useGetClientById(id?: string | null) {
   return useQuery({
-    queryKey: ["invoice.client.get", id],
+    queryKey: [useGetClientById.name, id],
     enabled: !!id,
     queryFn: () => httpClient.get<Client>(`/invoice/client/${id}`),
   });
 }
 
-export function usePutInvoiceClient(id?: string | null) {
-  return useMutation(["invoice.client.put", id], (data: SaveClientInput) =>
-    httpClient.put<Client>(`/invoice/client/${id}`, data),
-  );
-}
-
-export function useInvoiceDeleteClient(id: string | null) {
-  return useMutation(["invoice.client.delete", id], () =>
-    httpClient.delete<Client>(`/invoice/client/${id}`),
+export function useGetClients() {
+  return useQuery(useGetClients.name, () =>
+    httpClient.get<GetClients>("/invoice/client").then((res) => res.data),
   );
 }

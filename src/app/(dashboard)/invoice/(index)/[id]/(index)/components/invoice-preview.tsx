@@ -1,4 +1,3 @@
-import { GetProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { GetInvoiceById } from "../../../invoice-service";
 import dayjs from "dayjs";
 import { humanAmount } from "@/lib/humanizer";
@@ -17,9 +16,9 @@ import {
 
 export function InvoicePreview({
   invoice,
-  provider,
   invoiceClassName,
 }: InvoicePreviewProps) {
+  const provider = invoice.Provider;
   const providerData = [
     { label: "Nom", value: provider.name.toUpperCase() },
     { label: "Adresse", value: provider.address },
@@ -146,7 +145,6 @@ export function InvoicePreview({
 
 type InvoicePreviewProps = {
   invoice: GetInvoiceById;
-  provider: NonNullable<GetProvider>;
   invoiceClassName: string;
 };
 

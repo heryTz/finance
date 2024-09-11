@@ -118,6 +118,7 @@ model Provider {
   updatedAt DateTime? @updatedAt
   Owner     User      @relation(fields: [ownerId], references: [id])
   ownerId   String
+  Invoice   Invoice[]
 }
 
 model Product {
@@ -161,6 +162,8 @@ model Invoice {
   currency      String
   Payment       PaymentMode @relation(fields: [paymentModeId], references: [id])
   paymentModeId String
+  Provider      Provider    @relation(fields: [providerId], references: [id])
+  providerId    String
 
   @@unique([ref, clientId])
 }

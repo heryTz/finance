@@ -1,6 +1,3 @@
-"use client";
-
-import { ArrayElement } from "@/lib/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,15 +8,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { GetInvoices } from "../invoice-service";
 import { ModalDelete } from "@/components/modal-delete";
-import { deleteInvoiceAction } from "../invoice-action";
-import { routes } from "@/app/routes";
+import { useRouter } from "next/navigation";
+import { ArrayElement } from "@/lib/types";
+import { GetProviders } from "../provider-service";
+import { ProviderSave } from "./provider-save";
+import { deleteProviderAction } from "../provider-action";
 
-export function InvoiceTableAction({ row }: InvoiceTableActionProps) {
-  const { push, refresh } = useRouter();
+export function ProviderAction({ row }: ProviderActionProps) {
+  const router = useRouter();
+  const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+
+  const onRefetch = () => {
+    router.refresh();
+  };
 
   return (
     <>
@@ -32,10 +35,7 @@ export function InvoiceTableAction({ row }: InvoiceTableActionProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => push(routes.invoiceShow(row.id))}>
-            Télécharger
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => push(routes.invoiceEdit(row.id))}>
+          <DropdownMenuItem onClick={() => setOpenEdit(true)}>
             Editer
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpenDelete(true)}>
@@ -43,21 +43,24 @@ export function InvoiceTableAction({ row }: InvoiceTableActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {openDelete && (
-        <ModalDelete
-          open={openDelete}
-          onOpenChange={setOpenDelete}
-          label={`No ${row.ref}`}
-          onDelete={async () => {
-            await deleteInvoiceAction(row.id);
-            refresh();
-          }}
-        />
-      )}
+      <ProviderSave
+        open={openEdit}
+        onOpenChange={setOpenEdit}
+        onFinish={onRefetch}
+        idToEdit={row.id}
+      />
+      <ModalDelete
+        open={openDelete}
+        onOpenChange={setOpenDelete}
+        label={row.name}
+        onDelete={async () => {
+          await deleteProviderAction(row.id);
+          onRefetch();
+        }}
+      />
     </>
   );
 }
-
-type InvoiceTableActionProps = {
-  row: ArrayElement<GetInvoices["results"]>;
+type ProviderActionProps = {
+  row: ArrayElement<GetProviders["results"]>;
 };

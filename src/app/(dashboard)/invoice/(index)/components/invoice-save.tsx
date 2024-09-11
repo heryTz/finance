@@ -1,6 +1,5 @@
 "use client";
 
-import { GetClients } from "../../client/client-service";
 import { GetInvoiceById, GetProducts } from "../invoice-service";
 import { createInvoiceAction, updateInvoiceAction } from "../invoice-action";
 import { getCurrency, Currency } from "../invoice-util";
@@ -8,28 +7,38 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
-import { useTransition } from "react";
-import { GetPaymentsMode } from "../../payment-mode/payment-mode-service";
+import { useState, useTransition } from "react";
 import { Container } from "@/components/container";
 import { toast } from "sonner";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormMessageError } from "@/components/ui/form";
 import { AutocompleteField } from "@/components/autocomplete-field";
 import { InputField } from "@/components/input-field";
 import { SelectField } from "@/components/select-field";
 import { CalendarField } from "@/components/calendar-field";
 import { Button } from "@/components/ui/button";
-import { TrashIcon } from "lucide-react";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { routes } from "@/app/routes";
+import { ClientSave } from "../../client/components/client-save";
+import { CommandItem } from "@/components/ui/command";
+import { useSeo } from "@/lib/use-seo";
+import { useGetClients } from "../../client/client-query";
+import { useGetPaymentModes } from "../../payment-mode/payment-mode-query";
+import { PaymentModeSave } from "../../payment-mode/components/payment-mode-save";
+import { ComboboxField } from "@/components/combobox-field";
+import { cn } from "@/lib/utils";
+import { useGetProviders } from "../../provider/provider-query";
+import { ProviderSave } from "../../provider/components/provider-save";
 
-export function InvoiceSave({
-  clients,
-  products,
-  paymentsMode,
-  invoice,
-}: InvoiceSaveFormProps) {
+export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
+  const clientsFn = useGetClients();
+  const paymentModesFn = useGetPaymentModes();
+  const providersFn = useGetProviders();
+  const [openClientModal, setOpenClientModal] = useState(false);
+  const [openPaymentModeModal, setOpenPaymentModeModal] = useState(false);
+  const [openProviderModal, setOpenProviderModal] = useState(false);
   const invoiceParsed = invoice
     ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
     : null;
@@ -41,9 +50,11 @@ export function InvoiceSave({
       currency: invoiceParsed?.currency as Currency,
       paymentModeId: invoiceParsed?.paymentModeId,
       createdAt: invoiceParsed?.createdAt ?? new Date(),
+      providerId: invoiceParsed?.providerId,
     },
     resolver: zodResolver(createInvoiceSchema),
   });
+  const { errors } = form.formState;
   const productsField = useFieldArray({
     control: form.control,
     name: "products",
@@ -65,13 +76,15 @@ export function InvoiceSave({
     });
   });
 
+  const title = invoice
+    ? `Modification de la facture "No ${invoice.ref}"`
+    : "Créer une facture";
+
+  useSeo({ title });
+
   return (
     <Container
-      title={
-        invoice
-          ? `Modification de la facture "No ${invoice.ref}"`
-          : "Créer une facture"
-      }
+      title={title}
       breadcrumb={[
         { label: "Facture", path: routes.invoice() },
         { label: invoice ? "Modification" : "Création" },
@@ -83,14 +96,113 @@ export function InvoiceSave({
             control={form.control}
             name="clientId"
             render={({ field }) => (
-              <AutocompleteField
+              <ComboboxField
                 label="Client *"
+                placeholder="Sélectionner un client"
+                searchPlaceholder="Chercher un client"
+                emptySearchMessage="Aucun client"
                 value={field.value}
                 onChange={field.onChange}
-                options={clients.results.map((el) => ({
-                  value: el.id,
-                  label: el.name,
-                }))}
+                options={
+                  clientsFn.data?.results.map((el) => ({
+                    value: el.id,
+                    label: el.name,
+                  })) ?? []
+                }
+                actions={
+                  <CommandItem
+                    className="cursor-pointer"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onSelect={() => setOpenClientModal(true)}
+                  >
+                    <PlusIcon className="mr-2 w-4 h-4" />
+                    <span>Ajouter un client</span>
+                  </CommandItem>
+                }
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="providerId"
+            render={({ field }) => (
+              <ComboboxField
+                label="Prestataire *"
+                placeholder="Sélectionner un prestataire"
+                searchPlaceholder="Chercher un prestataire"
+                emptySearchMessage="Aucun prestataire"
+                value={field.value}
+                onChange={field.onChange}
+                options={
+                  providersFn.data?.results.map((el) => ({
+                    value: el.id,
+                    label: el.name,
+                  })) ?? []
+                }
+                actions={
+                  <CommandItem
+                    className="cursor-pointer"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onSelect={() => setOpenProviderModal(true)}
+                  >
+                    <PlusIcon className="mr-2 w-4 h-4" />
+                    <span>Ajouter un prestataire</span>
+                  </CommandItem>
+                }
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={`currency`}
+            render={({ field }) => (
+              <ComboboxField
+                label="Devise *"
+                placeholder="Sélectionner une devise"
+                searchPlaceholder="Chercher une devise"
+                emptySearchMessage="Aucune devise"
+                value={field.value}
+                onChange={field.onChange}
+                options={getCurrency().map((el) => ({ value: el, label: el }))}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="paymentModeId"
+            render={({ field }) => (
+              <ComboboxField
+                label="Mode de paiement *"
+                placeholder="Sélectionner un mode de paiement"
+                searchPlaceholder="Chercher un mode de paiement"
+                emptySearchMessage="Aucun mode de paiement"
+                value={field.value}
+                onChange={field.onChange}
+                options={
+                  paymentModesFn.data?.results.map((el) => ({
+                    label: el.name,
+                    value: el.id,
+                  })) ?? []
+                }
+                actions={
+                  <CommandItem
+                    className="cursor-pointer"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onSelect={() => setOpenPaymentModeModal(true)}
+                  >
+                    <PlusIcon className="mr-2 w-4 h-4" />
+                    <span>Ajouter un mode de paiement</span>
+                  </CommandItem>
+                }
               />
             )}
           />
@@ -108,33 +220,6 @@ export function InvoiceSave({
           />
           <FormField
             control={form.control}
-            name={`currency`}
-            render={({ field }) => (
-              <SelectField
-                label="Devis *"
-                value={field.value}
-                onChange={field.onChange}
-                options={getCurrency().map((el) => ({ value: el, label: el }))}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="paymentModeId"
-            render={({ field }) => (
-              <AutocompleteField
-                label="Mode de paiement *"
-                value={field.value}
-                onChange={field.onChange}
-                options={paymentsMode.map((el) => ({
-                  label: el.name,
-                  value: el.id,
-                }))}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
             name="createdAt"
             render={({ field }) => (
               <CalendarField
@@ -144,7 +229,16 @@ export function InvoiceSave({
               />
             )}
           />
-          <p className="font-semibold text-lg underline mt-2">Produits</p>
+          <p
+            className={cn("font-semibold text-lg underline mt-2", {
+              "text-destructive": errors.products?.message,
+            })}
+          >
+            Produits
+          </p>
+          {errors.products?.message && (
+            <FormMessageError>{errors.products.message}</FormMessageError>
+          )}
           <div className="grid gap-4">
             {productsField.fields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-4">
@@ -161,8 +255,6 @@ export function InvoiceSave({
                     name={`products.${index}.name`}
                     render={({ field: fieldName }) => (
                       <AutocompleteField
-                        freeSolo
-                        hideEmptySuggestion
                         label="Nom *"
                         formItemProps={{ className: "flex-1" }}
                         value={fieldName.value}
@@ -221,13 +313,35 @@ export function InvoiceSave({
           </div>
         </form>
       </Form>
+      <ClientSave
+        open={openClientModal}
+        onOpenChange={setOpenClientModal}
+        onFinish={({ id }) => {
+          form.setValue("clientId", id);
+          clientsFn.refetch();
+        }}
+      />
+      <ProviderSave
+        open={openProviderModal}
+        onOpenChange={setOpenProviderModal}
+        onFinish={({ id }) => {
+          form.setValue("providerId", id);
+          providersFn.refetch();
+        }}
+      />
+      <PaymentModeSave
+        open={openPaymentModeModal}
+        onOpenChange={setOpenPaymentModeModal}
+        onFinish={({ id }) => {
+          form.setValue("paymentModeId", id);
+          paymentModesFn.refetch();
+        }}
+      />
     </Container>
   );
 }
 
 type InvoiceSaveFormProps = {
-  clients: GetClients;
   products: GetProducts;
-  paymentsMode: GetPaymentsMode["results"];
   invoice?: GetInvoiceById;
 };

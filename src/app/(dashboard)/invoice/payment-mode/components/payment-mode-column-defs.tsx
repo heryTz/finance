@@ -2,7 +2,7 @@ import { humanDate } from "@/lib/humanizer";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrayElement } from "@/lib/types";
 import { GetPaymentsMode } from "../payment-mode-service";
-import { PaymentModeTableAction } from "./payment-mode-table-action";
+import { PaymentModeAction } from "./payment-mode-action";
 
 export function useColumnDefs() {
   const columns: ColumnDef<ArrayElement<GetPaymentsMode["results"]>>[] = [
@@ -20,7 +20,7 @@ export function useColumnDefs() {
     {
       accessorKey: "action",
       header: "Action",
-      cell: (props) => <PaymentModeTableAction row={props.row.original} />,
+      cell: (props) => <PaymentModeAction row={props.row.original} />,
     },
   ];
 

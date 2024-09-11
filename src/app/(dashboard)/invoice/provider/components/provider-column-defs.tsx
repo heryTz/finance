@@ -1,12 +1,11 @@
 import { humanDate } from "@/lib/humanizer";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrayElement } from "@/lib/types";
-import { GetClients } from "../client-service";
-import { ClientAction } from "./client-action";
+import { GetProviders } from "../provider-service";
+import { ProviderAction } from "./provider-action";
 
 export function useColumnDefs() {
-  const columns: ColumnDef<ArrayElement<GetClients["results"]>>[] = [
-    { accessorKey: "ref", header: "Ref", meta: { className: "w-[100px]" } },
+  const columns: ColumnDef<ArrayElement<GetProviders["results"]>>[] = [
     { accessorKey: "name", header: "Nom", meta: { className: "w-[400px]" } },
     { accessorKey: "email", header: "Email", meta: { className: "w-[250px]" } },
     {
@@ -27,7 +26,7 @@ export function useColumnDefs() {
       accessorKey: "action",
       header: "Action",
       meta: { className: "w-[100px]" },
-      cell: (props) => <ClientAction row={props.row.original} />,
+      cell: (props) => <ProviderAction row={props.row.original} />,
     },
   ];
 

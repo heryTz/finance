@@ -1,5 +1,6 @@
+"use client";
+
 import { ArrayElement } from "@/lib/types";
-import { GetOperations } from "../operation-service";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,20 +11,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
-import { OperationSave } from "./operation-save";
-import { useQueryClient } from "react-query";
-import { useGetOperations } from "../operation-query";
+import { useRouter } from "next/navigation";
+import { GetInvoices } from "../invoice-service";
 import { ModalDelete } from "@/components/modal-delete";
-import { deleteOperationAction } from "../operation-action";
+import { deleteInvoiceAction } from "../invoice-action";
+import { routes } from "@/app/routes";
 
-export function OperationAction({ row }: OperationActionProps) {
-  const queryClient = useQueryClient();
-  const [openEdit, setOpenEdit] = useState(false);
+export function InvoiceAction({ row }: InvoiceActionProps) {
+  const { push, refresh } = useRouter();
   const [openDelete, setOpenDelete] = useState(false);
-
-  const onRefetch = () => {
-    queryClient.refetchQueries({ queryKey: [useGetOperations.name] });
-  };
 
   return (
     <>
@@ -36,7 +32,10 @@ export function OperationAction({ row }: OperationActionProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => setOpenEdit(true)}>
+          <DropdownMenuItem onClick={() => push(routes.invoiceShow(row.id))}>
+            Télécharger
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => push(routes.invoiceEdit(row.id))}>
             Editer
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpenDelete(true)}>
@@ -44,25 +43,21 @@ export function OperationAction({ row }: OperationActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <OperationSave
-        idToEdit={row.id}
-        open={openEdit}
-        onOpenChange={setOpenEdit}
-        onFinish={onRefetch}
-      />
-      <ModalDelete
-        open={openDelete}
-        onOpenChange={setOpenDelete}
-        label={row.label}
-        onDelete={async () => {
-          await deleteOperationAction(row.id);
-          onRefetch();
-        }}
-      />
+      {openDelete && (
+        <ModalDelete
+          open={openDelete}
+          onOpenChange={setOpenDelete}
+          label={`No ${row.ref}`}
+          onDelete={async () => {
+            await deleteInvoiceAction(row.id);
+            refresh();
+          }}
+        />
+      )}
     </>
   );
 }
 
-type OperationActionProps = {
-  row: ArrayElement<GetOperations["results"]>;
+type InvoiceActionProps = {
+  row: ArrayElement<GetInvoices["results"]>;
 };

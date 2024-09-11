@@ -161,6 +161,20 @@ const FormDescription = React.forwardRef<
 });
 FormDescription.displayName = "FormDescription";
 
+const FormMessageError = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => {
+  return (
+    <p
+      ref={ref}
+      className={cn("text-sm text-destructive", className)}
+      {...props}
+    />
+  );
+});
+FormMessageError.displayName = "FormMessageError";
+
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -178,14 +192,14 @@ const FormMessage = React.forwardRef<
   }
 
   return (
-    <p
+    <FormMessageError
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium text-destructive", className)}
+      className={className}
       {...props}
     >
       {body}
-    </p>
+    </FormMessageError>
   );
 });
 FormMessage.displayName = "FormMessage";
@@ -200,4 +214,5 @@ export {
   FormMessage,
   FormField,
   FormControlWithArea,
+  FormMessageError,
 };

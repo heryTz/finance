@@ -3,6 +3,7 @@ import { getCurrency } from "./invoice-util";
 
 export const createInvoiceSchema = z.object({
   clientId: z.string().min(1),
+  providerId: z.string().min(1),
   paymentModeId: z.string().min(1),
   tva: z.coerce.number().nullish(),
   currency: z.enum(getCurrency()),

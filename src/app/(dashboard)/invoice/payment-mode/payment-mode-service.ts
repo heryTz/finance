@@ -1,6 +1,7 @@
 import { NotFoundException } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
 import { CreatePaymentModeInput } from "./payment-mode-dto";
+import { PaymentMode } from "@prisma/client";
 
 export async function getPaymentModeById(userId: string, id: string) {
   const mode = await prisma.paymentMode.findFirst({
@@ -23,7 +24,7 @@ export async function updatePaymentMode(
   userId: string,
   id: string,
   input: CreatePaymentModeInput,
-) {
+): Promise<PaymentMode> {
   const payment = await prisma.paymentMode.update({
     data: { ...input },
     where: { id, onwerId: userId },

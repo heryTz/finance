@@ -4,7 +4,7 @@ import { GetInvoiceById } from "./invoice-service";
 
 export function useGetInvoiceById(id: string | null) {
   return useQuery({
-    queryKey: ["invoice.get", id],
+    queryKey: [useGetInvoiceById.name, id],
     enabled: !!id,
     queryFn: () =>
       httpClient
