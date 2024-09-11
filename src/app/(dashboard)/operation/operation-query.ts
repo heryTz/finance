@@ -6,9 +6,11 @@ import type { GetOperationById, GetOperations } from "./operation-service";
 export function useGetOperations({ q, distinct }: GetOperationQuery = {}) {
   return useQuery([useGetOperations.name, q, distinct], ({ queryKey }) => {
     const [_, q, distinct] = queryKey;
-    return httpClient.get<GetOperations>(`/operations`, {
-      params: { q, distinct },
-    });
+    return httpClient
+      .get<GetOperations>(`/operations`, {
+        params: { q, distinct },
+      })
+      .then((resp) => resp.data);
   });
 }
 

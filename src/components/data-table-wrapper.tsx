@@ -3,6 +3,8 @@ import { Container } from "./container";
 import { Button } from "./ui/button";
 import { Empty } from "./empty";
 import { cn } from "@/lib/utils";
+import { Loader } from "./loader";
+import { ErrorSection } from "./error-section";
 
 export function DataTableWrapper({
   cta,
@@ -10,13 +12,15 @@ export function DataTableWrapper({
   action,
   count,
   emptyProps,
+  error,
+  loading,
   ...containerProps
 }: DataTableWrapperProps) {
   return (
     <Container
       action={
         <>
-          {count > 0 ? (
+          {!loading && count > 0 ? (
             <Button onClick={cta.onClick}>{cta.label}</Button>
           ) : null}
           {action}
@@ -24,7 +28,11 @@ export function DataTableWrapper({
       }
       {...containerProps}
     >
-      {count === 0 ? (
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <ErrorSection />
+      ) : count === 0 ? (
         <Empty
           withBorder
           {...emptyProps}
@@ -41,6 +49,8 @@ export function DataTableWrapper({
 type DataTableWrapperProps = ComponentProps<typeof Container> &
   PropsWithChildren<{
     count: number;
+    loading?: boolean;
+    error?: unknown;
     cta: {
       label: string;
       onClick: () => void;

@@ -17,7 +17,7 @@ import { ModalDelete } from "@/components/modal-delete";
 import { deleteInvoiceAction } from "../invoice-action";
 import { routes } from "@/app/routes";
 
-export function InvoiceTableAction({ row }: InvoiceTableActionProps) {
+export function InvoiceAction({ row }: InvoiceActionProps) {
   const { push, refresh } = useRouter();
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -58,6 +58,6 @@ export function InvoiceTableAction({ row }: InvoiceTableActionProps) {
   );
 }
 
-type InvoiceTableActionProps = {
+type InvoiceActionProps = {
   row: ArrayElement<GetInvoices["results"]>;
 };

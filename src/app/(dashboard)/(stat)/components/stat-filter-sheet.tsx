@@ -56,7 +56,7 @@ export function StatFilterSheet({
                 label="Libellé"
                 inputProps={{ placeholder: "Chercher..." }}
                 options={
-                  operationsFn.data?.data.results.map((el) => ({
+                  operationsFn.data?.results.map((el) => ({
                     value: el.label,
                     label: el.label,
                   })) ?? []

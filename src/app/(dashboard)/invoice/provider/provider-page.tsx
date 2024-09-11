@@ -16,19 +16,21 @@ export default function ProviderPage({ providers }: ProviderPageProps) {
   useSeo({ title: "Prestataire" });
 
   return (
-    <DataTableWrapper
-      title="Prestataire"
-      count={providers.results.length}
-      cta={{ label: "Ajouter", onClick: () => setOpen(true) }}
-      breadcrumb={[{ label: "Prestataire" }]}
-      emptyProps={{
-        title: "Aucun prestataire",
-        description: 'Cliquez sur "Ajouter" pour créer un prestataire',
-      }}
-    >
-      <DataTable data={providers.results} columns={columns} />
+    <>
+      <DataTableWrapper
+        title="Prestataire"
+        count={providers.results.length}
+        cta={{ label: "Ajouter", onClick: () => setOpen(true) }}
+        breadcrumb={[{ label: "Prestataire" }]}
+        emptyProps={{
+          title: "Aucun prestataire",
+          description: 'Cliquez sur "Ajouter" pour créer un prestataire',
+        }}
+      >
+        <DataTable data={providers.results} columns={columns} />
+      </DataTableWrapper>
       <ProviderSave open={open} onOpenChange={setOpen} onFinish={refresh} />
-    </DataTableWrapper>
+    </>
   );
 }
 

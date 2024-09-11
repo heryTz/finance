@@ -113,7 +113,7 @@ export function OperationSave({
                   value={field.value}
                   onChange={(value) => {
                     field.onChange(value);
-                    const item = operationsFn.data?.data.results.find(
+                    const item = operationsFn.data?.results.find(
                       (el) => el.label === value,
                     );
                     if (item) {
@@ -124,7 +124,7 @@ export function OperationSave({
                     }
                   }}
                   options={
-                    operationsFn.data?.data.results.map((el) => ({
+                    operationsFn.data?.results.map((el) => ({
                       label: el.label,
                       value: el.label,
                     })) ?? []

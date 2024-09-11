@@ -16,19 +16,21 @@ export default function ClientPage({ clients }: ClientPageProps) {
   useSeo({ title: "Clients" });
 
   return (
-    <DataTableWrapper
-      title="Clients"
-      count={clients.results.length}
-      cta={{ label: "Ajouter", onClick: () => setOpen(true) }}
-      breadcrumb={[{ label: "Clients" }]}
-      emptyProps={{
-        title: "Aucun client",
-        description: 'Cliquez sur "Ajouter" pour créer un client',
-      }}
-    >
-      <DataTable data={clients.results} columns={columns} />
+    <>
+      <DataTableWrapper
+        title="Clients"
+        count={clients.results.length}
+        cta={{ label: "Ajouter", onClick: () => setOpen(true) }}
+        breadcrumb={[{ label: "Clients" }]}
+        emptyProps={{
+          title: "Aucun client",
+          description: 'Cliquez sur "Ajouter" pour créer un client',
+        }}
+      >
+        <DataTable data={clients.results} columns={columns} />
+      </DataTableWrapper>
       <ClientSave open={open} onOpenChange={setOpen} onFinish={refresh} />
-    </DataTableWrapper>
+    </>
   );
 }
 
