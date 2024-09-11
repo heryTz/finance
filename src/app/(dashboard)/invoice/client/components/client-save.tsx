@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useGetByIdInvoiceClient } from "../client-query";
+import { useGetClientById } from "../client-query";
 import { useEffect, useTransition } from "react";
 import { Loader } from "@/components/loader";
 import { saveClientInputSchema } from "../client-dto";
@@ -21,7 +21,7 @@ export function ClientSave({
   onFinish,
 }: ClientSaveProps) {
   const [isPending, startTransition] = useTransition();
-  const clientFn = useGetByIdInvoiceClient(idToEdit);
+  const clientFn = useGetClientById(idToEdit);
   const client = clientFn.data?.data;
 
   const form = useForm<FormValue>({

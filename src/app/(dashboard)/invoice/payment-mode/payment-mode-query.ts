@@ -7,7 +7,7 @@ import type {
 
 export function useGetPaymentModeById(id?: string | null) {
   return useQuery({
-    queryKey: ["invoice.payments.mode.get", id],
+    queryKey: [useGetPaymentModeById.name, id],
     enabled: !!id,
     queryFn: () =>
       httpClient

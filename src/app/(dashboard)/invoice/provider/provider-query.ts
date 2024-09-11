@@ -2,10 +2,10 @@ import { httpClient } from "@/lib/http-client";
 import { useQuery } from "react-query";
 import type { GetProviderById, GetProviders } from "./provider-service";
 
-export function useGetByIdProvider(id?: string) {
+export function useGetProviderById(id?: string) {
   return useQuery({
     enabled: !!id,
-    queryKey: [useGetByIdProvider.name, id],
+    queryKey: [useGetProviderById.name, id],
     queryFn: () =>
       httpClient
         .get<GetProviderById>(`/invoice/provider/${id}`)

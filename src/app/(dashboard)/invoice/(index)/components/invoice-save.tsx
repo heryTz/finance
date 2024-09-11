@@ -22,7 +22,7 @@ import { routes } from "@/app/routes";
 import { ClientSave } from "../../client/components/client-save";
 import { CommandItem } from "@/components/ui/command";
 import { useSeo } from "@/lib/use-seo";
-import { useGetInvoiceClients } from "../../client/client-query";
+import { useGetClients } from "../../client/client-query";
 import { useGetPaymentModes } from "../../payment-mode/payment-mode-query";
 import { PaymentModeSave } from "../../payment-mode/components/payment-mode-save";
 import { ComboboxField } from "@/components/combobox-field";
@@ -33,7 +33,7 @@ import { ProviderSave } from "../../provider/components/provider-save";
 export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
-  const clientsFn = useGetInvoiceClients();
+  const clientsFn = useGetClients();
   const paymentModesFn = useGetPaymentModes();
   const providersFn = useGetProviders();
   const [openClientModal, setOpenClientModal] = useState(false);

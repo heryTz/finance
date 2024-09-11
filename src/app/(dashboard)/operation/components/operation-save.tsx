@@ -2,7 +2,7 @@
 import { OperationType } from "@/entity/operation";
 import { useForm } from "react-hook-form";
 import { useTags } from "../../tag/tag-query";
-import { useOperationById, useOperations } from "../operation-query";
+import { useGetOperationById, useGetOperations } from "../operation-query";
 import { useEffect, useTransition } from "react";
 import { Modal } from "@/components/modal";
 import { Loader } from "@/components/loader";
@@ -33,9 +33,9 @@ export function OperationSave({
 }: OperationSaveProps) {
   const [isPending, startTransition] = useTransition();
   const tagsFn = useTags();
-  const operationFn = useOperationById(idToEdit);
+  const operationFn = useGetOperationById(idToEdit);
   const operation = operationFn.data?.data;
-  const operationsFn = useOperations({ distinct: "true" });
+  const operationsFn = useGetOperations({ distinct: "true" });
   const form = useForm<FormData>({
     resolver: zodResolver(saveOperationInputSchema),
     defaultValues: {

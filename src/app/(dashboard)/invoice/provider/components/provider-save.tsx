@@ -8,7 +8,7 @@ import { Modal } from "@/components/modal";
 import { Form, FormField } from "@/components/ui/form";
 import { InputField } from "@/components/input-field";
 import { saveProviderInputSchema } from "../provider-dto";
-import { useGetByIdProvider } from "../provider-query";
+import { useGetProviderById } from "../provider-query";
 import { Provider } from "@prisma/client";
 import { createProviderAction, updateProviderAction } from "../provider-action";
 
@@ -21,7 +21,7 @@ export function ProviderSave({
   onFinish,
 }: ProviderSaveProps) {
   const [isPending, startTransition] = useTransition();
-  const providerFn = useGetByIdProvider(idToEdit);
+  const providerFn = useGetProviderById(idToEdit);
   const provider = providerFn.data;
 
   const form = useForm<FormValue>({

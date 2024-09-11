@@ -3,8 +3,8 @@ import { useQuery } from "react-query";
 import type { GetOperationQuery } from "./operation-dto";
 import type { GetOperationById, GetOperations } from "./operation-service";
 
-export function useOperations({ q, distinct }: GetOperationQuery = {}) {
-  return useQuery([useOperations.name, q, distinct], ({ queryKey }) => {
+export function useGetOperations({ q, distinct }: GetOperationQuery = {}) {
+  return useQuery([useGetOperations.name, q, distinct], ({ queryKey }) => {
     const [_, q, distinct] = queryKey;
     return httpClient.get<GetOperations>(`/operations`, {
       params: { q, distinct },
@@ -12,9 +12,9 @@ export function useOperations({ q, distinct }: GetOperationQuery = {}) {
   });
 }
 
-export function useOperationById(id?: string) {
+export function useGetOperationById(id?: string) {
   return useQuery({
-    queryKey: ["operation", id],
+    queryKey: [useGetOperationById.name, id],
     queryFn: () => httpClient.get<GetOperationById>(`/operations/${id}`),
     enabled: !!id,
   });

@@ -1,5 +1,5 @@
 "use client";
-import { useOperations } from "./operation-query";
+import { useGetOperations } from "./operation-query";
 import { useState } from "react";
 import { Loader } from "@/components/loader";
 import { Container } from "@/components/container";
@@ -11,7 +11,7 @@ import { DataTable } from "@/components/data-table";
 import { OperationSave } from "./components/operation-save";
 
 export default function OperationPage() {
-  const { data, isLoading, error, refetch } = useOperations();
+  const { data, isLoading, error, refetch } = useGetOperations();
   const { columns } = useOperationColumnDefs();
   const [openSave, setOpenSave] = useState(false);
 
