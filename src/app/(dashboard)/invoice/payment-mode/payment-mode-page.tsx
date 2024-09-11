@@ -3,11 +3,10 @@ import { GetPaymentsMode } from "./payment-mode-service";
 import { useState } from "react";
 import { DataTable } from "@/components/data-table";
 import { useColumnDefs } from "./components/payment-mode-column-defs";
-import { Container } from "@/components/container";
-import { Button } from "@/components/ui/button";
 import { useSeo } from "@/lib/use-seo";
 import { useRouter } from "next/navigation";
 import { PaymentModeSave } from "./components/payment-mode-save";
+import { DataTableWrapper } from "@/components/data-table-wrapper";
 
 export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
   const router = useRouter();
@@ -16,10 +15,15 @@ export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
   useSeo({ title: "Mode de paiements" });
 
   return (
-    <Container
+    <DataTableWrapper
       title="Mode de paiements"
-      action={<Button onClick={() => setOpenSave(true)}>Ajouter</Button>}
+      count={paymentsMode.results.length}
+      cta={{ label: "Ajouter", onClick: () => setOpenSave(true) }}
       breadcrumb={[{ label: "Mode de paiements" }]}
+      emptyProps={{
+        title: "Aucun mode de paiements",
+        description: 'Cliquez sur "Ajouter" pour créer un mode de paiements',
+      }}
     >
       <DataTable data={paymentsMode.results} columns={columns} />
       <PaymentModeSave
@@ -27,7 +31,7 @@ export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
         onOpenChange={setOpenSave}
         onFinish={router.refresh}
       />
-    </Container>
+    </DataTableWrapper>
   );
 }
 

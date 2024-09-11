@@ -1,7 +1,7 @@
 import { saveProviderInputSchema } from "@/app/(dashboard)/invoice/provider/provider-dto";
 import {
-  getProviderById,
   createProvider,
+  getProviders,
 } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { apiGuard } from "@/lib/api-guard";
 import { weh } from "@/lib/with-error-handler";
@@ -16,6 +16,6 @@ export const POST = weh(async (request: Request) => {
 
 export const GET = weh(async () => {
   const { user } = await apiGuard();
-  const provider = await getProviderById(user.id);
-  return NextResponse.json(provider);
+  const providers = await getProviders(user.id);
+  return NextResponse.json(providers);
 });

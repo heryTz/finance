@@ -1,25 +1,25 @@
-import ProviderSetup from "../provider/provider-page";
-import ClientListing from "../client/client-page";
+import ProvidePage from "../provider/provider-page";
+import ClientPage from "../client/client-page";
 import { getInvoices } from "./invoice-service";
 import PaymentModePage from "../payment-mode/payment-mode-page";
 import { getPaymentsMode } from "../payment-mode/payment-mode-service";
-import InvoiceList from "./components/invoice-list";
+import InvoicePage from "./invoice-page";
 import { apiGuard } from "@/lib/api-guard";
 import { AppTab } from "@/components/app-tab";
 import { getClients } from "../client/client-service";
-import { getProviderById } from "../provider/provider-service";
+import { getProviders } from "../provider/provider-service";
 
-// 🥵 WFT! make "ClientListing", "InvoiceLising", "ProviderSetup" as default export solve this problem
+// 🥵 WFT! make "ClientPage", "InvoiceLising", "ProvidePage" as default export solve this problem
 // Element type is invalid. Received a promise that resolves to: undefined. Lazy element type must resolve to a class or function.
 
 // TODO: Make all tabs in different routes and avoid this eager loading
 
-export default async function InvoicePage() {
+export default async function Page() {
   const { user } = await apiGuard();
   const invoices = await getInvoices(user.id);
   const paymentsMode = await getPaymentsMode(user.id);
   const clients = await getClients(user.id);
-  const provider = await getProviderById(user.id);
+  const providers = await getProviders(user.id);
 
   return (
     <AppTab
@@ -27,17 +27,17 @@ export default async function InvoicePage() {
         {
           name: "invoice",
           title: "Facture",
-          component: <InvoiceList invoices={invoices} />,
+          component: <InvoicePage invoices={invoices} />,
         },
         {
           name: "client",
           title: "Client",
-          component: <ClientListing clients={clients} />,
+          component: <ClientPage clients={clients} />,
         },
         {
           name: "provider",
           title: "Prestataire",
-          component: <ProviderSetup provider={provider} />,
+          component: <ProvidePage providers={providers} />,
         },
         {
           name: "payment-mode",

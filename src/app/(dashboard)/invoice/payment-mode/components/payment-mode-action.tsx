@@ -1,5 +1,3 @@
-import { ArrayElement } from "@/lib/types";
-import { GetOperations } from "../operation-service";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +8,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
-import { OperationSave } from "./operation-save";
-import { useQueryClient } from "react-query";
-import { useOperations } from "../operation-query";
 import { ModalDelete } from "@/components/modal-delete";
-import { deleteOperationAction } from "../operation-action";
+import { useRouter } from "next/navigation";
+import { ArrayElement } from "@/lib/types";
+import { GetPaymentsMode } from "../payment-mode-service";
+import { PaymentModeSave } from "./payment-mode-save";
+import { deletePaymentModeAction } from "../payment-mode-action";
 
-export function OperationAction({ row }: OperationActionProps) {
-  const queryClient = useQueryClient();
+export function PaymentModeAction({ row }: PaymentModeActionProps) {
+  const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
   const onRefetch = () => {
-    queryClient.refetchQueries({ queryKey: [useOperations.name] });
+    router.refresh();
   };
 
   return (
@@ -44,25 +43,24 @@ export function OperationAction({ row }: OperationActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <OperationSave
-        idToEdit={row.id}
+      <PaymentModeSave
         open={openEdit}
         onOpenChange={setOpenEdit}
         onFinish={onRefetch}
+        idToEdit={row.id}
       />
       <ModalDelete
         open={openDelete}
         onOpenChange={setOpenDelete}
-        label={row.label}
+        label={row.name}
         onDelete={async () => {
-          await deleteOperationAction(row.id);
+          await deletePaymentModeAction(row.id);
           onRefetch();
         }}
       />
     </>
   );
 }
-
-type OperationActionProps = {
-  row: ArrayElement<GetOperations["results"]>;
+type PaymentModeActionProps = {
+  row: ArrayElement<GetPaymentsMode["results"]>;
 };

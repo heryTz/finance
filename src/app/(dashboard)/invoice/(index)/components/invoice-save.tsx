@@ -27,14 +27,18 @@ import { useGetPaymentModes } from "../../payment-mode/payment-mode-query";
 import { PaymentModeSave } from "../../payment-mode/components/payment-mode-save";
 import { ComboboxField } from "@/components/combobox-field";
 import { cn } from "@/lib/utils";
+import { useGetProviders } from "../../provider/provider-query";
+import { ProviderSave } from "../../provider/components/provider-save";
 
 export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const [isPending, startTransition] = useTransition();
   const { back } = useRouter();
   const clientsFn = useGetInvoiceClients();
   const paymentModesFn = useGetPaymentModes();
+  const providersFn = useGetProviders();
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openPaymentModeModal, setOpenPaymentModeModal] = useState(false);
+  const [openProviderModal, setOpenProviderModal] = useState(false);
   const invoiceParsed = invoice
     ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
     : null;
@@ -46,6 +50,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
       currency: invoiceParsed?.currency as Currency,
       paymentModeId: invoiceParsed?.paymentModeId,
       createdAt: invoiceParsed?.createdAt ?? new Date(),
+      providerId: invoiceParsed?.providerId,
     },
     resolver: zodResolver(createInvoiceSchema),
   });
@@ -115,6 +120,39 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
                   >
                     <PlusIcon className="mr-2 w-4 h-4" />
                     <span>Ajouter un client</span>
+                  </CommandItem>
+                }
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="providerId"
+            render={({ field }) => (
+              <ComboboxField
+                label="Prestataire *"
+                placeholder="Sélectionner un prestataire"
+                searchPlaceholder="Chercher un prestataire"
+                emptySearchMessage="Aucun prestataire"
+                value={field.value}
+                onChange={field.onChange}
+                options={
+                  providersFn.data?.results.map((el) => ({
+                    value: el.id,
+                    label: el.name,
+                  })) ?? []
+                }
+                actions={
+                  <CommandItem
+                    className="cursor-pointer"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onSelect={() => setOpenProviderModal(true)}
+                  >
+                    <PlusIcon className="mr-2 w-4 h-4" />
+                    <span>Ajouter un prestataire</span>
                   </CommandItem>
                 }
               />
@@ -278,16 +316,24 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
       <ClientSave
         open={openClientModal}
         onOpenChange={setOpenClientModal}
-        onFinish={(newClient) => {
-          form.setValue("clientId", newClient.id);
+        onFinish={({ id }) => {
+          form.setValue("clientId", id);
           clientsFn.refetch();
+        }}
+      />
+      <ProviderSave
+        open={openProviderModal}
+        onOpenChange={setOpenProviderModal}
+        onFinish={({ id }) => {
+          form.setValue("providerId", id);
+          providersFn.refetch();
         }}
       />
       <PaymentModeSave
         open={openPaymentModeModal}
         onOpenChange={setOpenPaymentModeModal}
-        onFinish={(newPaymentMode) => {
-          form.setValue("paymentModeId", newPaymentMode.id);
+        onFinish={({ id }) => {
+          form.setValue("paymentModeId", id);
           paymentModesFn.refetch();
         }}
       />

@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { ArrayElement } from "@/lib/types";
 import { GetClients } from "../client-service";
 import { ClientSave } from "./client-save";
+import { deleteClientAction } from "../client-action";
 
 export function ClientAction({ row }: ClientActionProps) {
   const router = useRouter();
@@ -53,6 +54,7 @@ export function ClientAction({ row }: ClientActionProps) {
         onOpenChange={setOpenDelete}
         label={row.name}
         onDelete={async () => {
+          await deleteClientAction(row.id);
           onRefetch();
         }}
       />

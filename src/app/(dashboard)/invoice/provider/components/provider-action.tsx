@@ -11,11 +11,11 @@ import { useState } from "react";
 import { ModalDelete } from "@/components/modal-delete";
 import { useRouter } from "next/navigation";
 import { ArrayElement } from "@/lib/types";
-import { GetPaymentsMode } from "../payment-mode-service";
-import { PaymentModeSave } from "./payment-mode-save";
-import { deletePaymentModeAction } from "../payment-mode-action";
+import { GetProviders } from "../provider-service";
+import { ProviderSave } from "./provider-save";
+import { deleteProviderAction } from "../provider-action";
 
-export function PaymentModeTableAction({ row }: PaymentModeTableActionProps) {
+export function ProviderAction({ row }: ProviderActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -43,7 +43,7 @@ export function PaymentModeTableAction({ row }: PaymentModeTableActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <PaymentModeSave
+      <ProviderSave
         open={openEdit}
         onOpenChange={setOpenEdit}
         onFinish={onRefetch}
@@ -54,13 +54,13 @@ export function PaymentModeTableAction({ row }: PaymentModeTableActionProps) {
         onOpenChange={setOpenDelete}
         label={row.name}
         onDelete={async () => {
-          await deletePaymentModeAction(row.id);
+          await deleteProviderAction(row.id);
           onRefetch();
         }}
       />
     </>
   );
 }
-type PaymentModeTableActionProps = {
-  row: ArrayElement<GetPaymentsMode["results"]>;
+type ProviderActionProps = {
+  row: ArrayElement<GetProviders["results"]>;
 };

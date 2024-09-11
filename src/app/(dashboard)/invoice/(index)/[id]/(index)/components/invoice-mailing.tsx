@@ -5,14 +5,13 @@ import {
 } from "../../../invoice-dto";
 import { useForm } from "react-hook-form";
 import { useEffect, useTransition } from "react";
-import { useGetProvider } from "../../../../provider/provider-query";
 import { Loader } from "@/components/loader";
 import { useGetInvoiceById } from "../../../invoice-query";
 import {
   defaultInvoiceContent,
   defaultInvoiceSubject,
 } from "../../../invoice-util";
-import { invoiceDetaultFilename } from "../../../components/invoice-list";
+import { invoiceDetaultFilename } from "../../../invoice-page";
 import { toast } from "sonner";
 import { Modal } from "@/components/modal";
 import { Form, FormField } from "@/components/ui/form";
@@ -26,7 +25,6 @@ export function InvoiceMailing({
   onSubmit,
 }: InvoiceMailingProps) {
   const [isPending, startTransition] = useTransition();
-  const providerFn = useGetProvider();
   const invoiceFn = useGetInvoiceById(id);
 
   const form = useForm<SendInvoiceMailInput>({
@@ -41,14 +39,14 @@ export function InvoiceMailing({
   useEffect(() => {
     reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [providerFn?.data, invoiceFn?.data]);
+  }, [invoiceFn?.data]);
 
   const reset = () => {
-    if (providerFn?.data && invoiceFn?.data) {
+    if (invoiceFn?.data) {
       form.reset({
         subject: defaultInvoiceSubject(),
         content: defaultInvoiceContent({
-          senderName: providerFn.data.data?.name ?? "",
+          senderName: invoiceFn.data.Provider.name ?? "",
         }),
         file: "placeholder",
         filename: invoiceDetaultFilename(invoiceFn.data),
@@ -76,8 +74,6 @@ export function InvoiceMailing({
     reset();
   };
 
-  const isLoading = providerFn.isLoading || invoiceFn.isLoading;
-
   return (
     <Modal
       open={open}
@@ -86,11 +82,11 @@ export function InvoiceMailing({
       submit={{
         children: "Envoyer",
         onClick: submit,
-        disabled: isPending || isLoading,
+        disabled: isPending || invoiceFn.isLoading,
       }}
       cancel={{ onClick: cancel }}
     >
-      {isLoading ? (
+      {invoiceFn.isLoading ? (
         <Loader />
       ) : (
         <Form {...form}>

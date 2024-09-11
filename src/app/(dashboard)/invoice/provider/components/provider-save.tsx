@@ -1,55 +1,55 @@
 import { useForm } from "react-hook-form";
-import { useGetByIdInvoiceClient } from "../client-query";
 import { useEffect, useTransition } from "react";
 import { Loader } from "@/components/loader";
-import { saveClientInputSchema } from "../client-dto";
 import { toast } from "sonner";
 import { zd } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Modal } from "@/components/modal";
 import { Form, FormField } from "@/components/ui/form";
 import { InputField } from "@/components/input-field";
-import { Client } from "@prisma/client";
-import { createClientAction, updateClientAction } from "../client-action";
+import { saveProviderInputSchema } from "../provider-dto";
+import { useGetByIdProvider } from "../provider-query";
+import { Provider } from "@prisma/client";
+import { createProviderAction, updateProviderAction } from "../provider-action";
 
-type FormValue = zd.infer<typeof saveClientInputSchema>;
+type FormValue = zd.infer<typeof saveProviderInputSchema>;
 
-export function ClientSave({
+export function ProviderSave({
   open,
   onOpenChange,
   idToEdit,
   onFinish,
-}: ClientSaveProps) {
+}: ProviderSaveProps) {
   const [isPending, startTransition] = useTransition();
-  const clientFn = useGetByIdInvoiceClient(idToEdit);
-  const client = clientFn.data?.data;
+  const providerFn = useGetByIdProvider(idToEdit);
+  const provider = providerFn.data;
 
   const form = useForm<FormValue>({
-    resolver: zodResolver(saveClientInputSchema),
+    resolver: zodResolver(saveProviderInputSchema),
   });
 
   useEffect(() => {
     reset();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client]);
+  }, [provider]);
 
   const reset = () => {
-    form.reset(client ? saveClientInputSchema.parse(client) : {});
+    form.reset(provider ? saveProviderInputSchema.parse(provider) : {});
   };
 
   const onSubmit = form.handleSubmit((data) =>
     startTransition(async () => {
       try {
-        let client: Client;
+        let provider: Provider;
         if (idToEdit) {
-          client = await updateClientAction(idToEdit, data);
+          provider = await updateProviderAction(idToEdit, data);
           toast.success("Modification effectuée avec succès");
         } else {
-          client = await createClientAction(data);
+          provider = await createProviderAction(data);
           toast.success("Ajout effectué avec succès");
         }
         onOpenChange(false);
-        onFinish?.(client);
+        onFinish?.(provider);
         reset();
       } catch (error) {
         toast.error("Une erreur s'est produite");
@@ -68,17 +68,17 @@ export function ClientSave({
       onOpenChange={(v) => !v && onCancel()}
       title={
         idToEdit
-          ? `Modifier le client "${client?.name ?? "..."}"`
-          : "Ajouter un client"
+          ? `Modifier le prestataire "${provider?.name ?? "..."}"`
+          : "Ajouter un prestataire"
       }
       cancel={{ onClick: onCancel }}
       submit={{
         children: "Sauvegarder",
         onClick: onSubmit,
-        disabled: isPending || clientFn.isLoading,
+        disabled: isPending || providerFn.isLoading,
       }}
     >
-      {idToEdit && clientFn.isLoading ? (
+      {idToEdit && providerFn.isLoading ? (
         <Loader />
       ) : (
         <Form {...form}>
@@ -139,9 +139,9 @@ export function ClientSave({
   );
 }
 
-type ClientSaveProps = {
+type ProviderSaveProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onFinish?: (client: Client) => void;
+  onFinish?: (provider: Provider) => void;
   idToEdit?: string;
 };

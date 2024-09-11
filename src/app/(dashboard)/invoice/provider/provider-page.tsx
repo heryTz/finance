@@ -1,120 +1,37 @@
 "use client";
-import { useSaveProvider } from "./provider-query";
-import { useForm } from "react-hook-form";
+
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import {
-  saveProviderInputSchema,
-  type SaveProviderInput,
-} from "./provider-dto";
-import { GetProviderById } from "./provider-service";
-import { toast } from "sonner";
-import { Container } from "@/components/container";
-import { Form, FormField } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InputField } from "@/components/input-field";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import type { GetProviders } from "./provider-service";
 import { useSeo } from "@/lib/use-seo";
+import { DataTable } from "@/components/data-table";
+import { useColumnDefs } from "./components/provider-column-defs";
+import { ProviderSave } from "./components/provider-save";
+import { DataTableWrapper } from "@/components/data-table-wrapper";
 
-type FormValue = SaveProviderInput;
-
-export default function ProviderPage({ provider }: ProviderPageProps) {
-  const router = useRouter();
-  const saveFn = useSaveProvider();
-  const form = useForm<FormValue>({
-    resolver: zodResolver(saveProviderInputSchema),
-  });
+export default function ProviderPage({ providers }: ProviderPageProps) {
+  const { refresh } = useRouter();
+  const [open, setOpen] = useState(false);
+  const { columns } = useColumnDefs();
   useSeo({ title: "Prestataire" });
 
-  useEffect(() => {
-    if (provider) form.reset(saveProviderInputSchema.parse(provider));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provider]);
-
-  const onSubmit = form.handleSubmit(async (data) => {
-    try {
-      await saveFn.mutateAsync(data);
-      toast.success("Configuration enregistrée");
-      router.refresh();
-    } catch (error) {
-      toast.error("Erreur s'est produite");
-    }
-  });
-
-  const onCancel = () => {
-    router.back();
-  };
-
   return (
-    <Container
-      title="Information du prestataire"
+    <DataTableWrapper
+      title="Prestataire"
+      count={providers.results.length}
+      cta={{ label: "Ajouter", onClick: () => setOpen(true) }}
       breadcrumb={[{ label: "Prestataire" }]}
+      emptyProps={{
+        title: "Aucun prestataire",
+        description: 'Cliquez sur "Ajouter" pour créer un prestataire',
+      }}
     >
-      <Form {...form}>
-        <form className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => <InputField label="Nom *" {...field} />}
-            />
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <InputField label="Adresse *" {...field} />
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <InputField label="Email *" {...field} type="email" />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <InputField label="Téléphone *" {...field} />
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="nif"
-              render={({ field }) => <InputField label="NIF" {...field} />}
-            />
-            <FormField
-              control={form.control}
-              name="siren"
-              render={({ field }) => <InputField label="Siren" {...field} />}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="ape"
-              render={({ field }) => <InputField label="APE" {...field} />}
-            />
-          </div>
-          <div className="flex justify-center gap-4">
-            <Button variant={"outline"} onClick={onCancel}>
-              Annuler
-            </Button>
-            <Button onClick={onSubmit} disabled={saveFn.isLoading}>
-              Sauvegarder
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </Container>
+      <DataTable data={providers.results} columns={columns} />
+      <ProviderSave open={open} onOpenChange={setOpen} onFinish={refresh} />
+    </DataTableWrapper>
   );
 }
 
 type ProviderPageProps = {
-  provider: GetProviderById;
+  providers: GetProviders;
 };

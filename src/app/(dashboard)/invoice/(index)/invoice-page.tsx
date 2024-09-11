@@ -1,14 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { GetInvoiceById, GetInvoices } from "../invoice-service";
+import { GetInvoiceById, GetInvoices } from "./invoice-service";
 import dayjs from "dayjs";
 import { DataTable } from "@/components/data-table";
 import { useSeo } from "@/lib/use-seo";
-import { useColumnDefs } from "./invoice-colum-defs";
+import { useColumnDefs } from "./components/invoice-colum-defs";
 import { routes } from "@/app/routes";
 import { DataTableWrapper } from "@/components/data-table-wrapper";
 
-export default function InvoiceList({ invoices }: InvoiceListProps) {
+export default function InvoicePage({ invoices }: InvoicePageProps) {
   const { push } = useRouter();
   const { columns } = useColumnDefs();
   useSeo({ title: "Facture" });
@@ -29,7 +29,7 @@ export default function InvoiceList({ invoices }: InvoiceListProps) {
   );
 }
 
-type InvoiceListProps = {
+type InvoicePageProps = {
   invoices: GetInvoices;
 };
 
