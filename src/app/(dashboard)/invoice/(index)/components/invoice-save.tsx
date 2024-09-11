@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { Form, FormField, FormMessageError } from "@/components/ui/form";
 import { AutocompleteField } from "@/components/autocomplete-field";
 import { InputField } from "@/components/input-field";
-import { SelectField } from "@/components/select-field";
 import { CalendarField } from "@/components/calendar-field";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, TrashIcon } from "lucide-react";
