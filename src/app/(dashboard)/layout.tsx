@@ -1,7 +1,12 @@
 "use client";
 
 import { AdminGuard } from "@/lib/admin-guard";
-import { ArrowLeftRightIcon, ChartArea, LinkIcon, Wallet } from "lucide-react";
+import {
+  ArrowLeftRightIcon,
+  ChartArea,
+  GithubIcon,
+  Wallet,
+} from "lucide-react";
 import { Sidebar } from "@/components/sidebar";
 import { usePathname } from "next/navigation";
 import { Appbar } from "@/components/appbar";
@@ -44,7 +49,6 @@ export function Component({ children }: PropsWithChildren) {
         </main>
         <footer className="px-4 pt-1 lg:px-6 lg:pt-1">
           <p className="text-sm text-muted-foreground text-right">
-            Open source:{" "}
             <Link
               target="_blank"
               href={"https://github.com/heryTz/finance"}
@@ -53,8 +57,7 @@ export function Component({ children }: PropsWithChildren) {
                 "p-0 text-muted-foreground",
               )}
             >
-              GitHub
-              <LinkIcon className="inline-block ml-1 w-3 h-3" />
+              <GithubIcon className="inline-block w-4 h-4" />
             </Link>
           </p>
         </footer>
