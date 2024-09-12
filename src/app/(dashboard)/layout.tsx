@@ -1,12 +1,7 @@
 "use client";
 
 import { AdminGuard } from "@/lib/admin-guard";
-import {
-  ArrowLeftRightIcon,
-  ChartArea,
-  GithubIcon,
-  Wallet,
-} from "lucide-react";
+import { ArrowLeftRightIcon, ChartArea, Wallet } from "lucide-react";
 import { Sidebar } from "@/components/sidebar";
 import { usePathname } from "next/navigation";
 import { Appbar } from "@/components/appbar";
@@ -48,16 +43,16 @@ export function Component({ children }: PropsWithChildren) {
           {children}
         </main>
         <footer className="px-4 pt-1 lg:px-6 lg:pt-1">
-          <p className="text-sm text-muted-foreground text-right">
+          <p className="text-xs text-muted-foreground text-right">
             <Link
               target="_blank"
               href={"https://github.com/heryTz/finance"}
               className={cn(
                 buttonVariants({ variant: "link" }),
-                "p-0 text-muted-foreground",
+                "p-0 text-muted-foreground text-xs underline",
               )}
             >
-              <GithubIcon className="inline-block w-4 h-4" />
+              GitHub
             </Link>
           </p>
         </footer>
