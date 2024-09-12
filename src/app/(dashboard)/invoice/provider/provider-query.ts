@@ -5,7 +5,7 @@ import type { GetProviderById, GetProviders } from "./provider-service";
 export function useGetProviderById(id?: string) {
   return useQuery({
     enabled: !!id,
-    queryKey: [useGetProviderById.name, id],
+    queryKey: ["useGetProviderById.", id],
     queryFn: () =>
       httpClient
         .get<GetProviderById>(`/invoice/provider/${id}`)
@@ -15,7 +15,7 @@ export function useGetProviderById(id?: string) {
 
 export function useGetProviders() {
   return useQuery({
-    queryKey: [useGetProviders.name],
+    queryKey: ["useGetProviders.name"],
     queryFn: () =>
       httpClient.get<GetProviders>("/invoice/provider").then((res) => res.data),
   });

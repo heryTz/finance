@@ -5,7 +5,7 @@ import { GetClients } from "./client-service";
 
 export function useGetClientById(id?: string | null) {
   return useQuery({
-    queryKey: [useGetClientById.name, id],
+    queryKey: ["useGetClientById", id],
     enabled: !!id,
     queryFn: () => httpClient.get<Client>(`/invoice/client/${id}`),
   });
@@ -13,7 +13,7 @@ export function useGetClientById(id?: string | null) {
 
 export function useGetClients() {
   return useQuery({
-    queryKey: [useGetClients.name],
+    queryKey: ["useGetClients"],
     queryFn: () =>
       httpClient.get<GetClients>("/invoice/client").then((res) => res.data),
   });

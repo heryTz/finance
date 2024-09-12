@@ -4,7 +4,7 @@ import type { GetTags } from "./tag-service";
 
 export function useTags() {
   return useQuery({
-    queryKey: [useTags.name],
+    queryKey: ["useTags"],
     queryFn: () => httpClient.get<GetTags>("/tags"),
   });
 }

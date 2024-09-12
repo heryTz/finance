@@ -5,7 +5,7 @@ import type { GetOperationById, GetOperations } from "./operation-service";
 
 export function useGetOperations({ q, distinct }: GetOperationQuery = {}) {
   return useQuery({
-    queryKey: [useGetOperations.name, q, distinct],
+    queryKey: ["useGetOperations", q, distinct],
     queryFn: ({ queryKey }) => {
       const [_, q, distinct] = queryKey;
       return httpClient
@@ -19,7 +19,7 @@ export function useGetOperations({ q, distinct }: GetOperationQuery = {}) {
 
 export function useGetOperationById(id?: string) {
   return useQuery({
-    queryKey: [useGetOperationById.name, id],
+    queryKey: ["useGetOperationById", id],
     queryFn: () => httpClient.get<GetOperationById>(`/operations/${id}`),
     enabled: !!id,
   });
