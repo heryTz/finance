@@ -1,5 +1,5 @@
 import { httpClient } from "@/lib/http-client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import type {
   GetPaymentModeById,
   GetPaymentsMode,

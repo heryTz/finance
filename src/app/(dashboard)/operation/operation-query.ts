@@ -1,16 +1,19 @@
 import { httpClient } from "@/lib/http-client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { GetOperationQuery } from "./operation-dto";
 import type { GetOperationById, GetOperations } from "./operation-service";
 
 export function useGetOperations({ q, distinct }: GetOperationQuery = {}) {
-  return useQuery([useGetOperations.name, q, distinct], ({ queryKey }) => {
-    const [_, q, distinct] = queryKey;
-    return httpClient
-      .get<GetOperations>(`/operations`, {
-        params: { q, distinct },
-      })
-      .then((resp) => resp.data);
+  return useQuery({
+    queryKey: [useGetOperations.name, q, distinct],
+    queryFn: ({ queryKey }) => {
+      const [_, q, distinct] = queryKey;
+      return httpClient
+        .get<GetOperations>(`/operations`, {
+          params: { q, distinct },
+        })
+        .then((resp) => resp.data);
+    },
   });
 }
 

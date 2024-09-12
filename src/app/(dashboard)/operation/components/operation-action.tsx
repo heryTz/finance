@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { OperationSave } from "./operation-save";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useGetOperations } from "../operation-query";
 import { ModalDelete } from "@/components/modal-delete";
 import { deleteOperationAction } from "../operation-action";

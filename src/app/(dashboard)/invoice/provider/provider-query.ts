@@ -1,5 +1,5 @@
 import { httpClient } from "@/lib/http-client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { GetProviderById, GetProviders } from "./provider-service";
 
 export function useGetProviderById(id?: string) {
@@ -14,7 +14,9 @@ export function useGetProviderById(id?: string) {
 }
 
 export function useGetProviders() {
-  return useQuery([useGetProviders.name], () =>
-    httpClient.get<GetProviders>("/invoice/provider").then((res) => res.data),
-  );
+  return useQuery({
+    queryKey: [useGetProviders.name],
+    queryFn: () =>
+      httpClient.get<GetProviders>("/invoice/provider").then((res) => res.data),
+  });
 }

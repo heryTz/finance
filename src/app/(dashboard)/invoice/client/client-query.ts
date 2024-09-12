@@ -1,6 +1,6 @@
 import { httpClient } from "@/lib/http-client";
 import { Client } from "@prisma/client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { GetClients } from "./client-service";
 
 export function useGetClientById(id?: string | null) {
@@ -12,7 +12,9 @@ export function useGetClientById(id?: string | null) {
 }
 
 export function useGetClients() {
-  return useQuery(useGetClients.name, () =>
-    httpClient.get<GetClients>("/invoice/client").then((res) => res.data),
-  );
+  return useQuery({
+    queryKey: [useGetClients.name],
+    queryFn: () =>
+      httpClient.get<GetClients>("/invoice/client").then((res) => res.data),
+  });
 }
