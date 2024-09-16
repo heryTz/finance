@@ -81,6 +81,9 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
 
   useSeo({ title });
 
+  const productsErrorMessage =
+    errors.products?.message ?? errors.products?.root?.message;
+
   return (
     <Container
       title={title}
@@ -228,64 +231,73 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
               />
             )}
           />
-          <p
-            className={cn("font-semibold text-lg underline mt-2", {
-              "text-destructive": errors.products?.message,
-            })}
-          >
-            Produits
-          </p>
-          {errors.products?.message && (
-            <FormMessageError>{errors.products.message}</FormMessageError>
-          )}
-          <div className="grid gap-4">
-            {productsField.fields.map((field, index) => (
-              <div key={field.id} className="flex items-center gap-4">
-                <Button
-                  variant={"destructive"}
-                  size={"icon"}
-                  onClick={() => productsField.remove(index)}
+          <div className="grid gap-2">
+            <p
+              className={cn("font-semibold text-lg underline", {
+                "text-destructive": productsErrorMessage,
+              })}
+            >
+              Produits
+            </p>
+
+            {productsErrorMessage && (
+              <FormMessageError>{productsErrorMessage}</FormMessageError>
+            )}
+            <div className="grid gap-2">
+              {productsField.fields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="flex items-center gap-2 md:gap-4 border rounded-md p-2 md:p-4"
                 >
-                  <TrashIcon />
-                </Button>
-                <div className="flex items-start gap-4 w-full">
-                  <FormField
-                    control={form.control}
-                    name={`products.${index}.name`}
-                    render={({ field: fieldName }) => (
-                      <AutocompleteField
-                        label="Nom *"
-                        formItemProps={{ className: "flex-1" }}
-                        value={fieldName.value}
-                        onChange={fieldName.onChange}
-                        options={products.results.map((el) => ({
-                          value: el.name,
-                          label: el.name,
-                        }))}
-                      />
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`products.${index}.price`}
-                    render={({ field }) => (
-                      <InputField
-                        type="number"
-                        label="Prix unitaire *"
-                        {...field}
-                      />
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`products.${index}.qte`}
-                    render={({ field }) => (
-                      <InputField type="number" label="Quantité *" {...field} />
-                    )}
-                  />
+                  <Button
+                    variant={"destructive"}
+                    size={"icon"}
+                    onClick={() => productsField.remove(index)}
+                  >
+                    <TrashIcon />
+                  </Button>
+                  <div className="grid md:grid-cols-3 gap-2 md:gap-4 w-full">
+                    <FormField
+                      control={form.control}
+                      name={`products.${index}.name`}
+                      render={({ field: fieldName }) => (
+                        <AutocompleteField
+                          label="Nom *"
+                          value={fieldName.value}
+                          onChange={fieldName.onChange}
+                          options={products.results.map((el) => ({
+                            value: el.name,
+                            label: el.name,
+                          }))}
+                        />
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`products.${index}.price`}
+                      render={({ field }) => (
+                        <InputField
+                          type="number"
+                          label="Prix unitaire *"
+                          {...field}
+                        />
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`products.${index}.qte`}
+                      render={({ field }) => (
+                        <InputField
+                          type="number"
+                          label="Quantité *"
+                          {...field}
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <Button
               type="button"
               variant={"secondary"}
