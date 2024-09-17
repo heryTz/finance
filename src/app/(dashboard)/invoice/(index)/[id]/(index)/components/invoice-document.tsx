@@ -50,28 +50,32 @@ export function InvoiceDocument({ invoice }: InvoiceDocumentProps) {
           <Button onClick={() => setOpenMail(true)}>Envoyer par email</Button>
         </div>
       </div>
-      <InvoiceDownload
-        defaultFilename={defaultFilename}
-        open={openDownload}
-        onOpenChange={setOpenDownload}
-        onDownload={async (filename) => {
-          const doc = await printFile();
-          doc.save(filename);
-        }}
-      />
-      <InvoiceMailing
-        open={openMail}
-        onOpenChange={setOpenMail}
-        id={invoice.id}
-        onSubmit={async (data) => {
-          const doc = await printFile();
-          const docBase64 = doc.output("datauristring");
-          await sendInvoiceMailAction(invoice.id, {
-            ...data,
-            file: docBase64,
-          });
-        }}
-      />
+      {openDownload && (
+        <InvoiceDownload
+          defaultFilename={defaultFilename}
+          open={openDownload}
+          onOpenChange={setOpenDownload}
+          onDownload={async (filename) => {
+            const doc = await printFile();
+            doc.save(filename);
+          }}
+        />
+      )}
+      {openMail && (
+        <InvoiceMailing
+          open={openMail}
+          onOpenChange={setOpenMail}
+          id={invoice.id}
+          onSubmit={async (data) => {
+            const doc = await printFile();
+            const docBase64 = doc.output("datauristring");
+            await sendInvoiceMailAction(invoice.id, {
+              ...data,
+              file: docBase64,
+            });
+          }}
+        />
+      )}
     </Container>
   );
 }

@@ -43,21 +43,25 @@ export function ProviderAction({ row }: ProviderActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ProviderSave
-        open={openEdit}
-        onOpenChange={setOpenEdit}
-        onFinish={onRefetch}
-        idToEdit={row.id}
-      />
-      <ModalDelete
-        open={openDelete}
-        onOpenChange={setOpenDelete}
-        label={row.name}
-        onDelete={async () => {
-          await deleteProviderAction(row.id);
-          onRefetch();
-        }}
-      />
+      {openEdit && (
+        <ProviderSave
+          idToEdit={row.id}
+          open={openEdit}
+          onOpenChange={setOpenEdit}
+          onFinish={onRefetch}
+        />
+      )}
+      {openDelete && (
+        <ModalDelete
+          open={openDelete}
+          onOpenChange={setOpenDelete}
+          label={row.name}
+          onDelete={async () => {
+            await deleteProviderAction(row.id);
+            onRefetch();
+          }}
+        />
+      )}
     </>
   );
 }

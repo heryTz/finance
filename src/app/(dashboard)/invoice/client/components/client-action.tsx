@@ -43,21 +43,25 @@ export function ClientAction({ row }: ClientActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ClientSave
-        open={openEdit}
-        onOpenChange={setOpenEdit}
-        onFinish={onRefetch}
-        idToEdit={row.id}
-      />
-      <ModalDelete
-        open={openDelete}
-        onOpenChange={setOpenDelete}
-        label={row.name}
-        onDelete={async () => {
-          await deleteClientAction(row.id);
-          onRefetch();
-        }}
-      />
+      {openEdit && (
+        <ClientSave
+          idToEdit={row.id}
+          open={openEdit}
+          onOpenChange={setOpenEdit}
+          onFinish={onRefetch}
+        />
+      )}
+      {openDelete && (
+        <ModalDelete
+          open={openDelete}
+          onOpenChange={setOpenDelete}
+          label={row.name}
+          onDelete={async () => {
+            await deleteClientAction(row.id);
+            onRefetch();
+          }}
+        />
+      )}
     </>
   );
 }
