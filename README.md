@@ -1,13 +1,15 @@
-# FINANCE
+# Finance
 
-⚠️ The aim of this project is to experiment with the new features of NextJS.
+A simple application to manage your budget and invoice. All features done in this project are base on my personal needs.
 
-A simple application to manage your budget and invoice. You can see the demo with the information below.
+You can see the demo with the information below.
 
 - demo: <https://finance.herynirintsoa.com>
 - mail: <test-test@yopmail.fr>
 
-![Finance demo](https://github.com/heryTz/finance/blob/main/demo.gif)
+![Finance demo](https://github.com/heryTz/finance/blob/main/demo.png)
+
+⚠️ This project is a work in progress so it may contains breaking changes.
 
 ## Setup dev
 
