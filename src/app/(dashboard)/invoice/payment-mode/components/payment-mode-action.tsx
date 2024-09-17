@@ -43,21 +43,25 @@ export function PaymentModeAction({ row }: PaymentModeActionProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <PaymentModeSave
-        open={openEdit}
-        onOpenChange={setOpenEdit}
-        onFinish={onRefetch}
-        idToEdit={row.id}
-      />
-      <ModalDelete
-        open={openDelete}
-        onOpenChange={setOpenDelete}
-        label={row.name}
-        onDelete={async () => {
-          await deletePaymentModeAction(row.id);
-          onRefetch();
-        }}
-      />
+      {openEdit && (
+        <PaymentModeSave
+          idToEdit={row.id}
+          open={openEdit}
+          onOpenChange={setOpenEdit}
+          onFinish={onRefetch}
+        />
+      )}
+      {openDelete && (
+        <ModalDelete
+          open={openDelete}
+          onOpenChange={setOpenDelete}
+          label={row.name}
+          onDelete={async () => {
+            await deletePaymentModeAction(row.id);
+            onRefetch();
+          }}
+        />
+      )}
     </>
   );
 }
