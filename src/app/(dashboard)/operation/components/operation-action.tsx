@@ -12,7 +12,6 @@ import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { OperationSave } from "./operation-save";
 import { useQueryClient } from "@tanstack/react-query";
-import { useGetOperations } from "../operation-query";
 import { ModalDelete } from "@/components/modal-delete";
 import { deleteOperationAction } from "../operation-action";
 
@@ -22,7 +21,7 @@ export function OperationAction({ row }: OperationActionProps) {
   const [openDelete, setOpenDelete] = useState(false);
 
   const onRefetch = () => {
-    queryClient.refetchQueries({ queryKey: [useGetOperations.name] });
+    queryClient.refetchQueries({ queryKey: ["useGetOperations"] });
   };
 
   return (
