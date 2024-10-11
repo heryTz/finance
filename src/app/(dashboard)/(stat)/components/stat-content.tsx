@@ -24,22 +24,14 @@ const serializer = createSerializer({
   [querySerializer.key]: querySerializer.parser,
 });
 
-export function StatContent({ data, defaultFilter }: StatContentProps) {
+export function StatContent({ data }: StatContentProps) {
   const router = useRouter();
-  const [filter, setFilter] = useQueryState(
-    querySerializer.key,
-    querySerializer.parser,
-  );
-
-  useEffect(() => {
-    setFilter(defaultFilter);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultFilter]);
+  const [filter] = useQueryState(querySerializer.key, querySerializer.parser);
 
   const onApply = (data: Partial<zd.infer<typeof getStatsQuerySchema>>) => {
     const newFilter = { ...filter, ...data };
-    setFilter(newFilter);
     router.replace(`/${serializer({ filter: newFilter })}`);
+    router.refresh();
   };
 
   return (
