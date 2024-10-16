@@ -14,7 +14,7 @@ export const authOptions: AuthOptions = {
     EmailProvider({
       server: {
         host: process.env.SMTP_HOST,
-        port: +(process.env.SMTP_PORT || 3000),
+        port: +(process.env.SMTP_PORT || 587),
         secure: process.env.SMTP_SECURE !== "false",
         auth: {
           user: process.env.SMTP_USER,
