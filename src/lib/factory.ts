@@ -9,6 +9,7 @@ import { z } from "zod";
 import { getStatsQuerySchema } from "@/app/(dashboard)/(stat)/stat-dto";
 import { createProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { SaveProviderInput } from "@/app/(dashboard)/invoice/provider/provider-dto";
+import dayjs from "dayjs";
 
 export function buildSaveOperationInput(
   operation?: Partial<SaveOperationInput>,
@@ -81,8 +82,8 @@ export function buildGetStatQuery(
     tags: [],
     display: [],
     range: {
-      from: new Date(),
-      to: new Date(),
+      from: dayjs().format("YYYY-MM-DD"),
+      to: dayjs().format("YYYY-MM-DD"),
     },
     ...query,
   };

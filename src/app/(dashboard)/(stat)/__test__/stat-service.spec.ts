@@ -16,9 +16,9 @@ describe("stat service", () => {
       buildSaveOperationInput({ type: OperationType.revenue }),
     );
     const range = {
-      from: dayjs().startOf("year").toDate(),
-      to: dayjs().endOf("year").toDate(),
-      customActualDate: dayjs().endOf("year").toDate(),
+      from: dayjs().startOf("year").format("YYYY-MM-DD"),
+      to: dayjs().endOf("year").format("YYYY-MM-DD"),
+      customActualDate: dayjs().endOf("year").format("YYYY-MM-DD"),
     };
     const user2Stat = await getStats(user2.id, buildGetStatQuery({ range }));
     expect(user2Stat.results).toEqual(
@@ -73,9 +73,9 @@ describe("stat service", () => {
     await Promise.all(expenses.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().startOf("year").toDate(),
-      to: dayjs().endOf("year").toDate(),
-      customActualDate: dayjs().endOf("year").toDate(),
+      from: dayjs().startOf("year").format("YYYY-MM-DD"),
+      to: dayjs().endOf("year").format("YYYY-MM-DD"),
+      customActualDate: dayjs().endOf("year").format("YYYY-MM-DD"),
     };
     const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual(
@@ -136,9 +136,12 @@ describe("stat service", () => {
     await Promise.all(expenses.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().startOf("year").toDate(),
-      to: dayjs().add(1, "year").endOf("year").toDate(),
-      customActualDate: dayjs().add(1, "year").endOf("year").toDate(),
+      from: dayjs().startOf("year").format("YYYY-MM-DD"),
+      to: dayjs().add(1, "year").endOf("year").format("YYYY-MM-DD"),
+      customActualDate: dayjs()
+        .add(1, "year")
+        .endOf("year")
+        .format("YYYY-MM-DD"),
     };
     const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual(
@@ -188,9 +191,12 @@ describe("stat service", () => {
     await Promise.all(expenses.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().set("month", 2).startOf("month").toDate(),
-      to: dayjs().set("month", 5).endOf("month").toDate(),
-      customActualDate: dayjs().set("month", 5).endOf("month").toDate(),
+      from: dayjs().set("month", 2).startOf("month").format("YYYY-MM-DD"),
+      to: dayjs().set("month", 5).endOf("month").format("YYYY-MM-DD"),
+      customActualDate: dayjs()
+        .set("month", 5)
+        .endOf("month")
+        .format("YYYY-MM-DD"),
     };
     const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual([
@@ -241,9 +247,12 @@ describe("stat service", () => {
     await Promise.all(expenses.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().set("month", 2).startOf("month").toDate(),
-      to: dayjs().set("month", 2).endOf("month").toDate(),
-      customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
+      from: dayjs().set("month", 2).startOf("month").format("YYYY-MM-DD"),
+      to: dayjs().set("month", 2).endOf("month").format("YYYY-MM-DD"),
+      customActualDate: dayjs()
+        .set("month", 2)
+        .endOf("month")
+        .format("YYYY-MM-DD"),
     };
     const stats = await getStats(user.id, buildGetStatQuery({ range }));
     expect(stats.results).toEqual([
@@ -278,9 +287,12 @@ describe("stat service", () => {
     await Promise.all(data.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().set("month", 0).startOf("month").toDate(),
-      to: dayjs().set("month", 2).endOf("month").toDate(),
-      customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
+      from: dayjs().set("month", 0).startOf("month").format("YYYY-MM-DD"),
+      to: dayjs().set("month", 2).endOf("month").format("YYYY-MM-DD"),
+      customActualDate: dayjs()
+        .set("month", 2)
+        .endOf("month")
+        .format("YYYY-MM-DD"),
     };
     const stats = await getStats(
       user.id,
@@ -332,9 +344,12 @@ describe("stat service", () => {
     await Promise.all(data.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().set("month", 0).startOf("month").toDate(),
-      to: dayjs().set("month", 2).endOf("month").toDate(),
-      customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
+      from: dayjs().set("month", 0).startOf("month").format("YYYY-MM-DD"),
+      to: dayjs().set("month", 2).endOf("month").format("YYYY-MM-DD"),
+      customActualDate: dayjs()
+        .set("month", 2)
+        .endOf("month")
+        .format("YYYY-MM-DD"),
     };
     const stats = await getStats(
       user.id,
@@ -389,9 +404,12 @@ describe("stat service", () => {
     await Promise.all(data.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().set("month", 0).startOf("month").toDate(),
-      to: dayjs().set("month", 2).endOf("month").toDate(),
-      customActualDate: dayjs().set("month", 2).endOf("month").toDate(),
+      from: dayjs().set("month", 0).startOf("month").format("YYYY-MM-DD"),
+      to: dayjs().set("month", 2).endOf("month").format("YYYY-MM-DD"),
+      customActualDate: dayjs()
+        .set("month", 2)
+        .endOf("month")
+        .format("YYYY-MM-DD"),
     };
     const stats = await getStats(
       user.id,
@@ -445,8 +463,8 @@ describe("stat service", () => {
     await Promise.all(data.map((el) => createOperation(user.id, el)));
 
     const range = {
-      from: dayjs().add(-2, "month").startOf("month").toDate(),
-      to: dayjs().endOf("month").toDate(),
+      from: dayjs().add(-2, "month").startOf("month").format("YYYY-MM-DD"),
+      to: dayjs().endOf("month").format("YYYY-MM-DD"),
     };
     const stats = await getStats(
       user.id,

@@ -4,9 +4,9 @@ import { parseAsJson } from "nuqs";
 
 export const getStatsQuerySchema = zd.object({
   range: zd.object({
-    from: zd.coerce.date(),
-    to: zd.coerce.date().nullish(),
-    customActualDate: zd.coerce.date().nullish(),
+    from: zd.string(),
+    to: zd.string().nullish(),
+    customActualDate: zd.string().nullish(),
   }),
   label: zd.string().nullish(),
   tags: zd.array(zd.string()),
@@ -23,8 +23,8 @@ export const getStatsQuerySchema = zd.object({
 
 export const defaultGetStatsQuery: zd.infer<typeof getStatsQuerySchema> = {
   range: {
-    from: dayjs().startOf("year").toDate(),
-    to: dayjs().endOf("year").toDate(),
+    from: dayjs().startOf("year").format("YYYY-MM-DD"),
+    to: dayjs().endOf("year").format("YYYY-MM-DD"),
   },
   tags: [],
   display: ["currentBalance", "currentIncome", "currentExpense"],

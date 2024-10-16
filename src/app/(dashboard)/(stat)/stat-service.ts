@@ -34,8 +34,14 @@ async function getOverviewStat(
   userId: string,
   { range, tags, label }: z.infer<typeof getStatsQuerySchema>,
 ) {
-  const { from, customActualDate } = range;
-  const to = range.to || dayjs(from).endOf("month").toDate();
+  // We convert all date to the start and end of the month because all result are mounth based
+  const customActualDate = range.customActualDate
+    ? dayjs(range.customActualDate).endOf("month").toDate()
+    : null;
+  const from = dayjs(range.from).startOf("month").toDate();
+  const to = range.to
+    ? dayjs(range.to).endOf("month").toDate()
+    : dayjs(from).endOf("month").toDate();
 
   const operations = await prisma.operation.findMany({
     where: {

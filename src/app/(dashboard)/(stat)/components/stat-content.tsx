@@ -11,12 +11,12 @@ import { humanAmount, humanFromLastMonth } from "@/lib/humanizer";
 import { CountChartCard } from "@/components/count-chart-card";
 import { BanknoteIcon } from "lucide-react";
 import { MonthPicker } from "@/components/month-picker";
-import { useEffect } from "react";
 import { createSerializer, useQueryState } from "nuqs";
 import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { StatFilter } from "./stat-filter";
 import { StatDisplay } from "./stat-display";
+import dayjs from "dayjs";
 
 const querySerializer = getStatsQuerySerializer();
 
@@ -64,8 +64,22 @@ export function StatContent({ data }: StatContentProps) {
               <MonthPicker
                 type="range"
                 buttonProps={{ className: "w-[210px]" }}
-                value={filter.range}
-                onChange={(range) => onApply({ range })}
+                value={{
+                  from: dayjs(filter.range.from).startOf("month").toDate(),
+                  to: filter.range.to
+                    ? dayjs(filter.range.to).endOf("month").toDate()
+                    : null,
+                }}
+                onChange={(range) =>
+                  onApply({
+                    range: {
+                      from: dayjs(range.from).format("YYYY-MM-DD"),
+                      to: range.to
+                        ? dayjs(range.to).format("YYYY-MM-DD")
+                        : null,
+                    },
+                  })
+                }
               />
             </>
           }

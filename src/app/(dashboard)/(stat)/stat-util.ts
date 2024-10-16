@@ -20,10 +20,11 @@ export const statData = {
 } as const;
 
 // Month index start by 0
+// Date string format: "YYYY-MM-DD"
 export function getMonthRange(range: {
-  from: Date;
-  to: Date;
-  customActualDate?: Date | null;
+  from: Date | string;
+  to: Date | string;
+  customActualDate?: Date | string | null;
 }) {
   const startYearDayjs = dayjs(range.from).startOf("month");
   const endYearDayjs = dayjs(range.to).endOf("month");
@@ -37,20 +38,23 @@ export function getMonthRange(range: {
       return (
         monthDayjs.isSameOrAfter(startYearDayjs) &&
         monthDayjs.isSameOrBefore(endYearDayjs) &&
-        monthDayjs.isSameOrBefore(dayjs(range.customActualDate).endOf("month"))
+        monthDayjs.isSameOrBefore(
+          dayjs(range.customActualDate ?? new Date()).endOf("month"),
+        )
       );
     },
   );
 }
 
+// Date string format: "YYYY-MM-DD"
 export function getMonthLabel(params: {
   monthIndex: number;
-  from: Date;
-  to: Date;
+  from: Date | string;
+  to: Date | string;
 }) {
   dayjs.locale("fr");
-  const startYear = params.from.getFullYear();
-  const endYear = params.to.getFullYear();
+  const startYear = new Date(params.from).getFullYear();
+  const endYear = new Date(params.to).getFullYear();
   const delta = endYear - startYear;
   return dayjs(params.from)
     .startOf("year")
