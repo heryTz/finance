@@ -6,6 +6,10 @@ import { authOptions } from "./api/auth/[...nextauth]/options";
 import { Poppins as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import utc from "dayjs/plugin/utc";
+import dayjs from "dayjs";
+
+dayjs.extend(utc);
 
 const fontSans = FontSans({
   subsets: ["latin"],

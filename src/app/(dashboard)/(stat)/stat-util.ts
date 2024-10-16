@@ -25,9 +25,53 @@ export function getMonthRange(range: {
   to: Date;
   customActualDate?: Date | null;
 }) {
+  const _range = {
+    from: new Date("2024-04-30T21:00:00.000Z"),
+    to: new Date("2024-04-30T23:59:59.999Z"),
+    customActualDate: null,
+  };
   const startYearDayjs = dayjs(range.from).startOf("month");
   const endYearDayjs = dayjs(range.to).endOf("month");
   const delta = endYearDayjs.get("year") - startYearDayjs.get("year") + 1;
+
+  // {
+  //   range: '2024-04-30T21:00:00.000Z',
+  //   to: '2024-04-30T23:59:59.999Z',
+  //   startYearDayjs: '2024-04-01T00:00:00.000Z',
+  //   endYearDayjs: '2024-04-30T23:59:59.999Z',
+  //   delta: 1
+  // }
+  // { monthRange: [ 3 ] }
+  //
+  // {
+  //   range: '2024-04-30T21:00:00.000Z',
+  //   to: '2024-05-31T20:59:59.999Z',
+  //   startYearDayjs: '2024-04-30T21:00:00.000Z',
+  //   endYearDayjs: '2024-05-31T20:59:59.999Z',
+  //   delta: 1
+  // }
+  // { monthRange: [ 4 ] }
+  //
+  //
+  //=======================================================================
+
+  // {
+  //   range: '2024-04-30T21:00:00.000Z',
+  //   to: '2024-05-31T20:59:59.999Z',
+  //   startYearDayjs: '2024-04-01T00:00:00.000Z',
+  //   endYearDayjs: '2024-05-31T23:59:59.999Z',
+  //   delta: 1
+  // }
+  // { monthRange: [ 3, 4 ] }
+  //
+  // {
+  //   range: '2024-04-30T21:00:00.000Z',
+  //   to: '2024-05-31T20:59:59.999Z',
+  //   startYearDayjs: '2024-04-30T21:00:00.000Z',
+  //   endYearDayjs: '2024-05-31T20:59:59.999Z',
+  //   delta: 1
+  // }
+  // { monthRange: [ 4 ] }
 
   console.log({
     range: range.from.toISOString(),
