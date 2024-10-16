@@ -8,10 +8,12 @@ import { z } from "zod";
 import { getStatsQuerySchema } from "./stat-dto";
 import "dayjs/locale/fr";
 import { variationPercentage } from "@/lib/operation-stat";
+import utc from "dayjs/plugin/utc";
 
 dayjs.locale("fr");
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
+dayjs.extend(utc);
 
 // TODO: Allow other xAxis label than month
 // TODO: Extract expenses and revenues calculation to a function
