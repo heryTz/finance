@@ -29,6 +29,14 @@ export function getMonthRange(range: {
   const endYearDayjs = dayjs(range.to).endOf("month");
   const delta = endYearDayjs.get("year") - startYearDayjs.get("year") + 1;
 
+  console.log({
+    range: range.from.toISOString(),
+    to: range.to.toISOString(),
+    startYearDayjs: startYearDayjs.toISOString(),
+    endYearDayjs: endYearDayjs.toISOString(),
+    delta: delta,
+  });
+
   return Array.from({ length: 12 * delta }, (_, i) => i).filter(
     (monthIndex) => {
       const monthDayjs = dayjs(range.from)

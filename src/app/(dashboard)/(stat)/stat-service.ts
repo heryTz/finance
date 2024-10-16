@@ -50,6 +50,7 @@ async function getOverviewStat(
   });
 
   const monthRange = getMonthRange({ from, to, customActualDate });
+  console.log({ monthRange });
   let lastMonthOfOperation = 0;
 
   const data: {
