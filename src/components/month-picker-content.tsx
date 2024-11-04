@@ -17,6 +17,7 @@ export function MonthPickerContent<Type extends "range" | "simple">({
   type,
 }: MonthPickerContentProps<Type>) {
   const [currentYear, setCurrentYear] = useState(dayjs().get("year"));
+  const [monthHoveredIndex, setMonthHoveredIndex] = useState<number>();
 
   const onClickMonth = (monthIndex: number) => {
     const month = dayjs()
@@ -45,6 +46,7 @@ export function MonthPickerContent<Type extends "range" | "simple">({
     }
 
     onChange({ ...value, to: month.endOf("month").toDate() });
+    setMonthHoveredIndex(undefined);
   };
 
   return (
@@ -77,6 +79,7 @@ export function MonthPickerContent<Type extends "range" | "simple">({
             let isSelected = false;
             let isFirst = false;
             let isLast = false;
+            let isHovered = false;
 
             if (type === "simple") {
               isSelected = value ? dayjs(value).isSame(month) : false;
@@ -94,6 +97,16 @@ export function MonthPickerContent<Type extends "range" | "simple">({
               isLast = value?.to
                 ? dayjs(value.to).isSame(month.endOf("month"))
                 : false;
+
+              if (value?.from && !value?.to && monthHoveredIndex) {
+                isHovered =
+                  dayjs(value.from).isBefore(month) &&
+                  dayjs()
+                    .set("year", currentYear)
+                    .startOf("year")
+                    .add(monthHoveredIndex, "month")
+                    .isSameOrAfter(month);
+              }
             }
 
             return (
@@ -104,12 +117,13 @@ export function MonthPickerContent<Type extends "range" | "simple">({
                 aria-selected={isSelected}
                 className={cn("text-center text-sm p-0 h-8 w-11", {
                   "bg-accent text-accent-foreground rounded-none":
-                    isSelected && !isFirst && !isLast,
+                    (isSelected && !isFirst && !isLast) || isHovered,
                   "rounded-l-md": (monthIndex + 1) % 3 === 1,
                   "rounded-r-md": (monthIndex + 1) % 3 === 0,
                 })}
                 key={monthIndex}
                 onClick={() => onClickMonth(monthIndex)}
+                onMouseOver={() => setMonthHoveredIndex(monthIndex)}
               >
                 {dayjs().startOf("year").add(monthIndex, "month").format("MMM")}
               </Button>
