@@ -4,12 +4,13 @@ import { NextResponse } from "next/server";
 
 export const GET = weh(async () => {
   let dbConnectionHealth = false;
-  // wft! prisma throw error "PrismaClientInitializationError" if I wrap this with try..catch
+  // TODO: check why prisma throw error "PrismaClientInitializationError" if I wrap this with try..catch
   await prisma.$queryRaw`SELECT 1`;
   dbConnectionHealth = true;
 
   return NextResponse.json({
     application: "ok",
+    // unused
     dbConnection: dbConnectionHealth ? "ok" : "nok",
   });
 });
