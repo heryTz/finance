@@ -18,36 +18,33 @@ export function MonthPickerContent<Type extends "range" | "simple">({
 }: MonthPickerContentProps<Type>) {
   const [currentYear, setCurrentYear] = useState(dayjs().get("year"));
 
-  const onClickMonth = (monthIndex: number, reset = false) => {
+  const onClickMonth = (monthIndex: number) => {
     const month = dayjs()
       .set("year", currentYear)
       .startOf("year")
       .set("month", monthIndex);
+
     if (type === "simple") {
       onChange(month.toDate());
       return;
     }
 
-    if (!value || reset) {
-      onChange({ from: month.startOf("month").toDate() });
-    } else if (value.from && !value.to) {
-      if (dayjs(value.from).isBefore(month)) {
-        onChange({ ...value, to: month.endOf("month").toDate() });
-      } else {
-        onChange({
-          from: month.startOf("month").toDate(),
-          to: dayjs(value.from).endOf("month").toDate(),
-        });
-      }
-    } else if (!value.from && value.to) {
-      throw new Error(
-        `This should never be happened. "value.to" should set after "value.from"`,
-      );
-    } else if (dayjs(value.from).isBefore(month)) {
-      onChange({ ...value, to: month.endOf("month").toDate() });
-    } else if (dayjs(value.from).isAfter(month)) {
-      onChange({ ...value, from: month.startOf("month").toDate() });
+    if (!value?.from) {
+      onChange({ from: month.startOf("month").toDate(), to: null });
+      return;
     }
+
+    if (value.from && value.to) {
+      onChange({ from: month.startOf("month").toDate(), to: null });
+      return;
+    }
+
+    if (value.from && dayjs(value.from).isAfter(month)) {
+      onChange({ from: month.startOf("month").toDate(), to: null });
+      return;
+    }
+
+    onChange({ ...value, to: month.endOf("month").toDate() });
   };
 
   return (
@@ -113,7 +110,6 @@ export function MonthPickerContent<Type extends "range" | "simple">({
                 })}
                 key={monthIndex}
                 onClick={() => onClickMonth(monthIndex)}
-                onDoubleClick={() => onClickMonth(monthIndex, true)}
               >
                 {dayjs().startOf("year").add(monthIndex, "month").format("MMM")}
               </Button>
