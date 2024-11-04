@@ -34,7 +34,7 @@ export function AppPagination({
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => onChange(Math.min(1, page - 1))}
+              onClick={() => onChange(Math.max(1, page - 1))}
             />
           </PaginationItem>
           {range.map((p) => {
