@@ -62,7 +62,7 @@ export async function createOperation(
       ),
     );
     tags = await prisma.tag.findMany({
-      where: { name: { in: input.tags } },
+      where: { userId, name: { in: input.tags } },
     });
   }
 

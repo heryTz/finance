@@ -75,6 +75,29 @@ describe("operation service", () => {
     expect(operationUpdated.tags[0].name).toBe(update.tags[0]);
   });
 
+  it("when update operation, attach all tag on input, remove all tag not present on input", async () => {
+    const user = await createUser({ email: "user1@example.com" });
+    const operation = await createOperation(
+      user.id,
+      buildSaveOperationInput({ tags: ["tag1", "tag3"] }),
+    );
+    const update = buildSaveOperationInput({
+      tags: ["tag1", "tag2"],
+    });
+    const operationUpdated = await updateOperation(
+      user.id,
+      operation.id,
+      update,
+    );
+    expect(operationUpdated.tags.length).toEqual(2);
+    expect(
+      operationUpdated.tags.find((el) => el.name === "tag1"),
+    ).toBeDefined();
+    expect(
+      operationUpdated.tags.find((el) => el.name === "tag2"),
+    ).toBeDefined();
+  });
+
   it("can only update my operation", async () => {
     const user1 = await createUser({ email: "user1@example.com" });
     const user2 = await createUser({ email: "user2@example.com" });
