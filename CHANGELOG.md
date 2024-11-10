@@ -1,5 +1,24 @@
 
 
+# [0.2.0](https://github.com/heryTz/finance/compare/v0.1.0...v0.2.0) (2024-11-10)
+
+
+### Bug Fixes
+
+* dayjs timezone ([06b3003](https://github.com/heryTz/finance/commit/06b3003c5d8433829fd0739451de2edd868c81d7))
+* mobile pagination ([3ce1f1a](https://github.com/heryTz/finance/commit/3ce1f1ad57968f7dd60a990a55abf827e58f7467))
+* next auth email provider config ([8374a98](https://github.com/heryTz/finance/commit/8374a983b11f773e917c6a8b7492266a2b10a479))
+* stat content ([9f70eb8](https://github.com/heryTz/finance/commit/9f70eb83f1c930d0555ce463c6b3c6fcb4f0c371))
+* stat-content ([72b5294](https://github.com/heryTz/finance/commit/72b5294366c81095ef398764f4590518e38b77bd))
+* tag assign to wrong user ([9655567](https://github.com/heryTz/finance/commit/965556796255c40d90a54f09e3c6455fe6e5e978))
+
+
+### Features
+
+* add "to" preview in month picker ([4ee351b](https://github.com/heryTz/finance/commit/4ee351bfbb8a3136a8240491946421bb94c2a091))
+* fetch item detail to edit only when user open modal ([#27](https://github.com/heryTz/finance/issues/27)) ([53f89a8](https://github.com/heryTz/finance/commit/53f89a8c25981cbef8eb8586d4ca6ca016d95bd2))
+* improve month picker DX ([c484a43](https://github.com/heryTz/finance/commit/c484a43a9102a4ac6d9a60c42dbc6409590ce30f))
+
 # 0.1.0 (2024-09-17)
 
 
