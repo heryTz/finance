@@ -64,7 +64,9 @@ export function Component({ children }: PropsWithChildren) {
 export default function Layout(props: {}) {
   return (
     <AdminGuard>
-      <Component {...props} />
+      <Component /* @next-codemod-error 'props' is used with spread syntax (...). Any asynchronous properties of 'props' must be awaited when accessed. */
+        {...props}
+      />
     </AdminGuard>
   );
 }

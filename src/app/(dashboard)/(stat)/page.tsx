@@ -15,11 +15,10 @@ const searchParamsCache = createSearchParamsCache({
   [querySerializer.key]: querySerializer.parser,
 });
 
-export default async function StatPage({
-  searchParams,
-}: {
-  searchParams: Record<string, string | string[] | undefined>;
+export default async function StatPage(props: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const searchParams = await props.searchParams;
   const { user } = await apiGuard();
   const params = searchParamsCache.parse(searchParams);
   const stats = await getStats(user.id, params.filter);

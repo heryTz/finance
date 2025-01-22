@@ -8,23 +8,26 @@ import {
 } from "@/app/(dashboard)/operation/operation-service";
 import { saveOperationInputSchema } from "@/app/(dashboard)/operation/operation-dto";
 
-type IdParams = { params: { id: string } };
+type IdParams = { params: Promise<{ id: string }> };
 
-export const GET = weh(async (_, { params }: IdParams) => {
+export const GET = weh(async (_, props: IdParams) => {
   const { user } = await apiGuard();
+  const params = await props.params;
   const operation = await getOperationById(user.id, params.id);
   return NextResponse.json(operation);
 });
 
-export const PUT = weh(async (request: Request, { params }: IdParams) => {
+export const PUT = weh(async (request: Request, props: IdParams) => {
   const { user } = await apiGuard();
+  const params = await props.params;
   const input = saveOperationInputSchema.parse(await request.json());
   const operation = await updateOperation(user.id, params.id, input);
   return NextResponse.json(operation);
 });
 
-export const DELETE = weh(async (_, { params }: IdParams) => {
+export const DELETE = weh(async (_, props: IdParams) => {
   const { user } = await apiGuard();
+  const params = await props.params;
   const operation = await deleteOperation(user.id, params.id);
   return NextResponse.json(operation);
 });

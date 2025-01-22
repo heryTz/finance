@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -35,8 +35,8 @@
     "@tanstack/react-table": "^8.20.5",
     "@tippyjs/react": "^4.2.6",
     "@types/node": "20.5.0",
-    "@types/react": "18.2.20",
-    "@types/react-dom": "18.2.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -44,17 +44,17 @@
     "dayjs": "^1.11.13",
     "dotenv-cli": "^7.4.2",
     "eslint": "8.47.0",
-    "eslint-config-next": "14.0.4",
+    "eslint-config-next": "15.1.6",
     "i18next": "^23.16.5",
     "jspdf": "^2.5.2",
     "lucide-react": "^0.426.0",
-    "next": "^14.2.17",
+    "next": "15.1.6",
     "next-auth": "^4.24.10",
     "next-themes": "^0.3.0",
     "nuqs": "^1.20.0",
-    "react": "18.2.0",
+    "react": "19.0.0",
     "react-day-picker": "8.10.1",
-    "react-dom": "18.2.0",
+    "react-dom": "19.0.0",
     "react-hook-form": "^7.53.2",
     "react-i18next": "^15.1.1",
     "react-modal": "^3.16.1",
@@ -137,7 +137,9 @@
       "axios@>=1.3.2 <=1.7.3": ">=1.7.4",
       "micromatch@<4.0.8": ">=4.0.8",
       "dompurify@<2.5.4": ">=2.5.4",
-      "cookie@<0.7.0": ">=0.7.0"
+      "cookie@<0.7.0": ">=0.7.0",
+      "@types/react": "19.0.7",
+      "@types/react-dom": "19.0.3"
     }
   }
 }

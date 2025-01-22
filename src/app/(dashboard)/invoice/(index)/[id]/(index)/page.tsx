@@ -8,14 +8,15 @@ export const metadata: Metadata = {
   title: genTitle("Génération de facture"),
 };
 
-export default async function InvoiceDocumentPage({
-  params,
-}: InvoiceDocumentPageProps) {
+export default async function InvoiceDocumentPage(
+  props: InvoiceDocumentPageProps,
+) {
+  const params = await props.params;
   const { user } = await apiGuard();
   const invoice = await getInvoiceById(user.id, params.id);
   return <InvoiceDocument invoice={invoice} />;
 }
 
 type InvoiceDocumentPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };

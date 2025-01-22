@@ -2,9 +2,8 @@ import { getInvoiceById, getProducts } from "../../invoice-service";
 import { InvoiceSave } from "../../components/invoice-save";
 import { apiGuard } from "@/lib/api-guard";
 
-export default async function InvoiceEditPage({
-  params,
-}: InvoiceEditPageProps) {
+export default async function InvoiceEditPage(props: InvoiceEditPageProps) {
+  const params = await props.params;
   const { user } = await apiGuard();
   const invoice = await getInvoiceById(user.id, params.id);
   const products = await getProducts(user.id);
@@ -13,5 +12,5 @@ export default async function InvoiceEditPage({
 }
 
 type InvoiceEditPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
