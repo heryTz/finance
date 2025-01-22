@@ -7,7 +7,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { Container } from "@/components/container";
 import { toast } from "sonner";
 import { Form, FormField, FormMessageError } from "@/components/ui/form";
@@ -30,8 +30,7 @@ import { useGetProviders } from "../../provider/provider-query";
 import { ProviderSave } from "../../provider/components/provider-save";
 
 export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
-  const [isPending, startTransition] = useTransition();
-  const { back } = useRouter();
+  const { back, replace } = useRouter();
   const clientsFn = useGetClients();
   const paymentModesFn = useGetPaymentModes();
   const providersFn = useGetProviders();
@@ -60,19 +59,15 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    startTransition(async () => {
-      try {
-        if (invoice) {
-          await updateInvoiceAction(invoice.id, data);
-          toast.success("La facture a été modifiée avec succès.");
-        } else {
-          await createInvoiceAction(data);
-          toast.success("La facture a été créée avec succès.");
-        }
-      } catch (error) {
-        toast.error("Une erreur s'est produite.");
-      }
-    });
+    if (invoice) {
+      await updateInvoiceAction(invoice.id, data);
+      toast.success("La facture a été modifiée avec succès.");
+      replace(routes.invoice());
+    } else {
+      await createInvoiceAction(data);
+      toast.success("La facture a été créée avec succès.");
+      replace(routes.invoice());
+    }
   });
 
   const title = invoice
@@ -318,7 +313,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
             <Button variant={"outline"} onClick={back}>
               Annuler
             </Button>
-            <Button disabled={isPending} onClick={onSubmit}>
+            <Button disabled={form.formState.isSubmitting} onClick={onSubmit}>
               Sauvegarder
             </Button>
           </div>
