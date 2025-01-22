@@ -13,19 +13,17 @@ export function useStorage<T>(key: string, version?: string) {
       const data = JSON.parse(item) as Data<T | null>;
       return data.state || null;
     } catch (error) {
+      console.log(error);
       return null;
     }
   };
 
   const setItem = async (data: T) => {
-    await localStorage.setItem(
-      storeKey,
-      JSON.stringify({ state: data } as Data<T>),
-    );
+    localStorage.setItem(storeKey, JSON.stringify({ state: data } as Data<T>));
   };
 
   const removeItem = async () => {
-    await localStorage.removeItem(storeKey);
+    localStorage.removeItem(storeKey);
   };
 
   return {

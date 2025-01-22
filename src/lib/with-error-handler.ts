@@ -3,11 +3,11 @@ import { z } from "zod";
 import { NotFoundException, UnauthorizedException } from "./exception";
 import { logError } from "./logger";
 
-type Handler = (...args: any[]) => Promise<NextResponse | Response>;
+type Handler = (...args: unknown[]) => Promise<NextResponse | Response>;
 
 export const weh =
   (handler: Handler) =>
-  async (...args: any[]) => {
+  async (...args: unknown[]) => {
     try {
       return await handler(...args);
     } catch (error) {
