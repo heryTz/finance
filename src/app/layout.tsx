@@ -1,17 +1,11 @@
 import "./globals.css";
+import "./font-setup";
 import type { Metadata } from "next";
 import { AppProvider } from "./app-provider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/options";
-import { Poppins as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
-
-const fontSans = FontSans({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-sans",
-});
 
 export const metadata: Metadata = {
   title: "Finance",
@@ -33,12 +27,7 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </head>
-      <body
-        className={cn(
-          "min-h-dvh bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
-      >
+      <body className={cn("min-h-dvh bg-background font-sans antialiased")}>
         <div vaul-drawer-wrapper="" className="min-h-dvh bg-background">
           <AppProvider session={session}>{children}</AppProvider>
         </div>
