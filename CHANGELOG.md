@@ -1,5 +1,18 @@
 
 
+# [0.3.0](https://github.com/heryTz/finance/compare/v0.2.0...v0.3.0) (2025-01-23)
+
+
+### Bug Fixes
+
+* prisma openssl ([ec502ef](https://github.com/heryTz/finance/commit/ec502efca8da2c7cb7b4d555d2c6c6f017188433))
+
+
+### Features
+
+* Upgrade to Next.js v15 and React 19 ([#28](https://github.com/heryTz/finance/issues/28)) ([54a238e](https://github.com/heryTz/finance/commit/54a238ebb8befa98a9a74796183397fb115f4468))
+* use font source instead of google fonts ([8a8556b](https://github.com/heryTz/finance/commit/8a8556b55b4a22c25c33598161483266a416412d))
+
 # [0.2.0](https://github.com/heryTz/finance/compare/v0.1.0...v0.2.0) (2024-11-10)
 
 
