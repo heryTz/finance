@@ -1,8 +1,10 @@
 FROM node:20-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 FROM base AS deps
 WORKDIR /app
-RUN npm i -g pnpm   
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm i
 
@@ -19,7 +21,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
-RUN yarn build
+RUN pnpm build
 
 FROM base AS prod
 RUN apk add --no-cache openssl

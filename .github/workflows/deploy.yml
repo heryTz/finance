@@ -24,18 +24,17 @@ jobs:
     
     steps:
       - name: Checkout project
-        uses: actions/checkout@v3
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
+        uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 
+
+      - name: Install pnpm
+        run: corepack enable 
 
       - name: Install dependencies
-        shell: bash
         run: pnpm install
 
       - name: Run tests
