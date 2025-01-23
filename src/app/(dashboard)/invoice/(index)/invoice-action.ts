@@ -7,7 +7,6 @@ import {
   sendInvoiceMailInputSchema,
 } from "./invoice-dto";
 import { apiGuard } from "@/lib/api-guard";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import {
   createInvoice,
@@ -22,7 +21,6 @@ export async function createInvoiceAction(input: CreateInvoiceInput) {
   const data = createInvoiceSchema.parse(input);
   await createInvoice(user.id, data);
   revalidatePath(routes.invoice());
-  redirect(routes.invoice());
 }
 
 export async function updateInvoiceAction(
@@ -33,7 +31,6 @@ export async function updateInvoiceAction(
   const data = createInvoiceSchema.parse(input);
   await updateInvoice(user.id, id, data);
   revalidatePath(routes.invoice());
-  redirect(routes.invoice());
 }
 
 export async function deleteInvoiceAction(id: string) {

@@ -17,6 +17,7 @@ export function ModalDelete({
         toast.success("Suppression effectué avec succès");
         onOpenChange(false);
       } catch (error) {
+        console.log(error);
         toast.error("Une erreur est survenue");
       }
     });

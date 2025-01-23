@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, RefObject } from "react";
 import Tippy from "@tippyjs/react/headless";
 import { cn } from "@/lib/utils";
 import { usePopover } from "@/lib/use-popover";
@@ -18,7 +18,7 @@ export function PopoverV2({
 }: PopoverV2Props) {
   return (
     <Tippy
-      reference={anchor}
+      reference={anchor as RefObject<Element>}
       visible={open}
       interactive
       placement="bottom-start"

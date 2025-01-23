@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { routes } from "@/app/routes";
 
 export const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prisma) as any,
+  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: routes.authLogin(),
     verifyRequest: routes.authVerifyRequest(),

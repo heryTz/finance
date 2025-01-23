@@ -52,6 +52,7 @@ export function ClientSave({
         onFinish?.(client);
         reset();
       } catch (error) {
+        console.log(error);
         toast.error("Une erreur s'est produite");
       }
     }),

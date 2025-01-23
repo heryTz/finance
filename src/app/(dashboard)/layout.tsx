@@ -61,7 +61,7 @@ export function Component({ children }: PropsWithChildren) {
   );
 }
 
-export default function Layout(props: {}) {
+export default function Layout(props: PropsWithChildren) {
   return (
     <AdminGuard>
       <Component {...props} />

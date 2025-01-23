@@ -64,6 +64,7 @@ export function InvoiceMailing({
         onOpenChange(false);
         reset();
       } catch (error) {
+        console.log(error);
         toast.error("Une erreur est survenue lors de l'envoi de votre facture");
       }
     });

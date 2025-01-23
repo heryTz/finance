@@ -77,6 +77,7 @@ export function OperationSave({
         onFinish?.();
         reset();
       } catch (error) {
+        console.log(error);
         toast.error("Une erreur s'est produite");
       }
     }),

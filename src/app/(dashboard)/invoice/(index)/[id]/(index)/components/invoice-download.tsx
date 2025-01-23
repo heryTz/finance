@@ -34,6 +34,7 @@ export function InvoiceDownload({
         onOpenChange(false);
         reset();
       } catch (error) {
+        console.log(error);
         toast.error(
           "Une erreur est survenue lors du téléchargement de votre facture.",
         );
