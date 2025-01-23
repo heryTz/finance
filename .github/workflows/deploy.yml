@@ -7,7 +7,7 @@ jobs:
   production:
     runs-on: ubuntu-24.04
     env:
-      PRISMA_CLI_BINARY_TARGETS: native,linux-musl
+      PRISMA_CLI_BINARY_TARGETS: linux-musl,linux-musl-openssl-3.0.x
 
     services:
       postgres:
