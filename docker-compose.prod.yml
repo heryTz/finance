@@ -2,13 +2,14 @@ name: finance-prod
 
 services:
   app:
-    image: herytz/finance 
+    image: herytz/finance
     ports:
       - 3000:3000
     env_file:
       - .env.production.local
     depends_on:
       - db
+    pull_policy: always
 
   db:
     image: postgres:16.1-alpine
