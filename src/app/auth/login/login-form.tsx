@@ -41,7 +41,7 @@ export function LoginForm() {
   } = form;
 
   const onSubmit = form.handleSubmit(async (data: Input) => {
-    const response = await signIn("email", {
+    await signIn("email", {
       email: data.email,
       callbackUrl: routes.dashboard(),
     });

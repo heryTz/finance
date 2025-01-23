@@ -73,11 +73,11 @@ export function InvoicePreview({
         <div className="flex justify-between gap-4">
           <PartenaireShip
             title="Prestataire"
-            data={providerData.filter((el) => !!el.value) as any}
+            data={providerData.filter((el) => !!el.value)}
           />
           <PartenaireShip
             title="Client"
-            data={client.filter((el) => !!el.value) as any}
+            data={client.filter((el) => !!el.value)}
           />
         </div>
         <Separator />
@@ -150,7 +150,7 @@ type InvoicePreviewProps = {
 
 function PartenaireShip(props: {
   title: string;
-  data: { label: string; value: string }[];
+  data: { label: string; value: string | null }[];
 }) {
   return (
     <div>
@@ -159,7 +159,7 @@ function PartenaireShip(props: {
         {props.data.map((el) => (
           <div key={el.label} className="text-sm">
             <strong className="w-[70px] inline-block">{el.label}:</strong>{" "}
-            {el.value}
+            {el.value ?? "-"}
           </div>
         ))}
       </div>

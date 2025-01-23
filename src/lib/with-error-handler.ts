@@ -3,11 +3,13 @@ import { z } from "zod";
 import { NotFoundException, UnauthorizedException } from "./exception";
 import { logError } from "./logger";
 
-type Handler = (...args: unknown[]) => Promise<NextResponse | Response>;
+type Handler<T extends unknown[]> = (
+  ...args: T
+) => Promise<NextResponse | Response>;
 
 export const weh =
-  (handler: Handler) =>
-  async (...args: unknown[]) => {
+  <T extends unknown[]>(handler: Handler<T>) =>
+  async (...args: T) => {
     try {
       return await handler(...args);
     } catch (error) {

@@ -60,6 +60,7 @@ export function PaymentModeSave({
         onFinish?.(newPaymentMode);
         reset();
       } catch (error) {
+        console.log(error);
         toast.error("Erreur s'est produite");
       }
     });

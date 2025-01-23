@@ -19,4 +19,4 @@ export function AdminGuard({ children }: AdminGuardProps) {
   return <>{children}</>;
 }
 
-type AdminGuardProps = PropsWithChildren<{}>;
+type AdminGuardProps = PropsWithChildren;

@@ -52,6 +52,7 @@ export function ProviderSave({
         onFinish?.(provider);
         reset();
       } catch (error) {
+        console.log(error);
         toast.error("Une erreur s'est produite");
       }
     }),

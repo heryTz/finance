@@ -14,7 +14,7 @@ export const POST = weh(async (request: Request) => {
   return NextResponse.json(client);
 });
 
-export const GET = weh(async (request: Request) => {
+export const GET = weh(async () => {
   const { user } = await apiGuard();
   const clients = await getClients(user.id);
   return NextResponse.json(clients);

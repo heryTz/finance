@@ -13,4 +13,4 @@ export function HScrollable(props: HScrollableProps) {
   );
 }
 
-type HScrollableProps = PropsWithChildren<{}> & ComponentProps<"div">;
+type HScrollableProps = PropsWithChildren & ComponentProps<"div">;

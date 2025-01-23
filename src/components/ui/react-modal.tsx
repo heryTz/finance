@@ -40,7 +40,6 @@ export const ReactModal = ({
     if (props.open !== undefined) {
       setOpen(props.open);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.open]);
 
   const onOpenChange = (b: boolean) => {

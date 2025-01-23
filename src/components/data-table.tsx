@@ -20,7 +20,6 @@ import { HScrollable } from "./h-scrollable";
 export function DataTable<TData, TValue>({
   data,
   columns,
-  initialState,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -42,7 +41,9 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  const meta = (header.column.columnDef.meta ?? {}) as any;
+                  const meta = (header.column.columnDef.meta ?? {}) as {
+                    className?: string;
+                  };
                   return (
                     <TableHead key={header.id} className={meta.className}>
                       {header.isPlaceholder
@@ -65,7 +66,9 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => {
-                    const meta = (cell.column.columnDef.meta ?? {}) as any;
+                    const meta = (cell.column.columnDef.meta ?? {}) as {
+                      className?: string;
+                    };
                     return (
                       <TableCell key={cell.id} className={meta.className}>
                         {flexRender(

@@ -115,6 +115,7 @@ export async function sendInvoiceMail(
       replyTo: { address: provider.email, name: provider.name },
     });
   } catch (error) {
+    console.log(error);
     throw new Error(`Echec de l'envoi de l'e-mail`);
   }
 }

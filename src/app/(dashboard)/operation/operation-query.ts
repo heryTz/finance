@@ -6,8 +6,8 @@ import type { GetOperationById, GetOperations } from "./operation-service";
 export function useGetOperations({ q, distinct }: GetOperationQuery = {}) {
   return useQuery({
     queryKey: ["useGetOperations", q, distinct],
-    queryFn: ({ queryKey }) => {
-      const [_, q, distinct] = queryKey;
+    queryFn: async ({ queryKey }) => {
+      const [, q, distinct] = queryKey;
       return httpClient
         .get<GetOperations>(`/operations`, {
           params: { q, distinct },
