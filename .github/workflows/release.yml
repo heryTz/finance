@@ -16,26 +16,30 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: "https://registry.npmjs.org"
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          version: "9.0.0"
+
+      - name: Install pnpm
+        run: corepack enable
+
       - name: Install dependencies
         run: pnpm install
+
+
       - name: Verify dependencies integrity
         run: pnpm audit
+
       - name: Git config
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Release
         run: npx release-it --verbose --ci
         env:
