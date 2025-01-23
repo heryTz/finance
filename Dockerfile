@@ -27,11 +27,11 @@ FROM base AS prod
 RUN apk add --no-cache openssl
 WORKDIR /app
 COPY prisma ./
-RUN npx prisma generate
 COPY --from=builder /app/entrypoint-prod.sh ./entrypoint-prod.sh
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+RUN npx prisma generate
 EXPOSE 3000
 ENV HOSTNAME="0.0.0.0"
 CMD [ "sh", "entrypoint-prod.sh" ]
