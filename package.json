@@ -9,7 +9,6 @@
     "lint": "next lint",
     "test": "dotenv -e .env.test -- npx prisma db push --force-reset && jest --runInBand",
     "test:watch": "dotenv -e .env.test -- npx prisma db push --force-reset && jest --watch",
-    "test:ci": "npx prisma db push --force-reset && jest --runInBand",
     "cli": "npx ts-node -r tsconfig-paths/register",
     "format": "prettier --write \"src/**/*.(ts|tsx)\"",
     "prepare": "husky",

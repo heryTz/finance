@@ -7,16 +7,6 @@ on:
 jobs:
   production:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: postgresql://user:user@localhost:5432/finance_test
-      SMTP_HOST: localhost
-      SMTP_PORT: 1025
-      SMTP_USER: not.important@example.com
-      SMTP_PASS: example
-      SMTP_SECURE: false
-      EMAIL_FROM: contact@yopmail.fr
-      NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_SECRET: rfcvTakdHpXvZzWkPT7YXj7hWLRUOThECC2Bwc5bQGU=
 
     services:
       postgres:
@@ -31,7 +21,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 5433:5432
     
     steps:
       - name: Checkout project
@@ -50,7 +40,7 @@ jobs:
         run: pnpm install
 
       - name: Run tests
-        run: pnpm test:ci
+        run: pnpm test
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
