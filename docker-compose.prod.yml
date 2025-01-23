@@ -5,6 +5,8 @@ services:
     image: herytz/finance 
     ports:
       - 3000:3000
+    env_file:
+      - .env.production.local
     depends_on:
       - db
 
