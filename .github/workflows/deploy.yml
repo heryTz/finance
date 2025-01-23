@@ -8,7 +8,7 @@ jobs:
   production:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://user:user@postgres:5432/finance_test
+      DATABASE_URL: postgresql://user:user@localhost:5432/finance_test
       SMTP_HOST: localhost
       SMTP_PORT: 1025
       SMTP_USER: not.important@example.com
@@ -30,6 +30,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
     
     steps:
       - name: Checkout project
