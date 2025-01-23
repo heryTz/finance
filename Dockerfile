@@ -20,13 +20,13 @@ RUN apk add --no-cache openssl
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx prisma generate
 RUN pnpm build
 
 FROM base AS prod
 RUN apk add --no-cache openssl
 WORKDIR /app
 COPY prisma ./
+RUN npx prisma generate
 COPY --from=builder /app/entrypoint-prod.sh ./entrypoint-prod.sh
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
