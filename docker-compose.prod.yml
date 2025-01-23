@@ -2,10 +2,7 @@ name: finance-prod
 
 services:
   app:
-    image: finance-prod-app
-    build:
-      target: prod
-      context: .
+    image: herytz/finance 
     ports:
       - 3000:3000
     depends_on:

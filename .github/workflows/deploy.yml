@@ -1,7 +1,8 @@
 on:
   push:
     branches:
-      - main
+      - _main
+      - 22-use-a-registry 
   
 jobs:
   production:
@@ -10,34 +11,51 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
+
       - name: Set up pnpm
         uses: pnpm/action-setup@v2
         with:
           version: latest
+
       - name: Install Node.js
         uses: actions/setup-node@v3
+
       - name: Install dependencies
         shell: bash
         run: pnpm install
+
       - uses: ./.github/actions/docker-compose
+
       - name: Run tests
         run: |
           chmod +x ./entrypoint-test-ci.sh
           pnpm test:ci
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PUB_KEY }}" > ~/.ssh/id_rsa.pub
-          chmod 600 ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa.pub
-          ssh-keyscan -p${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      - name: Update app
-        run: |
-          ssh -p${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            cd ~/finance/app && \
-            git pull origin main && \
-            docker compose -f docker-compose.prod.yml up --build -d && \
-            docker image prune -f"
-      - name: Check health
-        run: APP_URL=${{ secrets.APP_URL }} node checkhealth.js
+
+      - name: Login to the registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+
+      - name: Build image
+        run: docker build --target prod --tag herytz/finance .
+
+      - name: Push image
+        run: docker push herytz/finance 
+
+      # - name: Setup SSH
+      #   run: |
+      #     mkdir -p ~/.ssh/
+      #     echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/id_rsa
+      #     echo "${{ secrets.SSH_PUB_KEY }}" > ~/.ssh/id_rsa.pub
+      #     chmod 600 ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa.pub
+      #     ssh-keyscan -p${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      #
+      # - name: Update app
+      #   run: |
+      #     ssh -p${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+      #       cd ~/finance/app && \
+      #       git pull origin main && \
+      #       docker compose -f docker-compose.prod.yml up --build -d && \
+      #       docker image prune -f"
+      #
+      # - name: Check health
+      #   run: APP_URL=${{ secrets.APP_URL }} node checkhealth.js
