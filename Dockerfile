@@ -31,7 +31,7 @@ COPY --from=builder /app/entrypoint-prod.sh ./entrypoint-prod.sh
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-RUN npx prisma generate
+RUN pnpm install 
 EXPOSE 3000
 ENV HOSTNAME="0.0.0.0"
 CMD [ "sh", "entrypoint-prod.sh" ]
