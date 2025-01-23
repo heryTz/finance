@@ -22,6 +22,7 @@ RUN npx prisma generate
 RUN yarn build
 
 FROM base AS prod
+RUN apk add --no-cache openssl
 WORKDIR /app
 COPY prisma ./
 COPY --from=builder /app/entrypoint-prod.sh ./entrypoint-prod.sh
