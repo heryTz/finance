@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import { useState } from "react";
 import { StatFilterSheet } from "./stat-filter-sheet";
 import { getStatsQuerySchema } from "../stat-dto";
@@ -12,7 +12,7 @@ export function StatFilter({ filter, onApply }: StatFilterProps) {
   return (
     <>
       <div className="flex items-center flex-wrap gap-4">
-        <Button StartIcon={PlusIcon} onClick={() => setOpen(true)}>
+        <Button StartIcon={FilterIcon} onClick={() => setOpen(true)}>
           Filtrer
         </Button>
         {filter.label && (

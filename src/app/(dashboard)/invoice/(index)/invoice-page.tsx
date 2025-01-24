@@ -24,7 +24,11 @@ export default function InvoicePage({ invoices }: InvoicePageProps) {
         description: 'Cliquez sur "Ajouter" pour créer une facture',
       }}
     >
-      <DataTable data={invoices.results} columns={columns} />
+      <DataTable
+        initialState={{ pagination: { pageIndex: 0, pageSize: 2 } }}
+        data={invoices.results}
+        columns={columns}
+      />
     </DataTableWrapper>
   );
 }

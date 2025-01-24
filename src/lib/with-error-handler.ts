@@ -23,6 +23,6 @@ export const weh =
       if (error instanceof NotFoundException) {
         return new Response(error.message, { status: 404 });
       }
-      return new Response(null, { status: 500 });
+      return new Response("Internal server error", { status: 500 });
     }
   };

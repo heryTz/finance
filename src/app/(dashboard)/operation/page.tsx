@@ -1,42 +1,36 @@
-"use client";
-import { useGetOperations } from "./operation-query";
-import { useState } from "react";
-import { useSeo } from "@/lib/use-seo";
-import { useOperationColumnDefs } from "./components/operation-column-defs";
-import { DataTable } from "@/components/data-table";
-import { OperationSave } from "./components/operation-save";
-import { DataTableWrapper } from "@/components/data-table-wrapper";
+import { Suspense } from "react";
+import { OperationPage } from "./operation-page";
+import { Loader } from "@/components/loader";
+import { getOperationQuerySerializer } from "./operation-dto";
+import { createSearchParamsCache } from "nuqs/server";
+import { apiGuard } from "@/lib/api-guard";
+import { getOperations } from "./operation-service";
 
-export default function OperationPage() {
-  const { data, isLoading, error, refetch } = useGetOperations();
-  const { columns } = useOperationColumnDefs();
-  const [openSave, setOpenSave] = useState(false);
+const querySerializer = getOperationQuerySerializer();
+const searchParamsCache = createSearchParamsCache({
+  [querySerializer.key]: querySerializer.parser,
+});
 
-  useSeo({ title: "Opération" });
+export default async function Page(props: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const searchParams = await props.searchParams;
+  const { user } = await apiGuard();
+  const params = searchParamsCache.parse(searchParams);
+
+  const operations = await getOperations(user.id, {
+    ...params.filter,
+    page: params.filter.page ?? 1,
+    pageSize: params.filter.pageSize ?? 10,
+  });
+  const results = operations.results.map((operation) => ({
+    ...operation,
+    amount: operation.amount.toString(),
+  }));
 
   return (
-    <>
-      <DataTableWrapper
-        title="Opération"
-        count={data?.results.length ?? 0}
-        cta={{ label: "Ajouter", onClick: () => setOpenSave(true) }}
-        breadcrumb={[{ label: "Opération" }]}
-        loading={isLoading}
-        error={error}
-        emptyProps={{
-          title: "Aucune opération",
-          description: 'Cliquez sur "Ajouter" pour créer une opération',
-        }}
-      >
-        <DataTable data={data?.results ?? []} columns={columns} />
-      </DataTableWrapper>
-      {openSave && (
-        <OperationSave
-          open={openSave}
-          onOpenChange={setOpenSave}
-          onFinish={refetch}
-        />
-      )}
-    </>
+    <Suspense fallback={<Loader />}>
+      <OperationPage operations={{ ...operations, results }} />
+    </Suspense>
   );
 }
