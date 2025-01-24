@@ -45,6 +45,7 @@ export function OperationFilterSheet({
       onOpenChange={onOpenChange}
       submit={{ onClick: onSubmit }}
       clearAll={{ onClick: onClear }}
+      disableOpenAutoFocus
     >
       <Form {...form}>
         <form className="grid gap-4">

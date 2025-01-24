@@ -17,10 +17,16 @@ export function FilterSheet({
   onOpenChange,
   children,
   clearAll,
+  disableOpenAutoFocus,
 }: FilterSheetProps) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex flex-col sm:max-w-[500px] p-4">
+      <SheetContent
+        className="flex flex-col sm:max-w-[500px] p-4"
+        onOpenAutoFocus={
+          disableOpenAutoFocus ? (e) => e.preventDefault() : undefined
+        }
+      >
         <SheetHeader className="p-2">
           <SheetTitle>{title ?? "Ajouter des filtres"}</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
@@ -44,4 +50,5 @@ type FilterSheetProps = PropsWithChildren<{
   description?: ReactNode;
   submit: ComponentProps<typeof Button>;
   clearAll: ComponentProps<typeof Button>;
+  disableOpenAutoFocus?: boolean;
 }>;
