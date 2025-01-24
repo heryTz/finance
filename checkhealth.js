@@ -2,7 +2,7 @@ const httpOnly = require("http");
 const https = require("https");
 
 const URL = `${process.env.APP_URL}/api/checkhealth`;
-const MAX_RETRIES = 10;
+const MAX_RETRIES = 20;
 const DELAY = 5000;
 
 const http = URL.startsWith("https:") ? https : httpOnly;
