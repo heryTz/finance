@@ -26,7 +26,7 @@ export function OperationFilter({ filter, onApply }: OperationFilterProps) {
             onClear={() => onApply({ label: undefined })}
           />
         )}
-        {filter.tags.length > 0 && (
+        {!!filter.tags?.length && (
           <ChipFilter
             title="Tags"
             value={filter.tags.join(", ")}
