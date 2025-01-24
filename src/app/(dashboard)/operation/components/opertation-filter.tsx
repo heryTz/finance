@@ -1,18 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import { useState } from "react";
-import { StatFilterSheet } from "./stat-filter-sheet";
-import { getStatsQuerySchema } from "../stat-dto";
 import { zd } from "@/lib/zod";
 import { ChipFilter } from "@/components/chip-filter";
+import { OperationFilterSheet } from "./operation-filter-sheet";
+import { operationFilterSheetSchema } from "../operation-dto";
 
-export function StatFilter({ filter, onApply }: StatFilterProps) {
+export function OperationFilter({ filter, onApply }: OperationFilterProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <div className="flex items-center flex-wrap gap-4">
-        <Button StartIcon={PlusIcon} onClick={() => setOpen(true)}>
+        <Button
+          variant={"secondary"}
+          StartIcon={FilterIcon}
+          onClick={() => setOpen(true)}
+        >
           Filtrer
         </Button>
         {filter.label && (
@@ -29,7 +33,7 @@ export function StatFilter({ filter, onApply }: StatFilterProps) {
             onClear={() => onApply({ tags: [] })}
           />
         )}
-        <StatFilterSheet
+        <OperationFilterSheet
           open={open}
           onOpenChange={setOpen}
           value={filter}
@@ -40,7 +44,7 @@ export function StatFilter({ filter, onApply }: StatFilterProps) {
   );
 }
 
-type StatFilterProps = {
-  filter: zd.infer<typeof getStatsQuerySchema>;
-  onApply: (data: Partial<zd.infer<typeof getStatsQuerySchema>>) => void;
+type OperationFilterProps = {
+  filter: zd.infer<typeof operationFilterSheetSchema>;
+  onApply: (data: Partial<zd.infer<typeof operationFilterSheetSchema>>) => void;
 };

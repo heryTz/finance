@@ -5,16 +5,35 @@ import { Tag } from "@prisma/client";
 import { NotFoundException } from "@/lib/exception";
 
 export async function getOperations(userId: string, query: GetOperationQuery) {
-  const { distinct, q } = query;
+  const { distinct, q, page, pageSize, label, tags } = query;
+
+  const whereClause = {
+    userId,
+    ...(q ? { label: { contains: q } } : {}),
+    label: label ? { contains: label } : undefined,
+    tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+  };
+
+  let skip: number | undefined;
+  let take: number | undefined;
+  if (page && pageSize) {
+    skip = pageSize * (page - 1);
+    take = pageSize;
+  }
 
   const operations = await prisma.operation.findMany({
-    where: {
-      userId,
-      ...(q ? { label: { contains: q } } : {}),
-    },
+    where: whereClause,
     orderBy: { createdAt: "desc" },
     include: { tags: true },
     distinct: distinct ? ["label"] : undefined,
+    skip,
+    take,
+  });
+
+  const count = await prisma.operation.count({
+    where: whereClause,
+    // Why count cannot use distinct?
+    //distinct: distinct ? ["label"] : undefined,
   });
 
   const amounts = await prisma.operation.groupBy({
@@ -36,7 +55,8 @@ export async function getOperations(userId: string, query: GetOperationQuery) {
       ?._sum.amount?.toNumber() ?? 0;
 
   return {
-    results: operations,
+    results: operations.map((el) => ({ ...el, amount: el.amount.toString() })),
+    total: count,
     stats: {
       expense,
       income,

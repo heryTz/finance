@@ -2,25 +2,25 @@ import { FilterSheet } from "@/components/filter-sheet";
 import { zd } from "@/lib/zod";
 import { ComponentProps, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { defaultGetStatsQuery, getStatsQuerySchema } from "../stat-dto";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField } from "@/components/ui/form";
 import { AutocompleteField } from "@/components/autocomplete-field";
 import { MultiSelectField } from "@/components/multi-select-field";
-import { useGetOperations } from "../../operation/operation-query";
+import { useGetOperations } from "../operation-query";
 import { useTags } from "../../tag/tag-query";
+import { operationFilterSheetSchema } from "../operation-dto";
 
-export function StatFilterSheet({
+export function OperationFilterSheet({
   open,
   onOpenChange,
   onApply,
   value,
-}: StatFilterSheetProps) {
+}: OperationFilterSheetProps) {
   const operationsFn = useGetOperations({ distinct: "true" });
   const tagsFn = useTags();
 
-  const form = useForm<zd.infer<typeof getStatsQuerySchema>>({
-    resolver: zodResolver(getStatsQuerySchema),
+  const form = useForm<zd.infer<typeof operationFilterSheetSchema>>({
+    resolver: zodResolver(operationFilterSheetSchema),
   });
 
   useEffect(() => {
@@ -34,8 +34,8 @@ export function StatFilterSheet({
   });
 
   const onClear = () => {
-    form.reset(defaultGetStatsQuery);
-    onApply(defaultGetStatsQuery);
+    form.reset({ label: undefined, tags: [] });
+    onApply({ label: undefined, tags: [] });
     onOpenChange(false);
   };
 
@@ -45,6 +45,7 @@ export function StatFilterSheet({
       onOpenChange={onOpenChange}
       submit={{ onClick: onSubmit }}
       clearAll={{ onClick: onClear }}
+      disableOpenAutoFocus
     >
       <Form {...form}>
         <form className="grid gap-4">
@@ -89,10 +90,10 @@ export function StatFilterSheet({
   );
 }
 
-type StatFilterSheetProps = Pick<
+type OperationFilterSheetProps = Pick<
   ComponentProps<typeof FilterSheet>,
   "open" | "onOpenChange"
 > & {
-  onApply: (data: zd.infer<typeof getStatsQuerySchema>) => void;
-  value: zd.infer<typeof getStatsQuerySchema>;
+  onApply: (data: zd.infer<typeof operationFilterSheetSchema>) => void;
+  value: zd.infer<typeof operationFilterSheetSchema>;
 };

@@ -11,26 +11,40 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  InitialTableState,
+  PaginationState,
+  TableState,
   useReactTable,
 } from "@tanstack/react-table";
 import { AppPagination } from "./app-pagination";
 import { HScrollable } from "./h-scrollable";
+import { useState } from "react";
 
 export function DataTable<TData, TValue>({
   data,
   columns,
+  onPaginationChange,
+  initialState,
+  state,
+  manualPagination,
+  rowCount,
 }: DataTableProps<TData, TValue>) {
+  const [tableState, setTableState] = useState(state ?? initialState);
+
   const table = useReactTable({
     data,
     columns,
-    initialState: {
-      pagination: {
-        pageSize: 15,
-      },
-    },
+    initialState: tableState,
+    state: tableState,
+    rowCount,
+    manualPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: (updater) => {
+      if (typeof updater !== "function") return;
+      const newPagination = updater(table.getState().pagination);
+      setTableState({ ...table.getState(), pagination: newPagination });
+      onPaginationChange?.(newPagination);
+    },
   });
 
   return (
@@ -96,7 +110,7 @@ export function DataTable<TData, TValue>({
       <AppPagination
         page={table.getState().pagination.pageIndex + 1}
         pageSize={table.getState().pagination.pageSize}
-        totalItems={table.getFilteredRowModel().rows.length}
+        totalItems={table.getRowCount()}
         onChange={(p) => table.setPageIndex(p - 1)}
       />
     </div>
@@ -106,5 +120,9 @@ export function DataTable<TData, TValue>({
 type DataTableProps<TData, TValue> = {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
-  initialState?: InitialTableState;
+  initialState?: Partial<TableState>;
+  state?: Partial<TableState>;
+  manualPagination?: boolean;
+  onPaginationChange?: (pagination: PaginationState) => void;
+  rowCount?: number;
 };

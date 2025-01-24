@@ -3,14 +3,20 @@ import { useQuery } from "@tanstack/react-query";
 import type { GetOperationQuery } from "./operation-dto";
 import type { GetOperationById, GetOperations } from "./operation-service";
 
-export function useGetOperations({ q, distinct }: GetOperationQuery = {}) {
+export function useGetOperations(query?: GetOperationQuery) {
   return useQuery({
-    queryKey: ["useGetOperations", q, distinct],
+    queryKey: [
+      "useGetOperations",
+      query?.q,
+      query?.distinct,
+      query?.page,
+      query?.pageSize,
+    ],
     queryFn: async ({ queryKey }) => {
-      const [, q, distinct] = queryKey;
+      const [, q, distinct, page, pageSize] = queryKey;
       return httpClient
         .get<GetOperations>(`/operations`, {
-          params: { q, distinct },
+          params: { q, distinct, page, pageSize },
         })
         .then((resp) => resp.data);
     },

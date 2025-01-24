@@ -51,7 +51,7 @@ async function getOverviewStat(
         gte: from,
       },
       label: label ? { contains: label } : undefined,
-      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
     },
   });
 
@@ -95,7 +95,7 @@ async function getOverviewStat(
     where: {
       userId,
       label: label ? { contains: label } : undefined,
-      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
       createdAt: {
         lte: dayjs(from).add(-1, "month").endOf("month").toDate(),
       },
@@ -137,7 +137,7 @@ async function getCountStat(
     where: {
       userId,
       label: label ? { contains: label } : undefined,
-      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
     },
     _sum: { amount: true },
   });
@@ -155,7 +155,7 @@ async function getCountStat(
     where: {
       userId,
       label: label ? { contains: label } : undefined,
-      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
       createdAt: {
         lte: dayjs().add(-1, "month").endOf("month").toDate(),
       },
@@ -179,7 +179,7 @@ async function getCountStat(
     where: {
       userId,
       label: label ? { contains: label } : undefined,
-      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
       createdAt: {
         gte: dayjs().startOf("month").toDate(),
       },
@@ -200,7 +200,7 @@ async function getCountStat(
     where: {
       userId,
       label: label ? { contains: label } : undefined,
-      tags: tags.length > 0 ? { some: { name: { in: tags } } } : undefined,
+      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
       createdAt: {
         gte: dayjs().add(-1, "month").startOf("month").toDate(),
         lte: dayjs().add(-1, "month").endOf("month").toDate(),

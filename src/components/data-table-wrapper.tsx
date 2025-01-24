@@ -5,6 +5,7 @@ import { Empty } from "./empty";
 import { cn } from "@/lib/utils";
 import { Loader } from "./loader";
 import { ErrorSection } from "./error-section";
+import { PlusIcon } from "lucide-react";
 
 export function DataTableWrapper({
   cta,
@@ -21,7 +22,9 @@ export function DataTableWrapper({
       action={
         <>
           {!loading && count > 0 ? (
-            <Button onClick={cta.onClick}>{cta.label}</Button>
+            <Button StartIcon={PlusIcon} onClick={cta.onClick}>
+              {cta.label}
+            </Button>
           ) : null}
           {action}
         </>

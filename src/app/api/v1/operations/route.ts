@@ -16,6 +16,8 @@ export const GET = weh(async (req: NextRequest) => {
   const query = getOperationQuerySchema.parse({
     q: searchParams.get("q"),
     distinct: searchParams.get("distinct"),
+    page: searchParams.get("page"),
+    pageSize: searchParams.get("pageSize"),
   });
 
   const operations = await getOperations(user.id, query);
