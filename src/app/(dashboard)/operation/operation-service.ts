@@ -5,11 +5,13 @@ import { Tag } from "@prisma/client";
 import { NotFoundException } from "@/lib/exception";
 
 export async function getOperations(userId: string, query: GetOperationQuery) {
-  const { distinct, q, page, pageSize } = query;
+  const { distinct, q, page, pageSize, label, tags } = query;
 
   const whereClause = {
     userId,
     ...(q ? { label: { contains: q } } : {}),
+    label: label ? { contains: label } : undefined,
+    tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
   };
 
   let skip: number | undefined;

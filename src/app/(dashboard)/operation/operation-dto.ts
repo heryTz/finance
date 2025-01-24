@@ -2,12 +2,19 @@ import { OperationType } from "@/entity/operation";
 import { zd } from "@/lib/zod";
 import { parseAsJson } from "nuqs/server";
 
-export const getOperationQuerySchema = zd.object({
-  q: zd.string().nullish(),
-  distinct: zd.enum(["true", "false"]).nullish(),
-  page: zd.coerce.number().nullish(),
-  pageSize: zd.coerce.number().nullish(),
+export const operationFilterSheetSchema = zd.object({
+  label: zd.string().nullish(),
+  tags: zd.array(zd.string()).nullish(),
 });
+
+export const getOperationQuerySchema = zd
+  .object({
+    q: zd.string().nullish(),
+    distinct: zd.enum(["true", "false"]).nullish(),
+    page: zd.coerce.number().nullish(),
+    pageSize: zd.coerce.number().nullish(),
+  })
+  .and(operationFilterSheetSchema);
 
 export type GetOperationQuery = zd.infer<typeof getOperationQuerySchema>;
 
@@ -16,6 +23,7 @@ export const defaultGetOperationQuery: zd.infer<
 > = {
   page: 1,
   pageSize: 10,
+  tags: [],
 };
 
 export function getOperationQuerySerializer() {

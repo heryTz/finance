@@ -1,25 +1,26 @@
 import { zd } from "@/lib/zod";
 import dayjs from "dayjs";
 import { parseAsJson } from "nuqs";
+import { operationFilterSheetSchema } from "../operation/operation-dto";
 
-export const getStatsQuerySchema = zd.object({
-  range: zd.object({
-    from: zd.string(),
-    to: zd.string().nullish(),
-    customActualDate: zd.string().nullish(),
-  }),
-  label: zd.string().nullish(),
-  tags: zd.array(zd.string()),
-  display: zd.array(
-    zd.enum([
-      "currentBalance",
-      "currentIncome",
-      "currentExpense",
-      "totalIncome",
-      "totalExpense",
-    ]),
-  ),
-});
+export const getStatsQuerySchema = zd
+  .object({
+    range: zd.object({
+      from: zd.string(),
+      to: zd.string().nullish(),
+      customActualDate: zd.string().nullish(),
+    }),
+    display: zd.array(
+      zd.enum([
+        "currentBalance",
+        "currentIncome",
+        "currentExpense",
+        "totalIncome",
+        "totalExpense",
+      ]),
+    ),
+  })
+  .and(operationFilterSheetSchema);
 
 export const defaultGetStatsQuery: zd.infer<typeof getStatsQuerySchema> = {
   range: {

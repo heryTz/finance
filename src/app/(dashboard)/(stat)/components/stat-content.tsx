@@ -14,9 +14,9 @@ import { MonthPicker } from "@/components/month-picker";
 import { createSerializer, useQueryState } from "nuqs";
 import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
-import { StatFilter } from "./stat-filter";
 import { StatDisplay } from "./stat-display";
 import dayjs from "dayjs";
+import { OperationFilter } from "../../operation/components/opertation-filter";
 
 const querySerializer = getStatsQuerySerializer();
 
@@ -37,7 +37,7 @@ export function StatContent({ data }: StatContentProps) {
   return (
     <Container
       title="Dashboard"
-      filter={<StatFilter filter={filter} onApply={onApply} />}
+      filter={<OperationFilter filter={filter} onApply={onApply} />}
       action={<StatDisplay display={filter.display} onApply={onApply} />}
     >
       <div className="grid gap-4">

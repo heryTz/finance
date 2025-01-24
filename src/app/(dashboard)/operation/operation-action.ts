@@ -13,9 +13,8 @@ import { routes } from "@/app/routes";
 export async function createOperationAction(input: SaveOperationInput) {
   const { user } = await apiGuard();
   const data = saveOperationInputSchema.parse(input);
-  const operation = await createOperation(user.id, data);
+  await createOperation(user.id, data);
   revalidatePath(routes.operation());
-  return operation;
 }
 
 export async function updateOperationAction(
@@ -24,14 +23,12 @@ export async function updateOperationAction(
 ) {
   const { user } = await apiGuard();
   const data = saveOperationInputSchema.parse(input);
-  const operation = await updateOperation(user.id, id, data);
+  await updateOperation(user.id, id, data);
   revalidatePath(routes.operation());
-  return operation;
 }
 
 export async function deleteOperationAction(id: string) {
   const { user } = await apiGuard();
-  const operation = await deleteOperation(user.id, id);
+  await deleteOperation(user.id, id);
   revalidatePath(routes.operation());
-  return operation;
 }

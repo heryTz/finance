@@ -15,6 +15,7 @@ import {
 import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { routes } from "@/app/routes";
+import { OperationFilter } from "./components/opertation-filter";
 
 const querySerializer = getOperationQuerySerializer();
 const serializer = createSerializer({
@@ -47,6 +48,12 @@ export function OperationPage({ operations }: OperationPageProps) {
         title: "Aucune opération",
         description: 'Cliquez sur "Ajouter" pour créer une opération',
       }}
+      filter={
+        <OperationFilter
+          filter={filter}
+          onApply={(value) => onFilter({ ...value, page: 1 })}
+        />
+      }
     >
       <DataTable
         data={operations.results}
