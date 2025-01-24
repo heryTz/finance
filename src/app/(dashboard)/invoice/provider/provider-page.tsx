@@ -27,7 +27,11 @@ export default function ProviderPage({ providers }: ProviderPageProps) {
           description: 'Cliquez sur "Ajouter" pour créer un prestataire',
         }}
       >
-        <DataTable data={providers.results} columns={columns} />
+        <DataTable
+          data={providers.results}
+          columns={columns}
+          initialState={{ pagination: { pageIndex: 0, pageSize: 10 } }}
+        />
       </DataTableWrapper>
       <ProviderSave open={open} onOpenChange={setOpen} onFinish={refresh} />
     </>

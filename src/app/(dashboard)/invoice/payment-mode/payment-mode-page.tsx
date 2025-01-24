@@ -26,7 +26,11 @@ export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
           description: 'Cliquez sur "Ajouter" pour créer un mode de paiements',
         }}
       >
-        <DataTable data={paymentsMode.results} columns={columns} />
+        <DataTable
+          data={paymentsMode.results}
+          columns={columns}
+          initialState={{ pagination: { pageIndex: 0, pageSize: 10 } }}
+        />
       </DataTableWrapper>
       <PaymentModeSave
         open={openSave}

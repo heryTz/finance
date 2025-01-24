@@ -25,7 +25,7 @@ export default function InvoicePage({ invoices }: InvoicePageProps) {
       }}
     >
       <DataTable
-        initialState={{ pagination: { pageIndex: 0, pageSize: 2 } }}
+        initialState={{ pagination: { pageIndex: 0, pageSize: 10 } }}
         data={invoices.results}
         columns={columns}
       />

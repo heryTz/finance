@@ -27,7 +27,11 @@ export default function ClientPage({ clients }: ClientPageProps) {
           description: 'Cliquez sur "Ajouter" pour créer un client',
         }}
       >
-        <DataTable data={clients.results} columns={columns} />
+        <DataTable
+          data={clients.results}
+          columns={columns}
+          initialState={{ pagination: { pageIndex: 0, pageSize: 10 } }}
+        />
       </DataTableWrapper>
       <ClientSave open={open} onOpenChange={setOpen} onFinish={refresh} />
     </>

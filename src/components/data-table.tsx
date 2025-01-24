@@ -17,7 +17,7 @@ import {
 } from "@tanstack/react-table";
 import { AppPagination } from "./app-pagination";
 import { HScrollable } from "./h-scrollable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function DataTable<TData, TValue>({
   data,
@@ -29,6 +29,10 @@ export function DataTable<TData, TValue>({
   rowCount,
 }: DataTableProps<TData, TValue>) {
   const [tableState, setTableState] = useState(state ?? initialState);
+
+  useEffect(() => {
+    setTableState(state ?? initialState);
+  }, [state, initialState]);
 
   const table = useReactTable({
     data,
