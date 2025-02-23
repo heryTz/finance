@@ -25,12 +25,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install pnpm
-        run: corepack enable
+      # Remove when this issue is resolved: https://github.com/nodejs/corepack/issues/616#issuecomment-2622079955
+      - name: Install corepack
+        run: npm install -g corepack@latest
 
       - name: Install dependencies
         run: pnpm install
-
 
       - name: Verify dependencies integrity
         run: pnpm audit

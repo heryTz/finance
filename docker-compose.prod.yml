@@ -3,6 +3,7 @@ name: finance-prod
 services:
   app:
     image: herytz/finance
+    restart: always
     ports:
       - 3000:3000
     env_file:
@@ -13,7 +14,7 @@ services:
 
   db:
     image: postgres:16.1-alpine
-    restart: unless-stopped
+    restart: always
     ports:
       - "5433:5432"
     environment:
