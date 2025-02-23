@@ -2,6 +2,8 @@ FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+# Remove when this issue is resolved: https://github.com/nodejs/corepack/issues/616#issuecomment-2622079955
+RUN npm install -g corepack@latest
 
 FROM base AS deps
 WORKDIR /app
