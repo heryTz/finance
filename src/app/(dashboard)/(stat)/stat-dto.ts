@@ -1,6 +1,6 @@
 import { zd } from "@/lib/zod";
 import dayjs from "dayjs";
-import { parseAsJson } from "nuqs";
+import { parseAsJson } from "nuqs/server";
 import { operationFilterSheetSchema } from "../operation/operation-dto";
 
 export const getStatsQuerySchema = zd
