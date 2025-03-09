@@ -14,11 +14,13 @@ import { OperationSave } from "./operation-save";
 import { useQueryClient } from "@tanstack/react-query";
 import { ModalDelete } from "@/components/modal-delete";
 import { deleteOperationAction } from "../operation-action";
+import { useAction } from "next-safe-action/hooks";
 
 export function OperationAction({ row }: OperationActionProps) {
   const queryClient = useQueryClient();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const deleteOperation = useAction(deleteOperationAction);
 
   const onRefetch = () => {
     queryClient.refetchQueries({ queryKey: ["useGetOperations"] });
@@ -57,7 +59,7 @@ export function OperationAction({ row }: OperationActionProps) {
           onOpenChange={setOpenDelete}
           label={row.label}
           onDelete={async () => {
-            await deleteOperationAction(row.id);
+            deleteOperation.execute(row.id);
             onRefetch();
           }}
         />

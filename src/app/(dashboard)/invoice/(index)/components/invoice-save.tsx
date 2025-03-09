@@ -28,6 +28,7 @@ import { ComboboxField } from "@/components/combobox-field";
 import { cn } from "@/lib/utils";
 import { useGetProviders } from "../../provider/provider-query";
 import { ProviderSave } from "../../provider/components/provider-save";
+import { useAction } from "next-safe-action/hooks";
 
 export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const { back, replace } = useRouter();
@@ -37,6 +38,24 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openPaymentModeModal, setOpenPaymentModeModal] = useState(false);
   const [openProviderModal, setOpenProviderModal] = useState(false);
+  const create = useAction(createInvoiceAction, {
+    onSuccess: () => {
+      toast.success("La facture a été créée avec succès.");
+      replace(routes.invoice());
+    },
+    onError: () => {
+      toast.error("Une erreur s'est produite.");
+    },
+  });
+  const update = useAction(updateInvoiceAction.bind(null, invoice?.id ?? ""), {
+    onSuccess: () => {
+      toast.success("La facture a été modifiée avec succès.");
+      replace(routes.invoice());
+    },
+    onError: () => {
+      toast.error("Une erreur s'est produite.");
+    },
+  });
   const invoiceParsed = invoice
     ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
     : null;
@@ -58,17 +77,9 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
     name: "products",
   });
 
-  const onSubmit = form.handleSubmit(async (data) => {
-    if (invoice) {
-      await updateInvoiceAction(invoice.id, data);
-      toast.success("La facture a été modifiée avec succès.");
-      replace(routes.invoice());
-    } else {
-      await createInvoiceAction(data);
-      toast.success("La facture a été créée avec succès.");
-      replace(routes.invoice());
-    }
-  });
+  const onSubmit = form.handleSubmit((data) =>
+    invoice ? update.execute(data) : create.execute(data),
+  );
 
   const title = invoice
     ? `Modification de la facture "No ${invoice.ref}"`

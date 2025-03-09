@@ -1,10 +1,10 @@
-export class UnauthorizedException extends Error {
+export class UnauthorizedError extends Error {
   constructor() {
     super("Unauthorized");
   }
 }
 
-export class NotFoundException extends Error {
+export class NotFoundError extends Error {
   constructor() {
     super("Not found");
   }

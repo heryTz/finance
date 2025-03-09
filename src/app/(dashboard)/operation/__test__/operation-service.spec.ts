@@ -8,7 +8,7 @@ import {
 } from "../operation-service";
 import { OperationType } from "@/entity/operation";
 import { buildSaveOperationInput } from "@/lib/factory";
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 
 describe("operation service", () => {
   it("create operation", async () => {
@@ -50,7 +50,7 @@ describe("operation service", () => {
     );
     expect(user1OperationById).toBeTruthy();
     await expect(getOperationById(user2.id, user1Operation.id)).rejects.toThrow(
-      NotFoundException,
+      NotFoundError,
     );
   });
 
@@ -107,7 +107,7 @@ describe("operation service", () => {
     );
     await expect(
       updateOperation(user2.id, user1Operation.id, buildSaveOperationInput()),
-    ).rejects.toThrow(NotFoundException);
+    ).rejects.toThrow(NotFoundError);
   });
 
   it("delete operation", async () => {

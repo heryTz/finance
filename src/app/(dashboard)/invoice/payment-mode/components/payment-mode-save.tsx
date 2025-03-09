@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 import { Loader } from "@/components/loader";
 import { useGetPaymentModeById } from "../payment-mode-query";
 import {
@@ -16,6 +16,7 @@ import { Modal } from "@/components/modal";
 import { Form, FormField } from "@/components/ui/form";
 import { InputField } from "@/components/input-field";
 import { PaymentMode } from "@prisma/client";
+import { useAction } from "next-safe-action/hooks";
 
 type FormValue = CreatePaymentModeInput;
 
@@ -25,11 +26,30 @@ export function PaymentModeSave({
   idToEdit,
   onFinish,
 }: PaymentModeSaveProps) {
-  const [isPending, startTransition] = useTransition();
   const paymentModeFn = useGetPaymentModeById(idToEdit);
   const paymentMode = paymentModeFn.data;
   const form = useForm<FormValue>({
     resolver: zodResolver(createPaymentModeSchema),
+  });
+  const create = useAction(createPaymentModeAction, {
+    onSuccess: (resp) => {
+      if (!resp.data) return;
+      toast.success("Ajout effectué avec succès");
+      onOpenChange(false);
+      onFinish?.(resp.data);
+      reset();
+    },
+    onError: () => toast.error("Erreur s'est produite"),
+  });
+  const update = useAction(updatePaymentModeAction.bind(null, idToEdit!), {
+    onSuccess: (resp) => {
+      if (!resp.data) return;
+      toast.success("Modification effectué avec succès");
+      onOpenChange(false);
+      onFinish?.(resp.data);
+      reset();
+    },
+    onError: () => toast.error("Erreur s'est produite"),
   });
 
   useEffect(() => {
@@ -45,26 +65,9 @@ export function PaymentModeSave({
     }
   };
 
-  const onSubmit = form.handleSubmit((data) => {
-    startTransition(async () => {
-      try {
-        let newPaymentMode: PaymentMode;
-        if (idToEdit) {
-          newPaymentMode = await updatePaymentModeAction(idToEdit, data);
-          toast.success("Modification effectué avec succès");
-        } else {
-          newPaymentMode = await createPaymentModeAction(data);
-          toast.success("Ajout effectué avec succès");
-        }
-        onOpenChange(false);
-        onFinish?.(newPaymentMode);
-        reset();
-      } catch (error) {
-        console.log(error);
-        toast.error("Erreur s'est produite");
-      }
-    });
-  });
+  const onSubmit = form.handleSubmit((data) =>
+    idToEdit ? update.execute(data) : create.execute(data),
+  );
 
   const onCancel = () => {
     onOpenChange(false);
@@ -84,7 +87,8 @@ export function PaymentModeSave({
       submit={{
         children: "Sauvegarder",
         onClick: onSubmit,
-        disabled: isPending || paymentModeFn.isLoading,
+        disabled:
+          create.isPending || update.isPending || paymentModeFn.isLoading,
       }}
     >
       {idToEdit && paymentModeFn.isLoading ? (

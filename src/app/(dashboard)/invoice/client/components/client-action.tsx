@@ -14,11 +14,13 @@ import { ArrayElement } from "@/lib/types";
 import { GetClients } from "../client-service";
 import { ClientSave } from "./client-save";
 import { deleteClientAction } from "../client-action";
+import { useAction } from "next-safe-action/hooks";
 
 export function ClientAction({ row }: ClientActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const deleteClient = useAction(deleteClientAction);
 
   const onRefetch = () => {
     router.refresh();
@@ -57,7 +59,7 @@ export function ClientAction({ row }: ClientActionProps) {
           onOpenChange={setOpenDelete}
           label={row.name}
           onDelete={async () => {
-            await deleteClientAction(row.id);
+            deleteClient.execute(row.id);
             onRefetch();
           }}
         />

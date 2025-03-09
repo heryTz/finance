@@ -7,7 +7,7 @@ import {
   updateClient,
 } from "../client-service";
 import { buildSaveClientInput } from "@/lib/factory";
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 
 describe("client service", () => {
   it("create client", async () => {
@@ -34,7 +34,7 @@ describe("client service", () => {
     const user1ClientById = await getClientById(user1.id, user1Client.id);
     expect(user1ClientById).toBeTruthy();
     await expect(getClientById(user2.id, user1Client.id)).rejects.toThrow(
-      NotFoundException,
+      NotFoundError,
     );
   });
 

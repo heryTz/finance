@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { NotFoundException, UnauthorizedException } from "./exception";
+import { NotFoundError } from "./exception";
 import { logError } from "./logger";
 
 type Handler<T extends unknown[]> = (
@@ -17,10 +17,7 @@ export const weh =
       if (error instanceof z.ZodError) {
         return new Response(JSON.stringify(error.issues), { status: 400 });
       }
-      if (error instanceof UnauthorizedException) {
-        return new Response("unauthorized", { status: 403 });
-      }
-      if (error instanceof NotFoundException) {
+      if (error instanceof NotFoundError) {
         return new Response(error.message, { status: 404 });
       }
       return new Response("Internal server error", { status: 500 });

@@ -6,7 +6,7 @@ import {
   updatePaymentMode,
   getPaymentsMode,
 } from "../payment-mode-service";
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 import { CreatePaymentModeInput } from "../payment-mode-dto";
 
 describe("payment mode service", () => {
@@ -35,7 +35,7 @@ describe("payment mode service", () => {
     const user1Payment = await getPaymentModeById(user1.id, newPayment.id);
     expect(user1Payment).toBeTruthy();
     await expect(getPaymentModeById(user2.id, newPayment.id)).rejects.toThrow(
-      NotFoundException,
+      NotFoundError,
     );
   });
 

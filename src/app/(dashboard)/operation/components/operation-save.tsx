@@ -2,7 +2,7 @@ import { OperationType } from "@/entity/operation";
 import { useForm } from "react-hook-form";
 import { useTags } from "../../tag/tag-query";
 import { useGetOperationById, useGetOperations } from "../operation-query";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 import { Modal } from "@/components/modal";
 import { Loader } from "@/components/loader";
 import { Form, FormField } from "@/components/ui/form";
@@ -19,6 +19,7 @@ import {
   createOperationAction,
   updateOperationAction,
 } from "../operation-action";
+import { useAction } from "next-safe-action/hooks";
 
 // TODO: Fix error js - press enter on input autocomplete and press arrow down
 
@@ -30,7 +31,6 @@ export function OperationSave({
   idToEdit,
   onFinish,
 }: OperationSaveProps) {
-  const [isPending, startTransition] = useTransition();
   const tagsFn = useTags();
   const operationFn = useGetOperationById(idToEdit);
   const operation = operationFn.data?.data;
@@ -43,6 +43,28 @@ export function OperationSave({
       tags: [],
       type: OperationType.depense,
       createdAt: new Date(),
+    },
+  });
+  const create = useAction(createOperationAction, {
+    onSuccess: () => {
+      toast.success("Ajout effectué avec succès");
+      onOpenChange(false);
+      onFinish?.();
+      reset();
+    },
+    onError: () => {
+      toast.error("Erreur lors de l'ajout");
+    },
+  });
+  const update = useAction(updateOperationAction.bind(null, idToEdit!), {
+    onSuccess: () => {
+      toast.success("Modification effectuée avec succès");
+      onOpenChange(false);
+      onFinish?.();
+      reset();
+    },
+    onError: () => {
+      toast.error("Erreur lors de la modification");
     },
   });
 
@@ -64,23 +86,7 @@ export function OperationSave({
   };
 
   const onSubmit = form.handleSubmit((data) =>
-    startTransition(async () => {
-      try {
-        if (idToEdit) {
-          await updateOperationAction(idToEdit, data);
-          toast.success("Modification effectuée avec succès");
-        } else {
-          await createOperationAction(data);
-          toast.success("Ajout effectué avec succès");
-        }
-        onOpenChange(false);
-        onFinish?.();
-        reset();
-      } catch (error) {
-        console.log(error);
-        toast.error("Une erreur s'est produite");
-      }
-    }),
+    idToEdit ? update.execute(data) : create.execute(data),
   );
 
   const onCancel = () => {
@@ -96,7 +102,7 @@ export function OperationSave({
       cancel={{ onClick: onCancel }}
       submit={{
         onClick: onSubmit,
-        disabled: isPending || operationFn.isLoading,
+        disabled: update.isPending || create.isPending || operationFn.isLoading,
       }}
     >
       {idToEdit && operationFn.isLoading ? (

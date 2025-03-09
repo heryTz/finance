@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiGuard } from "@/lib/api-guard";
+import { guard } from "@/lib/auth";
 import {
   createOperation,
   getOperations,
@@ -11,7 +11,7 @@ import {
 import { weh } from "@/lib/with-error-handler";
 
 export const GET = weh(async (req: NextRequest) => {
-  const { user } = await apiGuard();
+  const { user } = await guard();
   const searchParams = req.nextUrl.searchParams;
   const query = getOperationQuerySchema.parse({
     q: searchParams.get("q"),
@@ -25,7 +25,7 @@ export const GET = weh(async (req: NextRequest) => {
 });
 
 export const POST = weh(async (request: Request) => {
-  const { user } = await apiGuard();
+  const { user } = await guard();
   const input = saveOperationInputSchema.parse(await request.json());
   const operation = await createOperation(user!.id, input);
   return NextResponse.json(operation);

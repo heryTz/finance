@@ -2,7 +2,7 @@ import { OperationType } from "@/entity/operation";
 import { prisma } from "@/lib/prisma";
 import { SaveOperationInput, GetOperationQuery } from "./operation-dto";
 import { Tag } from "@prisma/client";
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 
 export async function getOperations(userId: string, query: GetOperationQuery) {
   const { distinct, q, page, pageSize, label, tags } = query;
@@ -110,7 +110,7 @@ export async function getOperationById(userId: string, id: string) {
     where: { id, userId },
     include: { tags: true },
   });
-  if (!operation) throw new NotFoundException();
+  if (!operation) throw new NotFoundError();
   return operation;
 }
 
@@ -126,7 +126,7 @@ export async function updateOperation(
     include: { tags: true },
   });
   if (!operation) {
-    throw new NotFoundException();
+    throw new NotFoundError();
   }
 
   const tagToConnect: Tag[] = [];

@@ -3,7 +3,7 @@ import { OperationPage } from "./operation-page";
 import { Loader } from "@/components/loader";
 import { getOperationQuerySerializer } from "./operation-dto";
 import { createSearchParamsCache } from "nuqs/server";
-import { apiGuard } from "@/lib/api-guard";
+import { guard } from "@/lib/auth";
 import { getOperations } from "./operation-service";
 
 const querySerializer = getOperationQuerySerializer();
@@ -15,7 +15,7 @@ export default async function Page(props: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const searchParams = await props.searchParams;
-  const { user } = await apiGuard();
+  const { user } = await guard();
   const params = searchParamsCache.parse(searchParams);
 
   const operations = await getOperations(user.id, {
