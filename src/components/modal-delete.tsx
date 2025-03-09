@@ -1,6 +1,8 @@
 import { Modal } from "@/components/modal";
+import { SafeActionResult } from "next-safe-action";
 import { useTransition } from "react";
 import { toast } from "sonner";
+import { ZodString } from "zod";
 
 export function ModalDelete({
   onDelete,
@@ -12,14 +14,17 @@ export function ModalDelete({
 
   const onSubmit = () => {
     startTransition(async () => {
-      try {
-        await onDelete();
-        toast.success("Suppression effectué avec succès");
-        onOpenChange(false);
-      } catch (error) {
-        console.log(error);
-        toast.error("Une erreur est survenue");
+      const result = await onDelete();
+      if (
+        result?.serverError ||
+        result?.validationErrors ||
+        result?.bindArgsValidationErrors
+      ) {
+        toast.error("Une erreur est survenue.");
+        return;
       }
+      toast.success("Suppression effectué avec succès");
+      onOpenChange(false);
     });
   };
 
@@ -49,5 +54,17 @@ type ModalDeleteProps = {
   open: boolean;
   onOpenChange: (b: boolean) => void;
   label: string;
-  onDelete: () => Promise<void>;
+  onDelete: () => Promise<
+    | SafeActionResult<
+        string,
+        ZodString,
+        readonly [],
+        {
+          _errors?: string[] | undefined;
+        },
+        readonly [],
+        unknown
+      >
+    | undefined
+  >;
 };

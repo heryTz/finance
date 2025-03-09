@@ -20,11 +20,9 @@ export function ProviderAction({ row }: ProviderActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const deleteProvider = useAction(deleteProviderAction);
-
-  const onRefetch = () => {
-    router.refresh();
-  };
+  const deleteProvider = useAction(deleteProviderAction, {
+    onSuccess: () => router.refresh(),
+  });
 
   return (
     <>
@@ -50,7 +48,7 @@ export function ProviderAction({ row }: ProviderActionProps) {
           idToEdit={row.id}
           open={openEdit}
           onOpenChange={setOpenEdit}
-          onFinish={onRefetch}
+          onFinish={() => router.refresh()}
         />
       )}
       {openDelete && (
@@ -58,10 +56,7 @@ export function ProviderAction({ row }: ProviderActionProps) {
           open={openDelete}
           onOpenChange={setOpenDelete}
           label={row.name}
-          onDelete={async () => {
-            deleteProvider.execute(row.id);
-            onRefetch();
-          }}
+          onDelete={async () => deleteProvider.executeAsync(row.id)}
         />
       )}
     </>

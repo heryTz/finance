@@ -20,7 +20,10 @@ export function OperationAction({ row }: OperationActionProps) {
   const queryClient = useQueryClient();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const deleteOperation = useAction(deleteOperationAction);
+  const deleteOperation = useAction(deleteOperationAction, {
+    onSuccess: () =>
+      queryClient.refetchQueries({ queryKey: ["useGetOperations"] }),
+  });
 
   const onRefetch = () => {
     queryClient.refetchQueries({ queryKey: ["useGetOperations"] });
@@ -58,10 +61,7 @@ export function OperationAction({ row }: OperationActionProps) {
           open={openDelete}
           onOpenChange={setOpenDelete}
           label={row.label}
-          onDelete={async () => {
-            deleteOperation.execute(row.id);
-            onRefetch();
-          }}
+          onDelete={async () => deleteOperation.executeAsync(row.id)}
         />
       )}
     </>

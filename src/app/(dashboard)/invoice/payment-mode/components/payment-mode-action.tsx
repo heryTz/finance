@@ -20,11 +20,9 @@ export function PaymentModeAction({ row }: PaymentModeActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const deletePaymentMode = useAction(deletePaymentModeAction);
-
-  const onRefetch = () => {
-    router.refresh();
-  };
+  const deletePaymentMode = useAction(deletePaymentModeAction, {
+    onSuccess: () => router.refresh(),
+  });
 
   return (
     <>
@@ -50,7 +48,7 @@ export function PaymentModeAction({ row }: PaymentModeActionProps) {
           idToEdit={row.id}
           open={openEdit}
           onOpenChange={setOpenEdit}
-          onFinish={onRefetch}
+          onFinish={() => router.refresh()}
         />
       )}
       {openDelete && (
@@ -58,10 +56,7 @@ export function PaymentModeAction({ row }: PaymentModeActionProps) {
           open={openDelete}
           onOpenChange={setOpenDelete}
           label={row.name}
-          onDelete={async () => {
-            deletePaymentMode.execute(row.id);
-            onRefetch();
-          }}
+          onDelete={async () => deletePaymentMode.executeAsync(row.id)}
         />
       )}
     </>

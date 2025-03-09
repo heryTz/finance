@@ -20,11 +20,9 @@ export function ClientAction({ row }: ClientActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const deleteClient = useAction(deleteClientAction);
-
-  const onRefetch = () => {
-    router.refresh();
-  };
+  const deleteClient = useAction(deleteClientAction, {
+    onSuccess: () => router.refresh(),
+  });
 
   return (
     <>
@@ -50,7 +48,7 @@ export function ClientAction({ row }: ClientActionProps) {
           idToEdit={row.id}
           open={openEdit}
           onOpenChange={setOpenEdit}
-          onFinish={onRefetch}
+          onFinish={() => router.refresh()}
         />
       )}
       {openDelete && (
@@ -58,10 +56,7 @@ export function ClientAction({ row }: ClientActionProps) {
           open={openDelete}
           onOpenChange={setOpenDelete}
           label={row.name}
-          onDelete={async () => {
-            deleteClient.execute(row.id);
-            onRefetch();
-          }}
+          onDelete={async () => deleteClient.executeAsync(row.id)}
         />
       )}
     </>
