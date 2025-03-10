@@ -1,4 +1,4 @@
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
 import { CreateInvoiceInput, SendInvoiceMailInput } from "./invoice-dto";
 import { sendEmail } from "@/lib/mailer";
@@ -30,7 +30,7 @@ export async function getInvoiceById(userId: string, id: string) {
     where: { id, ownerId: userId },
     include: { Products: true, Client: true, Payment: true, Provider: true },
   });
-  if (!invoice) throw new NotFoundException();
+  if (!invoice) throw new NotFoundError();
   return invoice;
 }
 

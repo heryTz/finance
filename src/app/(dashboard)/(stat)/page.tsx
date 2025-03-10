@@ -1,4 +1,4 @@
-import { apiGuard } from "@/lib/api-guard";
+import { guard } from "@/lib/auth";
 import { getStats } from "./stat-service";
 import { StatContent } from "./components/stat-content";
 import { Metadata } from "next";
@@ -19,7 +19,7 @@ export default async function StatPage(props: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const searchParams = await props.searchParams;
-  const { user } = await apiGuard();
+  const { user } = await guard();
   const params = searchParamsCache.parse(searchParams);
   const stats = await getStats(user.id, params.filter);
 

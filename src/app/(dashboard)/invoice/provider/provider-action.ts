@@ -1,7 +1,6 @@
 "use server";
 
-import { apiGuard } from "@/lib/api-guard";
-import { SaveProviderInput, saveProviderInputSchema } from "./provider-dto";
+import { saveProviderInputSchema } from "./provider-dto";
 import {
   createProvider,
   deleteProvider,
@@ -9,29 +8,30 @@ import {
 } from "./provider-service";
 import { revalidatePath } from "next/cache";
 import { routes } from "@/app/routes";
+import { authActionClient } from "@/lib/safe-action";
+import { z } from "zod";
 
-export async function createProviderAction(input: SaveProviderInput) {
-  const { user } = await apiGuard();
-  const data = saveProviderInputSchema.parse(input);
-  const provider = await createProvider(user.id, data);
-  revalidatePath(routes.invoice());
-  return provider;
-}
+export const createProviderAction = authActionClient
+  .schema(saveProviderInputSchema)
+  .action(async ({ parsedInput, ctx }) => {
+    const provider = await createProvider(ctx.user.id, parsedInput);
+    revalidatePath(routes.invoice());
+    return provider;
+  });
 
-export async function updateProviderAction(
-  id: string,
-  input: SaveProviderInput,
-) {
-  const { user } = await apiGuard();
-  const data = saveProviderInputSchema.parse(input);
-  const provider = await updateProvider(user.id, id, data);
-  revalidatePath(routes.invoice());
-  return provider;
-}
+export const updateProviderAction = authActionClient
+  .schema(saveProviderInputSchema)
+  .bindArgsSchemas([z.string()])
+  .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
+    const provider = await updateProvider(ctx.user.id, id, parsedInput);
+    revalidatePath(routes.invoice());
+    return provider;
+  });
 
-export async function deleteProviderAction(id: string) {
-  const { user } = await apiGuard();
-  const provider = await deleteProvider(user.id, id);
-  revalidatePath(routes.invoice());
-  return provider;
-}
+export const deleteProviderAction = authActionClient
+  .schema(z.string())
+  .action(async ({ parsedInput, ctx }) => {
+    const provider = await deleteProvider(ctx.user.id, parsedInput);
+    revalidatePath(routes.invoice());
+    return provider;
+  });

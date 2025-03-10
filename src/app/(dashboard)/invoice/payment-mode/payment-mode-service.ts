@@ -1,4 +1,4 @@
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 import { prisma } from "@/lib/prisma";
 import { CreatePaymentModeInput } from "./payment-mode-dto";
 import { PaymentMode } from "@prisma/client";
@@ -7,7 +7,7 @@ export async function getPaymentModeById(userId: string, id: string) {
   const mode = await prisma.paymentMode.findFirst({
     where: { id, onwerId: userId },
   });
-  if (!mode) throw new NotFoundException();
+  if (!mode) throw new NotFoundError();
   return mode;
 }
 

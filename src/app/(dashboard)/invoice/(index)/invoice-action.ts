@@ -1,12 +1,6 @@
 "use server";
 
-import {
-  CreateInvoiceInput,
-  SendInvoiceMailInput,
-  createInvoiceSchema,
-  sendInvoiceMailInputSchema,
-} from "./invoice-dto";
-import { apiGuard } from "@/lib/api-guard";
+import { createInvoiceSchema, sendInvoiceMailInputSchema } from "./invoice-dto";
 import { revalidatePath } from "next/cache";
 import {
   createInvoice,
@@ -15,35 +9,38 @@ import {
   updateInvoice,
 } from "./invoice-service";
 import { routes } from "@/app/routes";
+import { authActionClient } from "@/lib/safe-action";
+import { z } from "zod";
 
-export async function createInvoiceAction(input: CreateInvoiceInput) {
-  const { user } = await apiGuard();
-  const data = createInvoiceSchema.parse(input);
-  await createInvoice(user.id, data);
-  revalidatePath(routes.invoice());
-}
+export const createInvoiceAction = authActionClient
+  .schema(createInvoiceSchema)
+  .action(async ({ parsedInput, ctx }) => {
+    await createInvoice(ctx.user.id, parsedInput);
+    revalidatePath(routes.invoice());
+    return { error: null };
+  });
 
-export async function updateInvoiceAction(
-  id: string,
-  input: CreateInvoiceInput,
-) {
-  const { user } = await apiGuard();
-  const data = createInvoiceSchema.parse(input);
-  await updateInvoice(user.id, id, data);
-  revalidatePath(routes.invoice());
-}
+export const updateInvoiceAction = authActionClient
+  .schema(createInvoiceSchema)
+  .bindArgsSchemas([z.string()])
+  .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
+    await updateInvoice(ctx.user.id, id, parsedInput);
+    revalidatePath(routes.invoice());
+    return { error: null };
+  });
 
-export async function deleteInvoiceAction(id: string) {
-  const { user } = await apiGuard();
-  await deleteInvoice(user.id, id);
-  revalidatePath(routes.invoice());
-}
+export const deleteInvoiceAction = authActionClient
+  .schema(z.string())
+  .action(async ({ parsedInput, ctx }) => {
+    await deleteInvoice(ctx.user.id, parsedInput);
+    revalidatePath(routes.invoice());
+    return { error: null };
+  });
 
-export async function sendInvoiceMailAction(
-  id: string,
-  input: SendInvoiceMailInput,
-) {
-  const { user } = await apiGuard();
-  const data = sendInvoiceMailInputSchema.parse(input);
-  await sendInvoiceMail(user.id, id, data);
-}
+export const sendInvoiceMailAction = authActionClient
+  .schema(sendInvoiceMailInputSchema)
+  .bindArgsSchemas([z.string()])
+  .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
+    await sendInvoiceMail(ctx.user.id, id, parsedInput);
+    return { error: null };
+  });

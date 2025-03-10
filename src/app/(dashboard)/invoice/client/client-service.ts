@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { SaveClientInput } from "./client-dto";
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 
 export async function getClients(userId: string) {
   const clients = await prisma.client.findMany({
@@ -18,7 +18,7 @@ export async function getClientById(userId: string, id: string) {
   const client = await prisma.client.findFirst({
     where: { id, ownerId: userId },
   });
-  if (!client) throw new NotFoundException();
+  if (!client) throw new NotFoundError();
   return client;
 }
 

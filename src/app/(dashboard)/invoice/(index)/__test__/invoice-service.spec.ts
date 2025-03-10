@@ -1,5 +1,5 @@
 import { createUser } from "@/app/(dashboard)/user/user-service";
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 import {
   createInvoice,
   deleteInvoice,
@@ -47,7 +47,7 @@ describe("invoice service", () => {
       })),
     ).toEqual(input.products);
     await expect(getInvoiceById(user2.id, user1Invoice.id)).rejects.toThrow(
-      NotFoundException,
+      NotFoundError,
     );
   });
 

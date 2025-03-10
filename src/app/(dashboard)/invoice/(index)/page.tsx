@@ -4,7 +4,7 @@ import { getInvoices } from "./invoice-service";
 import PaymentModePage from "../payment-mode/payment-mode-page";
 import { getPaymentsMode } from "../payment-mode/payment-mode-service";
 import InvoicePage from "./invoice-page";
-import { apiGuard } from "@/lib/api-guard";
+import { guard } from "@/lib/auth";
 import { AppTab } from "@/components/app-tab";
 import { getClients } from "../client/client-service";
 import { getProviders } from "../provider/provider-service";
@@ -15,7 +15,7 @@ import { getProviders } from "../provider/provider-service";
 // TODO: Make all tabs in different routes and avoid this eager loading
 
 export default async function Page() {
-  const { user } = await apiGuard();
+  const { user } = await guard();
   const invoices = await getInvoices(user.id);
   const paymentsMode = await getPaymentsMode(user.id);
   const clients = await getClients(user.id);

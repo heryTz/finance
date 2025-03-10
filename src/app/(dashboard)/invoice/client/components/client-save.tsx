@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useGetClientById } from "../client-query";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 import { Loader } from "@/components/loader";
 import { saveClientInputSchema } from "../client-dto";
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import { Form, FormField } from "@/components/ui/form";
 import { InputField } from "@/components/input-field";
 import { Client } from "@prisma/client";
 import { createClientAction, updateClientAction } from "../client-action";
+import { useAction } from "next-safe-action/hooks";
 
 type FormValue = zd.infer<typeof saveClientInputSchema>;
 
@@ -20,9 +21,28 @@ export function ClientSave({
   idToEdit,
   onFinish,
 }: ClientSaveProps) {
-  const [isPending, startTransition] = useTransition();
   const clientFn = useGetClientById(idToEdit);
   const client = clientFn.data?.data;
+  const create = useAction(createClientAction, {
+    onSuccess: (resp) => {
+      if (!resp.data) return;
+      toast.success("Ajout effectué avec succès");
+      onOpenChange(false);
+      onFinish?.(resp.data);
+      reset();
+    },
+    onError: () => toast.error("Une erreur s'est produite"),
+  });
+  const update = useAction(updateClientAction.bind(null, idToEdit!), {
+    onSuccess: (resp) => {
+      if (!resp.data) return;
+      toast.success("Modification effectuée avec succès");
+      onOpenChange(false);
+      onFinish?.(resp.data);
+      reset();
+    },
+    onError: () => toast.error("Une erreur s'est produite"),
+  });
 
   const form = useForm<FormValue>({
     resolver: zodResolver(saveClientInputSchema),
@@ -38,24 +58,7 @@ export function ClientSave({
   };
 
   const onSubmit = form.handleSubmit((data) =>
-    startTransition(async () => {
-      try {
-        let client: Client;
-        if (idToEdit) {
-          client = await updateClientAction(idToEdit, data);
-          toast.success("Modification effectuée avec succès");
-        } else {
-          client = await createClientAction(data);
-          toast.success("Ajout effectué avec succès");
-        }
-        onOpenChange(false);
-        onFinish?.(client);
-        reset();
-      } catch (error) {
-        console.log(error);
-        toast.error("Une erreur s'est produite");
-      }
-    }),
+    idToEdit ? update.execute(data) : create.execute(data),
   );
 
   const onCancel = () => {
@@ -76,7 +79,7 @@ export function ClientSave({
       submit={{
         children: "Sauvegarder",
         onClick: onSubmit,
-        disabled: isPending || clientFn.isLoading,
+        disabled: create.isPending || update.isPending || clientFn.isLoading,
       }}
     >
       {idToEdit && clientFn.isLoading ? (

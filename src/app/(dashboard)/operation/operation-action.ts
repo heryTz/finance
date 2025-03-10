@@ -1,7 +1,6 @@
 "use server";
 
-import { apiGuard } from "@/lib/api-guard";
-import { SaveOperationInput, saveOperationInputSchema } from "./operation-dto";
+import { saveOperationInputSchema } from "./operation-dto";
 import {
   createOperation,
   deleteOperation,
@@ -9,26 +8,30 @@ import {
 } from "./operation-service";
 import { revalidatePath } from "next/cache";
 import { routes } from "@/app/routes";
+import { authActionClient } from "@/lib/safe-action";
+import { z } from "zod";
 
-export async function createOperationAction(input: SaveOperationInput) {
-  const { user } = await apiGuard();
-  const data = saveOperationInputSchema.parse(input);
-  await createOperation(user.id, data);
-  revalidatePath(routes.operation());
-}
+export const createOperationAction = authActionClient
+  .schema(saveOperationInputSchema)
+  .action(async ({ parsedInput, ctx }) => {
+    await createOperation(ctx.user.id, parsedInput);
+    revalidatePath(routes.operation());
+    return { error: null };
+  });
 
-export async function updateOperationAction(
-  id: string,
-  input: SaveOperationInput,
-) {
-  const { user } = await apiGuard();
-  const data = saveOperationInputSchema.parse(input);
-  await updateOperation(user.id, id, data);
-  revalidatePath(routes.operation());
-}
+export const updateOperationAction = authActionClient
+  .schema(saveOperationInputSchema)
+  .bindArgsSchemas([z.string()])
+  .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
+    await updateOperation(ctx.user.id, id, parsedInput);
+    revalidatePath(routes.operation());
+    return { error: null };
+  });
 
-export async function deleteOperationAction(id: string) {
-  const { user } = await apiGuard();
-  await deleteOperation(user.id, id);
-  revalidatePath(routes.operation());
-}
+export const deleteOperationAction = authActionClient
+  .schema(z.string())
+  .action(async ({ parsedInput, ctx }) => {
+    await deleteOperation(ctx.user.id, parsedInput);
+    revalidatePath(routes.operation());
+    return { error: null };
+  });

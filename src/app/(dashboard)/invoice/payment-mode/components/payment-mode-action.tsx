@@ -14,15 +14,15 @@ import { ArrayElement } from "@/lib/types";
 import { GetPaymentsMode } from "../payment-mode-service";
 import { PaymentModeSave } from "./payment-mode-save";
 import { deletePaymentModeAction } from "../payment-mode-action";
+import { useAction } from "next-safe-action/hooks";
 
 export function PaymentModeAction({ row }: PaymentModeActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-
-  const onRefetch = () => {
-    router.refresh();
-  };
+  const deletePaymentMode = useAction(deletePaymentModeAction, {
+    onSuccess: () => router.refresh(),
+  });
 
   return (
     <>
@@ -48,7 +48,7 @@ export function PaymentModeAction({ row }: PaymentModeActionProps) {
           idToEdit={row.id}
           open={openEdit}
           onOpenChange={setOpenEdit}
-          onFinish={onRefetch}
+          onFinish={() => router.refresh()}
         />
       )}
       {openDelete && (
@@ -56,10 +56,7 @@ export function PaymentModeAction({ row }: PaymentModeActionProps) {
           open={openDelete}
           onOpenChange={setOpenDelete}
           label={row.name}
-          onDelete={async () => {
-            await deletePaymentModeAction(row.id);
-            onRefetch();
-          }}
+          onDelete={async () => deletePaymentMode.executeAsync(row.id)}
         />
       )}
     </>

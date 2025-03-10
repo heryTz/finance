@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 import { Loader } from "@/components/loader";
 import { toast } from "sonner";
 import { zd } from "@/lib/zod";
@@ -11,6 +11,7 @@ import { saveProviderInputSchema } from "../provider-dto";
 import { useGetProviderById } from "../provider-query";
 import { Provider } from "@prisma/client";
 import { createProviderAction, updateProviderAction } from "../provider-action";
+import { useAction } from "next-safe-action/hooks";
 
 type FormValue = zd.infer<typeof saveProviderInputSchema>;
 
@@ -20,9 +21,28 @@ export function ProviderSave({
   idToEdit,
   onFinish,
 }: ProviderSaveProps) {
-  const [isPending, startTransition] = useTransition();
   const providerFn = useGetProviderById(idToEdit);
   const provider = providerFn.data;
+  const create = useAction(createProviderAction, {
+    onSuccess: (resp) => {
+      if (!resp.data) return;
+      toast.success("Ajout effectué avec succès");
+      onOpenChange(false);
+      onFinish?.(resp.data);
+      reset();
+    },
+    onError: () => toast.error("Une erreur s'est produite"),
+  });
+  const update = useAction(updateProviderAction.bind(null, idToEdit!), {
+    onSuccess: (resp) => {
+      if (!resp.data) return;
+      toast.success("Modification effectuée avec succès");
+      onOpenChange(false);
+      onFinish?.(resp.data);
+      reset();
+    },
+    onError: () => toast.error("Une erreur s'est produite"),
+  });
 
   const form = useForm<FormValue>({
     resolver: zodResolver(saveProviderInputSchema),
@@ -38,24 +58,7 @@ export function ProviderSave({
   };
 
   const onSubmit = form.handleSubmit((data) =>
-    startTransition(async () => {
-      try {
-        let provider: Provider;
-        if (idToEdit) {
-          provider = await updateProviderAction(idToEdit, data);
-          toast.success("Modification effectuée avec succès");
-        } else {
-          provider = await createProviderAction(data);
-          toast.success("Ajout effectué avec succès");
-        }
-        onOpenChange(false);
-        onFinish?.(provider);
-        reset();
-      } catch (error) {
-        console.log(error);
-        toast.error("Une erreur s'est produite");
-      }
-    }),
+    idToEdit ? update.execute(data) : create.execute(data),
   );
 
   const onCancel = () => {
@@ -76,7 +79,7 @@ export function ProviderSave({
       submit={{
         children: "Sauvegarder",
         onClick: onSubmit,
-        disabled: isPending || providerFn.isLoading,
+        disabled: create.isPending || update.isPending || providerFn.isLoading,
       }}
     >
       {idToEdit && providerFn.isLoading ? (

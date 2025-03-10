@@ -36,7 +36,7 @@ export function getOperationQuerySerializer() {
 }
 
 export const saveOperationInputSchema = zd.object({
-  label: zd.string().min(1),
+  label: zd.string().nonempty(),
   type: zd.nativeEnum(OperationType),
   tags: zd.array(zd.string()),
   amount: zd.coerce.number().min(0),

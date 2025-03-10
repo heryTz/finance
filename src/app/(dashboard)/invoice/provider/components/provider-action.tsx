@@ -14,15 +14,15 @@ import { ArrayElement } from "@/lib/types";
 import { GetProviders } from "../provider-service";
 import { ProviderSave } from "./provider-save";
 import { deleteProviderAction } from "../provider-action";
+import { useAction } from "next-safe-action/hooks";
 
 export function ProviderAction({ row }: ProviderActionProps) {
   const router = useRouter();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-
-  const onRefetch = () => {
-    router.refresh();
-  };
+  const deleteProvider = useAction(deleteProviderAction, {
+    onSuccess: () => router.refresh(),
+  });
 
   return (
     <>
@@ -48,7 +48,7 @@ export function ProviderAction({ row }: ProviderActionProps) {
           idToEdit={row.id}
           open={openEdit}
           onOpenChange={setOpenEdit}
-          onFinish={onRefetch}
+          onFinish={() => router.refresh()}
         />
       )}
       {openDelete && (
@@ -56,10 +56,7 @@ export function ProviderAction({ row }: ProviderActionProps) {
           open={openDelete}
           onOpenChange={setOpenDelete}
           label={row.name}
-          onDelete={async () => {
-            await deleteProviderAction(row.id);
-            onRefetch();
-          }}
+          onDelete={async () => deleteProvider.executeAsync(row.id)}
         />
       )}
     </>

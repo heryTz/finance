@@ -16,10 +16,14 @@ import { GetInvoices } from "../invoice-service";
 import { ModalDelete } from "@/components/modal-delete";
 import { deleteInvoiceAction } from "../invoice-action";
 import { routes } from "@/app/routes";
+import { useAction } from "next-safe-action/hooks";
 
 export function InvoiceAction({ row }: InvoiceActionProps) {
   const { push, refresh } = useRouter();
   const [openDelete, setOpenDelete] = useState(false);
+  const deleteInvoice = useAction(deleteInvoiceAction, {
+    onSuccess: () => refresh(),
+  });
 
   return (
     <>
@@ -48,10 +52,7 @@ export function InvoiceAction({ row }: InvoiceActionProps) {
           open={openDelete}
           onOpenChange={setOpenDelete}
           label={`No ${row.ref}`}
-          onDelete={async () => {
-            await deleteInvoiceAction(row.id);
-            refresh();
-          }}
+          onDelete={async () => deleteInvoice.executeAsync(row.id)}
         />
       )}
     </>

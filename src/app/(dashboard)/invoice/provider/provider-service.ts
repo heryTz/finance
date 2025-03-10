@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { SaveProviderInput } from "./provider-dto";
-import { NotFoundException } from "@/lib/exception";
+import { NotFoundError } from "@/lib/exception";
 
 export async function getProviderById(userId: string, id: string) {
   const provider = await prisma.provider.findFirst({
     where: { ownerId: userId, id },
   });
-  if (!provider) throw new NotFoundException();
+  if (!provider) throw new NotFoundError();
   return provider;
 }
 
