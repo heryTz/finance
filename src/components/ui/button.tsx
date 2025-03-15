@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 aria-[invalid=true]:border-destructive aria-[invalid=true]:text-destructive",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:text-destructive",
   {
     variants: {
       variant: {
@@ -40,32 +40,32 @@ export interface ButtonProps
   StartIcon?: React.ComponentType<{ className?: string }>;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      asChild = false,
-      children,
-      StartIcon,
-      ...props
-    },
-    ref,
-  ) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      >
-        {StartIcon && <StartIcon className="h-4 w-4 mr-2" />}
-        <Slottable>{children}</Slottable>
-      </Comp>
-    );
-  },
-);
+const Button = ({
+  ref,
+  className,
+  variant,
+  size,
+  asChild = false,
+  children,
+  StartIcon,
+  ...props
+}: ButtonProps & {
+  ref?:
+    | React.RefObject<HTMLButtonElement>
+    | React.RefCallback<HTMLButtonElement>;
+}) => {
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      ref={ref}
+      {...props}
+    >
+      {StartIcon && <StartIcon className="h-4 w-4 mr-2" />}
+      <Slottable>{children}</Slottable>
+    </Comp>
+  );
+};
 Button.displayName = "Button";
 
 export { Button, buttonVariants };

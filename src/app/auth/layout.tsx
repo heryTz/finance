@@ -8,7 +8,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <div className="min-h-dvh">
       <div className="border-b">
-        <div className="max-w-screen-xl mx-auto h-[60px] px-4 lg:px-6 flex justify-between items-center">
+        <div className="max-w-(--breakpoint-xl) mx-auto h-[60px] px-4 lg:px-6 flex justify-between items-center">
           <Logo />
           <div className="flex items-center gap-4">
             <Button

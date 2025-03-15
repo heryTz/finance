@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef } from "react";
+import { ComponentProps } from "react";
 import {
   FormControlWithArea,
   FormItem,
@@ -7,10 +7,14 @@ import {
 } from "./ui/form";
 import { MultiSelect } from "./multi-select";
 
-export const MultiSelectField = forwardRef<
-  HTMLDivElement,
-  MultiSelectFieldProps
->(({ label, inputProps, ...props }, ref) => {
+export const MultiSelectField = ({
+  ref,
+  label,
+  inputProps,
+  ...props
+}: MultiSelectFieldProps & {
+  ref?: React.RefObject<HTMLDivElement>;
+}) => {
   return (
     <FormItem ref={ref}>
       <FormLabel>{label}</FormLabel>
@@ -22,7 +26,7 @@ export const MultiSelectField = forwardRef<
       <FormMessage />
     </FormItem>
   );
-});
+};
 
 MultiSelectField.displayName = "MultiSelectField";
 

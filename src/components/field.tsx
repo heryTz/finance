@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef, PropsWithChildren } from "react";
+import { ComponentProps, PropsWithChildren } from "react";
 import {
   FormControl,
   FormControlWithArea,
@@ -7,18 +7,23 @@ import {
   FormMessage,
 } from "./ui/form";
 
-export const Field = forwardRef<HTMLDivElement, FieldProps>(
-  ({ label, children, component }, ref) => {
-    return (
-      <FormItem ref={ref}>
-        <FormLabel>{label}</FormLabel>
-        {component && <FormControlWithArea component={component} />}
-        {children && <FormControl>{children}</FormControl>}
-        <FormMessage />
-      </FormItem>
-    );
-  },
-);
+export const Field = ({
+  ref,
+  label,
+  children,
+  component,
+}: FieldProps & {
+  ref?: React.RefObject<HTMLDivElement>;
+}) => {
+  return (
+    <FormItem ref={ref}>
+      <FormLabel>{label}</FormLabel>
+      {component && <FormControlWithArea component={component} />}
+      {children && <FormControl>{children}</FormControl>}
+      <FormMessage />
+    </FormItem>
+  );
+};
 
 Field.displayName = "Field";
 

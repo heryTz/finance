@@ -15,7 +15,7 @@ export function Empty({
       className={cn(
         "flex flex-1 items-center justify-center",
         {
-          "border border-dashed rounded-lg shadow-sm": withBorder,
+          "border border-dashed rounded-lg shadow-xs": withBorder,
         },
         className,
       )}

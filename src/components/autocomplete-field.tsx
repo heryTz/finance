@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef } from "react";
+import { ComponentProps } from "react";
 import {
   FormControlWithArea,
   FormItem,
@@ -7,10 +7,15 @@ import {
 } from "./ui/form";
 import { Autocomplete } from "./autocomplete";
 
-export const AutocompleteField = forwardRef<
-  HTMLDivElement,
-  AutocompleteFieldProps
->(({ label, formItemProps, inputProps, ...props }, ref) => {
+export const AutocompleteField = ({
+  ref,
+  label,
+  formItemProps,
+  inputProps,
+  ...props
+}: AutocompleteFieldProps & {
+  ref?: React.RefObject<HTMLDivElement>;
+}) => {
   return (
     <FormItem ref={ref} {...formItemProps}>
       <FormLabel>{label}</FormLabel>
@@ -22,7 +27,7 @@ export const AutocompleteField = forwardRef<
       <FormMessage />
     </FormItem>
   );
-});
+};
 
 AutocompleteField.displayName = "AutocompleteField";
 

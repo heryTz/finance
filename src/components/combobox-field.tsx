@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef } from "react";
+import { ComponentProps } from "react";
 import {
   FormControlWithArea,
   FormItem,
@@ -7,21 +7,27 @@ import {
 } from "./ui/form";
 import { Combobox } from "./ui/combobox";
 
-export const ComboboxField = forwardRef<HTMLDivElement, ComboboxFieldProps>(
-  ({ label, formItemProps, buttonProps, ...props }, ref) => {
-    return (
-      <FormItem ref={ref} {...formItemProps}>
-        <FormLabel>{label}</FormLabel>
-        <FormControlWithArea
-          component={(area) => (
-            <Combobox {...props} buttonProps={{ ...buttonProps, ...area }} />
-          )}
-        />
-        <FormMessage />
-      </FormItem>
-    );
-  },
-);
+export const ComboboxField = ({
+  ref,
+  label,
+  formItemProps,
+  buttonProps,
+  ...props
+}: ComboboxFieldProps & {
+  ref?: React.RefObject<HTMLDivElement>;
+}) => {
+  return (
+    <FormItem ref={ref} {...formItemProps}>
+      <FormLabel>{label}</FormLabel>
+      <FormControlWithArea
+        component={(area) => (
+          <Combobox {...props} buttonProps={{ ...buttonProps, ...area }} />
+        )}
+      />
+      <FormMessage />
+    </FormItem>
+  );
+};
 
 ComboboxField.displayName = "ComboboxField";
 
