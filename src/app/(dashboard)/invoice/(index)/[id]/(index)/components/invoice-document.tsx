@@ -4,7 +4,6 @@ import jsPDF from "jspdf";
 import { useState } from "react";
 import { GetInvoiceById } from "../../../invoice-service";
 import { InvoicePreview } from "./invoice-preview";
-import { sendInvoiceMailAction } from "../../../invoice-action";
 import { invoiceDetaultFilename } from "../../../invoice-page";
 import { Button } from "@/components/ui/button";
 import { InvoiceDownload } from "./invoice-download";
@@ -66,13 +65,13 @@ export function InvoiceDocument({ invoice }: InvoiceDocumentProps) {
           open={openMail}
           onOpenChange={setOpenMail}
           id={invoice.id}
-          onSubmit={async (data) => {
+          buildInput={async (data) => {
             const doc = await printFile();
             const docBase64 = doc.output("datauristring");
-            await sendInvoiceMailAction(invoice.id, {
+            return {
               ...data,
               file: docBase64,
-            });
+            };
           }}
         />
       )}

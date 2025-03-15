@@ -17,15 +17,18 @@ import { Modal } from "@/components/modal";
 import { Form, FormField } from "@/components/ui/form";
 import { InputField } from "@/components/input-field";
 import { TextareaField } from "@/components/textarea-field";
+import { useAction } from "next-safe-action/hooks";
+import { sendInvoiceMailAction } from "../../../invoice-action";
 
 export function InvoiceMailing({
   open,
   onOpenChange,
   id,
-  onSubmit,
+  buildInput,
 }: InvoiceMailingProps) {
   const [isPending, startTransition] = useTransition();
   const invoiceFn = useGetInvoiceById(id);
+  const sendInvoiceMail = useAction(sendInvoiceMailAction.bind(null, id));
 
   const form = useForm<SendInvoiceMailInput>({
     defaultValues: {
@@ -59,13 +62,22 @@ export function InvoiceMailing({
   const submit = form.handleSubmit((data) => {
     startTransition(async () => {
       try {
-        await onSubmit(data);
+        const input = await buildInput(data);
+        const result = await sendInvoiceMail.executeAsync(input);
+        if (
+          result?.serverError ||
+          result?.validationErrors ||
+          result?.bindArgsValidationErrors
+        ) {
+          toast.error("Une erreur est survenue.");
+          return;
+        }
         toast.success("Votre facture a été envoyé");
         onOpenChange(false);
         reset();
       } catch (error) {
         console.log(error);
-        toast.error("Une erreur est survenue lors de l'envoi de votre facture");
+        toast.error("Une erreur est survenue.");
       }
     });
   });
@@ -122,7 +134,7 @@ export type InvoiceMailingProps = {
   open: boolean;
   onOpenChange: (b: boolean) => void;
   id: string;
-  onSubmit: (
+  buildInput: (
     data: Pick<SendInvoiceMailInput, "content" | "subject">,
-  ) => Promise<void>;
+  ) => Promise<SendInvoiceMailInput>;
 };

@@ -40,6 +40,7 @@
     "cmdk": "1.1.1",
     "dayjs": "^1.11.13",
     "dotenv-cli": "^7.4.4",
+    "html2canvas-pro": "^1.5.8",
     "i18next": "^23.16.8",
     "jspdf": "^2.5.2",
     "lucide-react": "^0.482.0",
