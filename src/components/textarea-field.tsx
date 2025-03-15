@@ -1,15 +1,9 @@
 import { FormItem, FormLabel, FormControl, FormMessage } from "./ui/form";
 import { Textarea } from "./ui/textarea";
 
-export const TextareaField = ({
-  ref,
-  label,
-  ...props
-}: TextareaFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+export const TextareaField = ({ label, ...props }: TextareaFieldProps) => {
   return (
-    <FormItem ref={ref}>
+    <FormItem>
       <FormLabel>{label}</FormLabel>
       <FormControl>
         <Textarea {...props} />

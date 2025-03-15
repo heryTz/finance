@@ -14,7 +14,7 @@ export const AutocompleteField = ({
   inputProps,
   ...props
 }: AutocompleteFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <FormItem ref={ref} {...formItemProps}>

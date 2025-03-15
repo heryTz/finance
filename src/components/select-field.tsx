@@ -13,7 +13,7 @@ export const SelectField = ({
   triggerProps,
   ...props
 }: SelectFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <FormItem ref={ref}>

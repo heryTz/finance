@@ -20,7 +20,7 @@ const SheetOverlay = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay> & {
-  ref: React.RefObject<React.ElementRef<typeof SheetPrimitive.Overlay>>;
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Overlay>>;
 }) => (
   <SheetPrimitive.Overlay
     className={cn(
@@ -63,7 +63,7 @@ const SheetContent = ({
   children,
   ...props
 }: SheetContentProps & {
-  ref: React.RefObject<React.ElementRef<typeof SheetPrimitive.Content>>;
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Content>>;
 }) => (
   <SheetPortal>
     <SheetOverlay />
@@ -115,7 +115,7 @@ const SheetTitle = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & {
-  ref: React.RefObject<React.ElementRef<typeof SheetPrimitive.Title>>;
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Title>>;
 }) => (
   <SheetPrimitive.Title
     ref={ref}
@@ -130,7 +130,7 @@ const SheetDescription = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description> & {
-  ref: React.RefObject<React.ElementRef<typeof SheetPrimitive.Description>>;
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Description>>;
 }) => (
   <SheetPrimitive.Description
     ref={ref}

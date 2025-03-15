@@ -34,7 +34,18 @@ function useChart() {
   return context;
 }
 
-const ChartContainer = ({ ref, id, className, children, config, ...props }) => {
+const ChartContainer = ({
+  id,
+  className,
+  children,
+  config,
+  ...props
+}: React.ComponentPropsWithoutRef<"div"> & {
+  config: ChartConfig;
+  children: React.ComponentProps<
+    typeof RechartsPrimitive.ResponsiveContainer
+  >["children"];
+}) => {
   const uniqueId = React.useId();
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`;
 
@@ -42,7 +53,6 @@ const ChartContainer = ({ ref, id, className, children, config, ...props }) => {
     <ChartContext.Provider value={{ config }}>
       <div
         data-chart={chartId}
-        ref={ref}
         className={cn(
           "flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-hidden [&_.recharts-surface]:outline-hidden",
           className,
@@ -109,7 +119,15 @@ const ChartTooltipContent = ({
   color,
   nameKey,
   labelKey,
-}) => {
+}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
+  React.ComponentProps<"div"> & {
+    hideLabel?: boolean;
+    hideIndicator?: boolean;
+    indicator?: "line" | "dot" | "dashed";
+    nameKey?: string;
+    labelKey?: string;
+    ref?: React.RefObject<HTMLDivElement>;
+  }) => {
   const { config } = useChart();
 
   const tooltipLabel = React.useMemo(() => {
@@ -243,7 +261,12 @@ const ChartLegendContent = ({
   payload,
   verticalAlign = "bottom",
   nameKey,
-}) => {
+}: React.ComponentProps<"div"> &
+  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+    hideIcon?: boolean;
+    nameKey?: string;
+    ref?: React.RefObject<HTMLDivElement>;
+  }) => {
   const { config } = useChart();
 
   if (!payload?.length) {

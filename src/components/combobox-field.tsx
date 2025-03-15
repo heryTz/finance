@@ -14,7 +14,7 @@ export const ComboboxField = ({
   buttonProps,
   ...props
 }: ComboboxFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <FormItem ref={ref} {...formItemProps}>

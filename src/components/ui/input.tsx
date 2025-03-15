@@ -19,7 +19,10 @@ const Input = ({
   onClear,
   ...props
 }: InputProps & {
-  ref: React.RefObject<HTMLInputElement>;
+  ref?:
+    | React.RefObject<HTMLInputElement | null>
+    | React.RefCallback<HTMLInputElement>
+    | null;
 }) => {
   return (
     <div className="relative">

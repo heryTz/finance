@@ -13,7 +13,7 @@ export const MultiSelectField = ({
   inputProps,
   ...props
 }: MultiSelectFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <FormItem ref={ref}>

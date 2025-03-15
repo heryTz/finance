@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { XIcon } from "lucide-react";
 import {
   ComponentProps,
+  ComponentPropsWithRef,
   createContext,
   PropsWithChildren,
   useContext,
@@ -60,7 +61,11 @@ export const ReactModal = ({
   );
 };
 
-export const ReactModalClose = ({ ref, asChild, ...props }) => {
+export const ReactModalClose = ({
+  ref,
+  asChild,
+  ...props
+}: ComponentPropsWithRef<"button"> & { asChild?: boolean }) => {
   const context = useContext(ReactModalContext);
   const Comp = asChild ? Slot : "button";
 
@@ -82,7 +87,7 @@ export const ReactModalContent = ({
   className,
   ...props
 }: PropsWithChildren<{ className?: string }> & {
-  ref: React.RefObject<ReactModalPrimitive>;
+  ref?: React.RefObject<ReactModalPrimitive>;
 }) => {
   const context = useContext(ReactModalContext);
   return (
@@ -143,7 +148,7 @@ export const ReactModalHeader = ({
   className,
   ...props
 }: ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <div
@@ -164,7 +169,7 @@ export const ReactModalTitle = ({
   className,
   ...props
 }: ComponentProps<"h2"> & {
-  ref: React.RefObject<HTMLHeadingElement>;
+  ref?: React.RefObject<HTMLHeadingElement>;
 }) => {
   const { labelledby } = useContext(ReactModalContext);
   return (
@@ -187,7 +192,7 @@ export const ReactModalFooter = ({
   className,
   ...props
 }: ComponentProps<"div"> & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <div
@@ -208,7 +213,7 @@ export const ReactModalDescription = ({
   className,
   ...props
 }: ComponentProps<"p"> & {
-  ref: React.RefObject<HTMLParagraphElement>;
+  ref?: React.RefObject<HTMLParagraphElement>;
 }) => {
   const { describeby } = useContext(ReactModalContext);
   return (
@@ -223,7 +228,11 @@ export const ReactModalDescription = ({
 
 ReactModalDescription.displayName = "ReactModalDescription";
 
-export const ReactModalTrigger = ({ ref, asChild, ...props }) => {
+export const ReactModalTrigger = ({
+  ref,
+  asChild,
+  ...props
+}: ComponentPropsWithRef<"button"> & { asChild?: boolean }) => {
   const context = useContext(ReactModalContext);
   const Comp = asChild ? Slot : "button";
 

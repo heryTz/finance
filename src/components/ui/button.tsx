@@ -50,7 +50,9 @@ const Button = ({
   StartIcon,
   ...props
 }: ButtonProps & {
-  ref: React.RefObject<HTMLButtonElement>;
+  ref?:
+    | React.RefObject<HTMLButtonElement>
+    | React.RefCallback<HTMLButtonElement>;
 }) => {
   const Comp = asChild ? Slot : "button";
   return (

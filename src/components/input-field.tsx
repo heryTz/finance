@@ -1,15 +1,9 @@
 import { FormItem, FormLabel, FormControl, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 
-export const InputField = ({
-  ref,
-  label,
-  ...props
-}: InputFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
-}) => {
+export const InputField = ({ label, ...props }: InputFieldProps) => {
   return (
-    <FormItem ref={ref}>
+    <FormItem>
       <FormLabel>{label}</FormLabel>
       <FormControl>
         <Input {...props} />

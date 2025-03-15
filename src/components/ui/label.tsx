@@ -10,7 +10,14 @@ const labelVariants = cva(
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
 );
 
-const Label = ({ ref, className, ...props }) => (
+const Label = ({
+  ref,
+  className,
+  ...props
+}: React.HtmlHTMLAttributes<HTMLLabelElement> &
+  VariantProps<typeof labelVariants> & {
+    ref?: React.RefObject<HTMLLabelElement>;
+  }) => (
   <LabelPrimitive.Root
     ref={ref}
     className={cn(labelVariants(), className)}

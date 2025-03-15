@@ -27,7 +27,7 @@ const DrawerOverlay = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay> & {
-  ref: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Overlay>>;
+  ref?: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Overlay>>;
 }) => (
   <DrawerPrimitive.Overlay
     ref={ref}
@@ -43,7 +43,7 @@ const DrawerContent = ({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & {
-  ref: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Content>>;
+  ref?: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Content>>;
 }) => (
   <DrawerPortal>
     <DrawerOverlay />
@@ -89,7 +89,7 @@ const DrawerTitle = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Title> & {
-  ref: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Title>>;
+  ref?: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Title>>;
 }) => (
   <DrawerPrimitive.Title
     ref={ref}
@@ -107,7 +107,7 @@ const DrawerDescription = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Description> & {
-  ref: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Description>>;
+  ref?: React.RefObject<React.ElementRef<typeof DrawerPrimitive.Description>>;
 }) => (
   <DrawerPrimitive.Description
     ref={ref}

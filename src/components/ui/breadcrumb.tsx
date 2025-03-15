@@ -4,7 +4,7 @@ import { ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const Breadcrumb = ({ ref, ...props }) => (
+const Breadcrumb = ({ ref, ...props }: React.ComponentPropsWithRef<"nav">) => (
   <nav ref={ref} aria-label="breadcrumb" {...props} />
 );
 Breadcrumb.displayName = "Breadcrumb";
@@ -14,7 +14,7 @@ const BreadcrumbList = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"ol"> & {
-  ref: React.RefObject<HTMLOListElement>;
+  ref?: React.RefObject<HTMLOListElement>;
 }) => (
   <ol
     ref={ref}
@@ -32,7 +32,7 @@ const BreadcrumbItem = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"li"> & {
-  ref: React.RefObject<HTMLLIElement>;
+  ref?: React.RefObject<HTMLLIElement>;
 }) => (
   <li
     ref={ref}
@@ -42,7 +42,15 @@ const BreadcrumbItem = ({
 );
 BreadcrumbItem.displayName = "BreadcrumbItem";
 
-const BreadcrumbLink = ({ ref, asChild, className, ...props }) => {
+const BreadcrumbLink = ({
+  ref,
+  asChild,
+  className,
+  ...props
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  ref?: React.RefObject<HTMLAnchorElement>;
+  asChild?: boolean;
+}) => {
   const Comp = asChild ? Slot : "a";
 
   return (
@@ -60,7 +68,7 @@ const BreadcrumbPage = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"span"> & {
-  ref: React.RefObject<HTMLSpanElement>;
+  ref?: React.RefObject<HTMLSpanElement>;
 }) => (
   <span
     ref={ref}

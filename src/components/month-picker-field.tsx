@@ -15,7 +15,7 @@ export const MonthPickerField = ({
   error,
   ...props
 }: MonthPickerFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <FormItem ref={ref}>

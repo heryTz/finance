@@ -13,15 +13,16 @@ export const CalendarField = ({
   label,
   onChange,
 }: CalendarFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLButtonElement> | React.RefObject<HTMLButtonElement>;
 }) => {
   return (
-    <FormItem ref={ref}>
+    <FormItem>
       <FormLabel>{label}</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
             <Button
+              ref={ref}
               variant={"outline"}
               className={cn(
                 "flex justify-start w-full pl-3 text-left font-normal aria-invalid:border-destructive aria-invalid:text-destructive",

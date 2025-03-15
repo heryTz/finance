@@ -16,7 +16,7 @@ export const CalendarRangeField = ({
   onChange,
   error,
 }: CalendarRangeFieldProps & {
-  ref: React.RefObject<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement>;
 }) => {
   return (
     <FormItem ref={ref}>
