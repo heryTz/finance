@@ -20,7 +20,7 @@ export function MonthPicker({
           variant={"outline"}
           {...buttonProps}
           className={cn(
-            "flex justify-start w-full pl-3 text-left font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:text-destructive",
+            "flex justify-start w-full pl-3 text-left font-normal aria-invalid:border-destructive aria-invalid:text-destructive",
             !value && "text-muted-foreground",
             buttonProps?.className,
           )}

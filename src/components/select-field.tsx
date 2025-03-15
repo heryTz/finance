@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef } from "react";
+import { ComponentProps } from "react";
 import {
   FormControlWithArea,
   FormItem,
@@ -7,21 +7,26 @@ import {
 } from "./ui/form";
 import { AppSelect } from "./app-select";
 
-export const SelectField = forwardRef<HTMLDivElement, SelectFieldProps>(
-  ({ label, triggerProps, ...props }, ref) => {
-    return (
-      <FormItem ref={ref}>
-        <FormLabel>{label}</FormLabel>
-        <FormControlWithArea
-          component={(area) => (
-            <AppSelect {...props} triggerProps={{ ...area, ...triggerProps }} />
-          )}
-        />
-        <FormMessage />
-      </FormItem>
-    );
-  },
-);
+export const SelectField = ({
+  ref,
+  label,
+  triggerProps,
+  ...props
+}: SelectFieldProps & {
+  ref: React.RefObject<HTMLDivElement>;
+}) => {
+  return (
+    <FormItem ref={ref}>
+      <FormLabel>{label}</FormLabel>
+      <FormControlWithArea
+        component={(area) => (
+          <AppSelect {...props} triggerProps={{ ...area, ...triggerProps }} />
+        )}
+      />
+      <FormMessage />
+    </FormItem>
+  );
+};
 
 SelectField.displayName = "SelectField";
 

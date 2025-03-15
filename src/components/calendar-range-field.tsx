@@ -1,4 +1,3 @@
-import { forwardRef } from "react";
 import { FormControl, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -9,10 +8,16 @@ import { CalendarDaysIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
-export const CalendarRangeField = forwardRef<
-  HTMLDivElement,
-  CalendarRangeFieldProps
->(({ placeholder, value, label, onChange, error }, ref) => {
+export const CalendarRangeField = ({
+  ref,
+  placeholder,
+  value,
+  label,
+  onChange,
+  error,
+}: CalendarRangeFieldProps & {
+  ref: React.RefObject<HTMLDivElement>;
+}) => {
   return (
     <FormItem ref={ref}>
       <FormLabel>{label}</FormLabel>
@@ -22,7 +27,7 @@ export const CalendarRangeField = forwardRef<
             <Button
               variant={"outline"}
               className={cn(
-                "flex justify-start w-full pl-3 text-left font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:text-destructive",
+                "flex justify-start w-full pl-3 text-left font-normal aria-invalid:border-destructive aria-invalid:text-destructive",
                 !value && "text-muted-foreground",
               )}
               StartIcon={CalendarDaysIcon}
@@ -55,7 +60,7 @@ export const CalendarRangeField = forwardRef<
       </FormMessage>
     </FormItem>
   );
-});
+};
 
 CalendarRangeField.displayName = "CalendarRangeField";
 

@@ -4,7 +4,6 @@ import { XIcon } from "lucide-react";
 import {
   ComponentProps,
   createContext,
-  forwardRef,
   PropsWithChildren,
   useContext,
   useEffect,
@@ -61,12 +60,7 @@ export const ReactModal = ({
   );
 };
 
-export const ReactModalClose = forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    asChild?: boolean;
-  }
->(({ asChild, ...props }, ref) => {
+export const ReactModalClose = ({ ref, asChild, ...props }) => {
   const context = useContext(ReactModalContext);
   const Comp = asChild ? Slot : "button";
 
@@ -79,14 +73,17 @@ export const ReactModalClose = forwardRef<
       {...props}
     />
   );
-});
+};
 
 ReactModalClose.displayName = "ReactModalClose";
 
-export const ReactModalContent = forwardRef<
-  ReactModalPrimitive,
-  PropsWithChildren<{ className?: string }>
->(({ className, ...props }, ref) => {
+export const ReactModalContent = ({
+  ref,
+  className,
+  ...props
+}: PropsWithChildren<{ className?: string }> & {
+  ref: React.RefObject<ReactModalPrimitive>;
+}) => {
   const context = useContext(ReactModalContext);
   return (
     <ReactModalPrimitive
@@ -95,7 +92,7 @@ export const ReactModalContent = forwardRef<
         "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
       }
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg focus-visible:outline-none duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg focus-visible:outline-hidden duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
         className,
       )}
       aria={{
@@ -119,14 +116,14 @@ export const ReactModalContent = forwardRef<
       {props.children}
       <ReactModalClose
         data-state={context.open ? "open" : "closed"}
-        className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+        className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
       >
         <XIcon className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </ReactModalClose>
     </ReactModalPrimitive>
   );
-});
+};
 
 ReactModalContent.displayName = "ReactModalContent";
 
@@ -141,10 +138,13 @@ export const ReactModalBody = ({
     </div>
   );
 };
-export const ReactModalHeader = forwardRef<
-  HTMLDivElement,
-  ComponentProps<"div">
->(({ className, ...props }, ref) => {
+export const ReactModalHeader = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<"div"> & {
+  ref: React.RefObject<HTMLDivElement>;
+}) => {
   return (
     <div
       ref={ref}
@@ -155,14 +155,17 @@ export const ReactModalHeader = forwardRef<
       {...props}
     />
   );
-});
+};
 
 ReactModalHeader.displayName = "ReactModalHeader";
 
-export const ReactModalTitle = forwardRef<
-  HTMLHeadingElement,
-  ComponentProps<"h2">
->(({ className, ...props }, ref) => {
+export const ReactModalTitle = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<"h2"> & {
+  ref: React.RefObject<HTMLHeadingElement>;
+}) => {
   const { labelledby } = useContext(ReactModalContext);
   return (
     <h2
@@ -175,14 +178,17 @@ export const ReactModalTitle = forwardRef<
       {...props}
     />
   );
-});
+};
 
 ReactModalTitle.displayName = "ReactModalTitle";
 
-export const ReactModalFooter = forwardRef<
-  HTMLDivElement,
-  ComponentProps<"div">
->(({ className, ...props }, ref) => {
+export const ReactModalFooter = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<"div"> & {
+  ref: React.RefObject<HTMLDivElement>;
+}) => {
   return (
     <div
       ref={ref}
@@ -193,14 +199,17 @@ export const ReactModalFooter = forwardRef<
       {...props}
     />
   );
-});
+};
 
 ReactModalFooter.displayName = "ReactModalFooter";
 
-export const ReactModalDescription = forwardRef<
-  HTMLParagraphElement,
-  ComponentProps<"p">
->(({ className, ...props }, ref) => {
+export const ReactModalDescription = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<"p"> & {
+  ref: React.RefObject<HTMLParagraphElement>;
+}) => {
   const { describeby } = useContext(ReactModalContext);
   return (
     <p
@@ -210,16 +219,11 @@ export const ReactModalDescription = forwardRef<
       {...props}
     />
   );
-});
+};
 
 ReactModalDescription.displayName = "ReactModalDescription";
 
-export const ReactModalTrigger = forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    asChild?: boolean;
-  }
->(({ asChild, ...props }, ref) => {
+export const ReactModalTrigger = ({ ref, asChild, ...props }) => {
   const context = useContext(ReactModalContext);
   const Comp = asChild ? Slot : "button";
 
@@ -232,6 +236,6 @@ export const ReactModalTrigger = forwardRef<
       {...props}
     />
   );
-});
+};
 
 ReactModalTrigger.displayName = "ReactModalTrigger";
