@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 import { StatDisplay } from "./stat-display";
 import dayjs from "dayjs";
 import { OperationFilter } from "../../operation/components/opertation-filter";
+import { useTransition } from "react";
+import { Spinner } from "@/components/spinner";
 
 const querySerializer = getStatsQuerySerializer();
 
@@ -25,14 +27,16 @@ const serializer = createSerializer({
 });
 
 export function StatContent({ data }: StatContentProps) {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [filter] = useQueryState(querySerializer.key, querySerializer.parser);
 
-  const onApply = (data: Partial<zd.infer<typeof getStatsQuerySchema>>) => {
-    const newFilter = { ...filter, ...data };
-    router.replace(`/${serializer({ filter: newFilter })}`);
-    router.refresh();
-  };
+  const onApply = (data: Partial<zd.infer<typeof getStatsQuerySchema>>) =>
+    startTransition(() => {
+      const newFilter = { ...filter, ...data };
+      router.replace(`/${serializer({ filter: newFilter })}`);
+      router.refresh();
+    });
 
   return (
     <Container
@@ -60,7 +64,8 @@ export function StatContent({ data }: StatContentProps) {
         <ChartCard
           title="Aperçu"
           rightComponent={
-            <>
+            <div className="flex items-center gap-2">
+              {isPending && <Spinner className="w-6 h-6" />}
               <MonthPicker
                 type="range"
                 buttonProps={{ className: "w-[210px]" }}
@@ -81,7 +86,7 @@ export function StatContent({ data }: StatContentProps) {
                   })
                 }
               />
-            </>
+            </div>
           }
         >
           <LineChart
