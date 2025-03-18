@@ -1,4 +1,4 @@
-import { getInvoiceById } from "@/app/(dashboard)/invoice/(index)/invoice-service";
+import { getInvoiceById } from "@/app/(dashboard)/invoice/index/invoice-service";
 import { guard } from "@/lib/auth";
 import { weh } from "@/lib/with-error-handler";
 import { NextResponse } from "next/server";

@@ -8,7 +8,7 @@ import { invoiceDetaultFilename } from "../../../invoice-page";
 import { Button } from "@/components/ui/button";
 import { InvoiceDownload } from "./invoice-download";
 import { InvoiceMailing } from "./invoice-mailing";
-import { Container } from "@/components/container";
+import { AppContent } from "@/components/app-content";
 import { routes } from "@/app/routes";
 
 export function InvoiceDocument({ invoice }: InvoiceDocumentProps) {
@@ -33,7 +33,7 @@ export function InvoiceDocument({ invoice }: InvoiceDocumentProps) {
   };
 
   return (
-    <Container
+    <AppContent
       title="Détails de la facture"
       breadcrumb={[
         { label: "Facture", path: routes.invoice() },
@@ -75,7 +75,7 @@ export function InvoiceDocument({ invoice }: InvoiceDocumentProps) {
           }}
         />
       )}
-    </Container>
+    </AppContent>
   );
 }
 

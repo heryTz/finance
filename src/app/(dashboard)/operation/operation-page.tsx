@@ -36,14 +36,14 @@ export function OperationPage({ operations }: OperationPageProps) {
     router.refresh();
   };
 
-  useSeo({ title: "Opération" });
+  useSeo({ title: "Opérations" });
 
   return (
     <DataTableWrapper
-      title="Opération"
+      title="Opérations"
       count={operations.results.length ?? 0}
       cta={{ label: "Ajouter", onClick: () => setOpenSave(true) }}
-      breadcrumb={[{ label: "Opération" }]}
+      breadcrumb={[{ label: "Opérations" }]}
       emptyProps={{
         title: "Aucune opération",
         description: 'Cliquez sur "Ajouter" pour créer une opération',

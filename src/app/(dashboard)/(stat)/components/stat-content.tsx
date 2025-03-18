@@ -3,7 +3,7 @@
 import { LineChart } from "@/components/line-chart";
 import { GetStats } from "../stat-service";
 import { statData, statDisplayConfig } from "../stat-util";
-import { Container } from "@/components/container";
+import { AppContent } from "@/components/app-content";
 import { z } from "zod";
 import { getStatsQuerySchema, getStatsQuerySerializer } from "../stat-dto";
 import { ChartCard } from "@/components/chart-card";
@@ -39,12 +39,12 @@ export function StatContent({ data }: StatContentProps) {
     });
 
   return (
-    <Container
+    <AppContent
       title="Dashboard"
-      filter={<OperationFilter filter={filter} onApply={onApply} />}
       action={<StatDisplay display={filter.display} onApply={onApply} />}
     >
       <div className="grid gap-4">
+        <OperationFilter filter={filter} onApply={onApply} />
         <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
           {[...statDisplayConfig]
             .filter((el) => filter.display.includes(el.name))
@@ -112,7 +112,7 @@ export function StatContent({ data }: StatContentProps) {
           />
         </ChartCard>
       </div>
-    </Container>
+    </AppContent>
   );
 }
 

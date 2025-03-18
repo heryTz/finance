@@ -12,18 +12,18 @@ export default function PaymentModePage({ paymentsMode }: PaymentsModeProps) {
   const router = useRouter();
   const { columns } = useColumnDefs();
   const [openSave, setOpenSave] = useState(false);
-  useSeo({ title: "Mode de paiements" });
+  useSeo({ title: "Modes de paiement" });
 
   return (
     <>
       <DataTableWrapper
-        title="Mode de paiements"
+        title="Modes de paiement"
         count={paymentsMode.results.length}
         cta={{ label: "Ajouter", onClick: () => setOpenSave(true) }}
-        breadcrumb={[{ label: "Mode de paiements" }]}
+        breadcrumb={[{ label: "Modes de paiement" }]}
         emptyProps={{
-          title: "Aucun mode de paiements",
-          description: 'Cliquez sur "Ajouter" pour créer un mode de paiements',
+          title: "Aucun mode de paiement",
+          description: 'Cliquez sur "Ajouter" pour créer un mode de paiement',
         }}
       >
         <DataTable

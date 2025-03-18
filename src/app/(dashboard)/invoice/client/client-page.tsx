@@ -9,7 +9,7 @@ import { ClientSave } from "./components/client-save";
 import { useRouter } from "next/navigation";
 import { DataTableWrapper } from "@/components/data-table-wrapper";
 
-export default function ClientPage({ clients }: ClientPageProps) {
+export function ClientPage({ clients }: ClientPageProps) {
   const { refresh } = useRouter();
   const [open, setOpen] = useState(false);
   const { columns } = useColumnDefs();

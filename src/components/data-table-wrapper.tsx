@@ -1,10 +1,8 @@
 import { ComponentProps, PropsWithChildren } from "react";
-import { Container } from "./container";
-import { Button } from "./ui/button";
+import { AppContent } from "./app-content";
 import { Empty } from "./empty";
 import { cn } from "@/lib/utils";
-import { Loader } from "./loader";
-import { ErrorSection } from "./error-section";
+import { Button } from "./ui/button";
 import { PlusIcon } from "lucide-react";
 
 export function DataTableWrapper({
@@ -13,29 +11,26 @@ export function DataTableWrapper({
   action,
   count,
   emptyProps,
-  error,
-  loading,
-  ...containerProps
+  title,
+  filter,
+  breadcrumb,
 }: DataTableWrapperProps) {
   return (
-    <Container
+    <AppContent
+      title={title}
+      breadcrumb={breadcrumb}
       action={
         <>
-          {!loading && count > 0 ? (
-            <Button StartIcon={PlusIcon} onClick={cta.onClick}>
+          {count > 0 && (
+            <Button size={"sm"} StartIcon={PlusIcon} onClick={cta.onClick}>
               {cta.label}
             </Button>
-          ) : null}
+          )}
           {action}
         </>
       }
-      {...containerProps}
     >
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <ErrorSection />
-      ) : count === 0 ? (
+      {count === 0 ? (
         <Empty
           withBorder
           {...emptyProps}
@@ -43,20 +38,22 @@ export function DataTableWrapper({
           cta={cta}
         />
       ) : (
-        children
+        <div className="grid gap-4">
+          {filter}
+          {children}
+        </div>
       )}
-    </Container>
+    </AppContent>
   );
 }
 
-type DataTableWrapperProps = ComponentProps<typeof Container> &
+type DataTableWrapperProps = ComponentProps<typeof AppContent> &
   PropsWithChildren<{
     count: number;
-    loading?: boolean;
-    error?: unknown;
     cta: {
       label: string;
       onClick: () => void;
     };
     emptyProps: Omit<ComponentProps<typeof Empty>, "cta">;
+    filter?: React.ReactNode;
   }>;

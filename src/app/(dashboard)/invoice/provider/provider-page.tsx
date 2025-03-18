@@ -9,19 +9,19 @@ import { useColumnDefs } from "./components/provider-column-defs";
 import { ProviderSave } from "./components/provider-save";
 import { DataTableWrapper } from "@/components/data-table-wrapper";
 
-export default function ProviderPage({ providers }: ProviderPageProps) {
+export function ProviderPage({ providers }: ProviderPageProps) {
   const { refresh } = useRouter();
   const [open, setOpen] = useState(false);
   const { columns } = useColumnDefs();
-  useSeo({ title: "Prestataire" });
+  useSeo({ title: "Prestataires" });
 
   return (
     <>
       <DataTableWrapper
-        title="Prestataire"
+        title="Prestataires"
         count={providers.results.length}
         cta={{ label: "Ajouter", onClick: () => setOpen(true) }}
-        breadcrumb={[{ label: "Prestataire" }]}
+        breadcrumb={[{ label: "Prestataires" }]}
         emptyProps={{
           title: "Aucun prestataire",
           description: 'Cliquez sur "Ajouter" pour créer un prestataire',
