@@ -11,7 +11,15 @@ export async function getOperations(userId: string, query: GetOperationQuery) {
     userId,
     ...(q ? { label: { contains: q } } : {}),
     label: label ? { contains: label } : undefined,
-    tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+    ...(tags?.length
+      ? {
+          AND: tags.map((tag) => ({
+            tags: {
+              some: { name: tag },
+            },
+          })),
+        }
+      : {}),
   };
 
   let skip: number | undefined;

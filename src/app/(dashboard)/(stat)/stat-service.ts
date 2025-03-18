@@ -34,6 +34,19 @@ async function getOverviewStat(
   userId: string,
   { range, tags, label }: z.infer<typeof getStatsQuerySchema>,
 ) {
+  const commonFilters = {
+    label: label ? { contains: label } : undefined,
+    ...(tags?.length
+      ? {
+          AND: tags.map((tag) => ({
+            tags: {
+              some: { name: tag },
+            },
+          })),
+        }
+      : {}),
+  };
+
   // We convert all date to the start and end of the month because all result are mounth based
   const customActualDate = range.customActualDate
     ? dayjs(range.customActualDate).endOf("month").toDate()
@@ -50,8 +63,7 @@ async function getOverviewStat(
         lte: to,
         gte: from,
       },
-      label: label ? { contains: label } : undefined,
-      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+      ...commonFilters,
     },
   });
 
@@ -94,8 +106,7 @@ async function getOverviewStat(
     by: ["type"],
     where: {
       userId,
-      label: label ? { contains: label } : undefined,
-      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+      ...commonFilters,
       createdAt: {
         lte: dayjs(from).add(-1, "month").endOf("month").toDate(),
       },
@@ -132,12 +143,24 @@ async function getCountStat(
   userId: string,
   { label, tags }: Omit<z.infer<typeof getStatsQuerySchema>, "range">,
 ) {
+  const commonFilters = {
+    label: label ? { contains: label } : undefined,
+    ...(tags?.length
+      ? {
+          AND: tags.map((tag) => ({
+            tags: {
+              some: { name: tag },
+            },
+          })),
+        }
+      : {}),
+  };
+
   const sumAmount = await prisma.operation.groupBy({
     by: ["type"],
     where: {
       userId,
-      label: label ? { contains: label } : undefined,
-      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+      ...commonFilters,
     },
     _sum: { amount: true },
   });
@@ -154,8 +177,7 @@ async function getCountStat(
     by: ["type"],
     where: {
       userId,
-      label: label ? { contains: label } : undefined,
-      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+      ...commonFilters,
       createdAt: {
         lte: dayjs().add(-1, "month").endOf("month").toDate(),
       },
@@ -178,8 +200,7 @@ async function getCountStat(
     by: ["type"],
     where: {
       userId,
-      label: label ? { contains: label } : undefined,
-      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+      ...commonFilters,
       createdAt: {
         gte: dayjs().startOf("month").toDate(),
       },
@@ -199,8 +220,7 @@ async function getCountStat(
     by: ["type"],
     where: {
       userId,
-      label: label ? { contains: label } : undefined,
-      tags: !!tags?.length ? { some: { name: { in: tags } } } : undefined,
+      ...commonFilters,
       createdAt: {
         gte: dayjs().add(-1, "month").startOf("month").toDate(),
         lte: dayjs().add(-1, "month").endOf("month").toDate(),
