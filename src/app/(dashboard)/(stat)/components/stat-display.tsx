@@ -15,7 +15,7 @@ export function StatDisplay({ display, onApply }: StatDisplayProps) {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant={"outline"} StartIcon={EyeIcon}>
+          <Button size={"sm"} variant={"outline"} StartIcon={EyeIcon}>
             Affichage
           </Button>
         </PopoverTrigger>

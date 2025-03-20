@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { CreateInvoiceInput, createInvoiceSchema } from "../invoice-dto";
 import { useState } from "react";
-import { Container } from "@/components/container";
+import { AppContent } from "@/components/app-content";
 import { toast } from "sonner";
 import { Form, FormField, FormMessageError } from "@/components/ui/form";
 import { AutocompleteField } from "@/components/autocomplete-field";
@@ -91,7 +91,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
     errors.products?.message ?? errors.products?.root?.message;
 
   return (
-    <Container
+    <AppContent
       title={title}
       breadcrumb={[
         { label: "Facture", path: routes.invoice() },
@@ -354,7 +354,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
           paymentModesFn.refetch();
         }}
       />
-    </Container>
+    </AppContent>
   );
 }
 

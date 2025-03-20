@@ -8,14 +8,14 @@ import { useColumnDefs } from "./components/invoice-colum-defs";
 import { routes } from "@/app/routes";
 import { DataTableWrapper } from "@/components/data-table-wrapper";
 
-export default function InvoicePage({ invoices }: InvoicePageProps) {
+export function InvoicePage({ invoices }: InvoicePageProps) {
   const { push } = useRouter();
   const { columns } = useColumnDefs();
-  useSeo({ title: "Facture" });
+  useSeo({ title: "Factures" });
 
   return (
     <DataTableWrapper
-      title="Facture"
+      title="Factures"
       cta={{ label: "Ajouter", onClick: () => push(routes.invoiceCreate()) }}
       breadcrumb={[{ label: "Facture" }]}
       count={invoices.results.length}

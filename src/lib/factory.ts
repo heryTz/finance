@@ -1,5 +1,5 @@
 import { SaveOperationInput } from "@/app/(dashboard)/operation/operation-dto";
-import { CreateInvoiceInput } from "@/app/(dashboard)/invoice/(index)/invoice-dto";
+import { CreateInvoiceInput } from "@/app/(dashboard)/invoice/index/invoice-dto";
 import { SaveClientInput } from "@/app/(dashboard)/invoice/client/client-dto";
 import { createClient } from "@/app/(dashboard)/invoice/client/client-service";
 import { createPaymentMode } from "@/app/(dashboard)/invoice/payment-mode/payment-mode-service";
