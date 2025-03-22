@@ -7,7 +7,7 @@ You can see the demo with the information below.
 - demo: <https://finance.herynirintsoa.com>
 - mail: <test-test@yopmail.fr>
 
-![Finance demo](https://github.com/heryTz/finance/blob/main/demo.png?v=1)
+![Finance demo](https://github.com/heryTz/finance/blob/main/demo.png?v=2)
 
 ⚠️ This project is a work in progress so it may contains breaking changes.
 
@@ -29,6 +29,12 @@ Setup db
 
 ```bash
 npx prisma generate && npx prisma migrate dev
+```
+
+Start the application
+
+```bash
+pnpm dev
 ```
 
 ## Setup prod
