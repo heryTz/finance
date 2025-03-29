@@ -15,7 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ModalDelete } from "@/components/modal-delete";
 import { deleteOperationAction } from "../operation-action";
 import { useAction } from "next-safe-action/hooks";
-import { GET_STAT_COUNTER } from "@/query/stat-query";
+import { GET_OPERATION_COUNTER } from "@/query/operation-query";
 import { GET_OPERATIONS } from "../operation-query";
 
 export function OperationAction({ row }: OperationActionProps) {
@@ -27,7 +27,7 @@ export function OperationAction({ row }: OperationActionProps) {
       queryKey: [GET_OPERATIONS],
     });
     queryClient.refetchQueries({
-      queryKey: [GET_STAT_COUNTER],
+      queryKey: [GET_OPERATION_COUNTER],
     });
   };
   const deleteOperation = useAction(deleteOperationAction, {

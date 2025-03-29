@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/app/routes";
 import { OperationFilter } from "./components/opertation-filter";
 import { useQueryClient } from "@tanstack/react-query";
-import { GET_STAT_COUNTER } from "@/query/stat-query";
+import { GET_OPERATION_COUNTER } from "@/query/operation-query";
 
 const querySerializer = getOperationQuerySerializer();
 const serializer = createSerializer({
@@ -78,7 +78,7 @@ export function OperationPage({ operations }: OperationPageProps) {
           open={openSave}
           onOpenChange={setOpenSave}
           onFinish={() =>
-            qclient.refetchQueries({ queryKey: [GET_STAT_COUNTER] })
+            qclient.refetchQueries({ queryKey: [GET_OPERATION_COUNTER] })
           }
         />
       )}

@@ -1,11 +1,11 @@
 import { humanAmount } from "@/lib/humanizer";
 import { Banknote } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { useGetStatCounter } from "@/query/stat-query";
+import { useGetOperationsCounter } from "@/query/operation-query";
 import { Spinner } from "./spinner";
 
 export function BalanceInfo() {
-  const counter = useGetStatCounter();
+  const counter = useGetOperationsCounter();
 
   return (
     <div className="-mx-2">

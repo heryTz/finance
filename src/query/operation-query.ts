@@ -2,14 +2,14 @@ import { GetStats } from "@/app/(dashboard)/(stat)/stat-service";
 import { httpClient } from "@/lib/http-client";
 import { useQuery } from "@tanstack/react-query";
 
-export const GET_STAT_COUNTER = "useGetStatCounter";
+export const GET_OPERATION_COUNTER = "useGetOperationsCounter";
 
-export function useGetStatCounter() {
+export function useGetOperationsCounter() {
   return useQuery({
-    queryKey: [GET_STAT_COUNTER],
+    queryKey: [GET_OPERATION_COUNTER],
     queryFn: () =>
       httpClient
-        .get<GetStats["countStat"]>("/stat/counters")
+        .get<GetStats["countStat"]>("/operations/counters")
         .then((res) => res.data),
   });
 }
