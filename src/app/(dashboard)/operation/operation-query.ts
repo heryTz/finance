@@ -3,10 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import type { GetOperationQuery } from "./operation-dto";
 import type { GetOperationById, GetOperations } from "./operation-service";
 
+export const GET_OPERATIONS = "useGetOperations";
+
 export function useGetOperations(query?: GetOperationQuery) {
   return useQuery({
     queryKey: [
-      "useGetOperations",
+      GET_OPERATIONS,
       query?.q,
       query?.distinct,
       query?.page,

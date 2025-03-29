@@ -3,6 +3,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
@@ -10,6 +12,7 @@ import { Logo } from "./logo";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import { NavSecondary } from "./nav-secondary";
+import { BalanceInfo } from "./balance-info";
 
 export function AppSidebar() {
   return (
@@ -18,6 +21,11 @@ export function AppSidebar() {
         <Link href={routes.dashboard()}>
           <Logo />
         </Link>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <BalanceInfo />
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarHeader>
       <SidebarContent>
         <NavMain />

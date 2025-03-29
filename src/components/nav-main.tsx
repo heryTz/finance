@@ -1,5 +1,7 @@
 import { usePathname } from "next/navigation";
 import {
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -68,56 +70,60 @@ export function NavMain() {
     },
   ];
   return (
-    <SidebarMenu>
-      {menus.map((el) =>
-        el.items ? (
-          <Collapsible
-            key={el.label}
-            asChild
-            defaultOpen={el.active}
-            className="group/collapsible"
-          >
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton isActive={el.active} tooltip={el.label}>
-                  <el.Icon className="h-4 w-4" />
-                  {el.label}
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+    <SidebarGroup>
+      <SidebarGroupContent className="flex flex-col gap-2">
+        <SidebarMenu>
+          {menus.map((el) =>
+            el.items ? (
+              <Collapsible
+                key={el.label}
+                asChild
+                defaultOpen={el.active}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton isActive={el.active} tooltip={el.label}>
+                      <el.Icon className="h-4 w-4" />
+                      {el.label}
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {el.items.map((sub) => (
+                        <SidebarMenuSubItem key={sub.label}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={sub.active}
+                            onClick={() => setOpenMobile(false)}
+                          >
+                            <Link href={sub.href}>{sub.label}</Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+            ) : (
+              <SidebarMenuItem key={el.label}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={el.active}
+                  tooltip={el.label}
+                  onClick={() => setOpenMobile(false)}
+                >
+                  <Link href={el.href}>
+                    <el.Icon className="h-4 w-4" />
+                    {el.label}
+                  </Link>
                 </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {el.items.map((sub) => (
-                    <SidebarMenuSubItem key={sub.label}>
-                      <SidebarMenuSubButton
-                        asChild
-                        isActive={sub.active}
-                        onClick={() => setOpenMobile(false)}
-                      >
-                        <Link href={sub.href}>{sub.label}</Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </SidebarMenuItem>
-          </Collapsible>
-        ) : (
-          <SidebarMenuItem key={el.label}>
-            <SidebarMenuButton
-              asChild
-              isActive={el.active}
-              tooltip={el.label}
-              onClick={() => setOpenMobile(false)}
-            >
-              <Link href={el.href}>
-                <el.Icon className="h-4 w-4" />
-                {el.label}
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ),
-      )}
-    </SidebarMenu>
+              </SidebarMenuItem>
+            ),
+          )}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }

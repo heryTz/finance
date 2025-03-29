@@ -30,7 +30,7 @@ export async function getStats(
   };
 }
 
-async function getOverviewStat(
+export async function getOverviewStat(
   userId: string,
   { range, tags, label }: z.infer<typeof getStatsQuerySchema>,
 ) {
@@ -139,7 +139,7 @@ async function getOverviewStat(
   return data;
 }
 
-async function getCountStat(
+export async function getCountStat(
   userId: string,
   { label, tags }: Omit<z.infer<typeof getStatsQuerySchema>, "range">,
 ) {

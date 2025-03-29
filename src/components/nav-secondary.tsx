@@ -22,7 +22,7 @@ export function NavSecondary(props: NavSecondaryProps) {
 
   return (
     <SidebarGroup {...props}>
-      <SidebarGroupContent>
+      <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           {menus.map((el) => (
             <SidebarMenuItem key={el.label}>

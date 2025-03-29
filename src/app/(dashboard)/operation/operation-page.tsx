@@ -16,6 +16,8 @@ import { zd } from "@/lib/zod";
 import { useRouter } from "next/navigation";
 import { routes } from "@/app/routes";
 import { OperationFilter } from "./components/opertation-filter";
+import { useQueryClient } from "@tanstack/react-query";
+import { GET_STAT_COUNTER } from "@/query/stat-query";
 
 const querySerializer = getOperationQuerySerializer();
 const serializer = createSerializer({
@@ -23,6 +25,7 @@ const serializer = createSerializer({
 });
 
 export function OperationPage({ operations }: OperationPageProps) {
+  const qclient = useQueryClient();
   const router = useRouter();
   const { columns } = useOperationColumnDefs();
   const [openSave, setOpenSave] = useState(false);
@@ -70,7 +73,15 @@ export function OperationPage({ operations }: OperationPageProps) {
           onFilter({ page: pageIndex + 1, pageSize })
         }
       />
-      {openSave && <OperationSave open={openSave} onOpenChange={setOpenSave} />}
+      {openSave && (
+        <OperationSave
+          open={openSave}
+          onOpenChange={setOpenSave}
+          onFinish={() =>
+            qclient.refetchQueries({ queryKey: [GET_STAT_COUNTER] })
+          }
+        />
+      )}
     </DataTableWrapper>
   );
 }
