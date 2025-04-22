@@ -8,6 +8,7 @@ const DELAY = 5000;
 const http = URL.startsWith("https:") ? https : httpOnly;
 
 let attempts = 0;
+const buildId = process.env.BUILD_ID;
 
 function checkUrl() {
   return new Promise((resolve, reject) => {
@@ -24,10 +25,20 @@ function checkUrl() {
           if (statusCode === 200) {
             if (body.includes("nok")) {
               reject(new Error(`Unhealthy: ${body}`));
-            } else {
-              console.log("Healthy");
-              resolve();
+              return;
             }
+
+            if (!body.includes(buildId)) {
+              reject(
+                new Error(
+                  `Build ID mismatch. Expected ${buildId}, got ${body}`,
+                ),
+              );
+              return;
+            }
+
+            console.log("Healthy");
+            resolve();
           } else {
             reject(new Error(`App is not ready: status => ${statusCode}`));
           }

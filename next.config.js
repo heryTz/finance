@@ -8,6 +8,9 @@ const nextConfig = {
       },
     },
   },
+  generateBuildId() {
+    return process.env.BUILD_ID ?? "local";
+  },
 };
 
 module.exports = nextConfig;
