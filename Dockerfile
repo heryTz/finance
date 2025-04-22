@@ -18,12 +18,13 @@ EXPOSE 3000
 CMD [ "sh", "entrypoint-dev.sh" ]
 
 FROM base AS builder
+ARG BUILD_ID=unknow
 RUN apk add --no-cache openssl
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
-RUN pnpm build
+RUN BUILD_ID=$BUILD_ID pnpm build
 
 FROM base AS prod
 RUN apk add --no-cache openssl
