@@ -1,4 +1,22 @@
+# Changelog
 
+# [0.4.0](https://github.com/heryTz/finance/compare/v0.3.0...v0.4.0) (2025-04-23)
+
+
+### Bug Fixes
+
+* add loading when choose date range to show ([ca47dd9](https://github.com/heryTz/finance/commit/ca47dd9d6cd575ef1b76ad0f30d86df90d68a217))
+* jest 29 does not support node <22.11 ([7841648](https://github.com/heryTz/finance/commit/7841648ab99c5150c73dc8b343db02ec35637401))
+* pagination ([0a8e5b6](https://github.com/heryTz/finance/commit/0a8e5b61dc46e624d71a0451ed8660dfa560f548))
+* rename v1/stat/counters to v1/operations/counters ([17b5dd7](https://github.com/heryTz/finance/commit/17b5dd7ead95f5a9d4ef117bfff62c4cedb3e654))
+* stat filter ([58c484d](https://github.com/heryTz/finance/commit/58c484d95e74b28edf237360a0ec3059a3353c02))
+
+
+### Features
+
+* 29 add operation filters ([#31](https://github.com/heryTz/finance/issues/31)) ([1a2bff0](https://github.com/heryTz/finance/commit/1a2bff02c72cdce7c8c3f33df4a4e4a4f185d711))
+* balance inside sidebar ([db29455](https://github.com/heryTz/finance/commit/db294557982f97e1d0f0fcfcbed3222d831331f4))
+* improve page layout (sidebar, datatable, etc.) ([#35](https://github.com/heryTz/finance/issues/35)) ([bb9b8f6](https://github.com/heryTz/finance/commit/bb9b8f617f1c080b615eb593e89c09413f5de7bd))
 
 # [0.3.0](https://github.com/heryTz/finance/compare/v0.2.0...v0.3.0) (2025-01-23)
 
