@@ -42,37 +42,39 @@ export function OperationPage({ operations }: OperationPageProps) {
   useSeo({ title: "Opérations" });
 
   return (
-    <DataTableWrapper
-      title="Opérations"
-      count={operations.results.length ?? 0}
-      cta={{ label: "Ajouter", onClick: () => setOpenSave(true) }}
-      breadcrumb={[{ label: "Opérations" }]}
-      emptyProps={{
-        title: "Aucune opération",
-        description: 'Cliquez sur "Ajouter" pour créer une opération',
-      }}
-      filter={
-        <OperationFilter
-          filter={filter}
-          onApply={(value) => onFilter({ ...value, page: 1 })}
-        />
-      }
-    >
-      <DataTable
-        data={operations.results}
-        columns={columns}
-        manualPagination
-        rowCount={operations.total}
-        initialState={{
-          pagination: {
-            pageIndex: (filter.page ?? 1) - 1,
-            pageSize: filter.pageSize ?? 10,
-          },
+    <>
+      <DataTableWrapper
+        title="Opérations"
+        count={operations.results.length ?? 0}
+        cta={{ label: "Ajouter", onClick: () => setOpenSave(true) }}
+        breadcrumb={[{ label: "Opérations" }]}
+        emptyProps={{
+          title: "Aucune opération",
+          description: 'Cliquez sur "Ajouter" pour créer une opération',
         }}
-        onPaginationChange={({ pageIndex, pageSize }) =>
-          onFilter({ page: pageIndex + 1, pageSize })
+        filter={
+          <OperationFilter
+            filter={filter}
+            onApply={(value) => onFilter({ ...value, page: 1 })}
+          />
         }
-      />
+      >
+        <DataTable
+          data={operations.results}
+          columns={columns}
+          manualPagination
+          rowCount={operations.total}
+          initialState={{
+            pagination: {
+              pageIndex: (filter.page ?? 1) - 1,
+              pageSize: filter.pageSize ?? 10,
+            },
+          }}
+          onPaginationChange={({ pageIndex, pageSize }) =>
+            onFilter({ page: pageIndex + 1, pageSize })
+          }
+        />
+      </DataTableWrapper>
       {openSave && (
         <OperationSave
           open={openSave}
@@ -82,7 +84,7 @@ export function OperationPage({ operations }: OperationPageProps) {
           }
         />
       )}
-    </DataTableWrapper>
+    </>
   );
 }
 
