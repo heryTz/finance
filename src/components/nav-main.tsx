@@ -13,6 +13,7 @@ import {
 import { routes } from "@/app/routes";
 import {
   ArrowLeftRightIcon,
+  BotIcon,
   ChartArea,
   ChevronRight,
   Wallet,
@@ -67,6 +68,12 @@ export function NavMain() {
           active: pathname.startsWith(routes.paymentMode()),
         },
       ],
+    },
+    {
+      label: "Chat",
+      href: routes.chat(),
+      Icon: BotIcon,
+      active: pathname.startsWith(routes.chat()),
     },
   ];
   return (

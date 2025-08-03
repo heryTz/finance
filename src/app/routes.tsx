@@ -11,4 +11,5 @@ export const routes = {
   client: () => `/invoice/client`,
   provider: () => `/invoice/provider`,
   paymentMode: () => `/invoice/payment-mode`,
+  chat: () => `/chat`,
 };
