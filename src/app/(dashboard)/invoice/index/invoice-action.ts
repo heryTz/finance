@@ -10,10 +10,10 @@ import {
 } from "./invoice-service";
 import { routes } from "@/app/routes";
 import { authActionClient } from "@/lib/safe-action";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const createInvoiceAction = authActionClient
-  .schema(createInvoiceSchema)
+  .inputSchema(createInvoiceSchema)
   .action(async ({ parsedInput, ctx }) => {
     await createInvoice(ctx.user.id, parsedInput);
     revalidatePath(routes.invoice());
@@ -21,7 +21,7 @@ export const createInvoiceAction = authActionClient
   });
 
 export const updateInvoiceAction = authActionClient
-  .schema(createInvoiceSchema)
+  .inputSchema(createInvoiceSchema)
   .bindArgsSchemas([z.string()])
   .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
     await updateInvoice(ctx.user.id, id, parsedInput);
@@ -30,7 +30,7 @@ export const updateInvoiceAction = authActionClient
   });
 
 export const deleteInvoiceAction = authActionClient
-  .schema(z.string())
+  .inputSchema(z.string())
   .action(async ({ parsedInput, ctx }) => {
     await deleteInvoice(ctx.user.id, parsedInput);
     revalidatePath(routes.invoice());
@@ -38,7 +38,7 @@ export const deleteInvoiceAction = authActionClient
   });
 
 export const sendInvoiceMailAction = authActionClient
-  .schema(sendInvoiceMailInputSchema)
+  .inputSchema(sendInvoiceMailInputSchema)
   .bindArgsSchemas([z.string()])
   .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
     await sendInvoiceMail(ctx.user.id, id, parsedInput);

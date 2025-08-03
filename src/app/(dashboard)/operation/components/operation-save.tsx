@@ -35,7 +35,7 @@ export function OperationSave({
   const operationFn = useGetOperationById(idToEdit);
   const operation = operationFn.data?.data;
   const operationsFn = useGetOperations({ distinct: "true" });
-  const form = useForm<FormData>({
+  const form = useForm({
     resolver: zodResolver(saveOperationInputSchema),
     defaultValues: {
       label: "",
@@ -43,7 +43,7 @@ export function OperationSave({
       tags: [],
       type: OperationType.depense,
       createdAt: new Date(),
-    },
+    } as FormData,
   });
   const create = useAction(createOperationAction, {
     onSuccess: () => {
@@ -157,7 +157,12 @@ export function OperationSave({
               control={form.control}
               name="amount"
               render={({ field }) => (
-                <InputField label="Montant" {...field} type="number" />
+                <InputField
+                  label="Montant"
+                  {...field}
+                  type="number"
+                  value={field.value as string}
+                />
               )}
             />
             <FormField
@@ -184,7 +189,7 @@ export function OperationSave({
               render={({ field }) => (
                 <CalendarField
                   label="Date de création"
-                  value={field.value}
+                  value={field.value as Date}
                   onChange={field.onChange}
                 />
               )}

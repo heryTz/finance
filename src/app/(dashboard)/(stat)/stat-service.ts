@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { getMonthLabel, getMonthRange } from "./stat-util";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { getStatsQuerySchema } from "./stat-dto";
 import "dayjs/locale/fr";
 import { variationPercentage } from "@/lib/operation-stat";

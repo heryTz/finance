@@ -1,14 +1,12 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import frRessources from "./ressources/fr.json";
-import zodFrRessources from "zod-i18n-map/locales/fr/zod.json";
 import { Lang, useLangStore } from "./use-lang-store";
 
 export const defaultNS = "translation";
 export const resources = {
   fr: {
     translation: frRessources,
-    zod: zodFrRessources,
   },
 } as const;
 

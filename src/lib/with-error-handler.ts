@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { NotFoundError } from "./exception";
 import { logError } from "./logger";
 

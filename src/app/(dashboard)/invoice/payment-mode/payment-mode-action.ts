@@ -9,10 +9,10 @@ import {
 } from "./payment-mode-service";
 import { routes } from "@/app/routes";
 import { authActionClient } from "@/lib/safe-action";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const createPaymentModeAction = authActionClient
-  .schema(createPaymentModeSchema)
+  .inputSchema(createPaymentModeSchema)
   .action(async ({ parsedInput, ctx }) => {
     const payment = await createPaymentMode(ctx.user.id, parsedInput);
     revalidatePath(routes.invoice());
@@ -20,7 +20,7 @@ export const createPaymentModeAction = authActionClient
   });
 
 export const updatePaymentModeAction = authActionClient
-  .schema(createPaymentModeSchema)
+  .inputSchema(createPaymentModeSchema)
   .bindArgsSchemas([z.string()])
   .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
     const payment = await updatePaymentMode(ctx.user.id, id, parsedInput);
@@ -29,7 +29,7 @@ export const updatePaymentModeAction = authActionClient
   });
 
 export const deletePaymentModeAction = authActionClient
-  .schema(z.string())
+  .inputSchema(z.string())
   .action(async ({ parsedInput, ctx }) => {
     const payment = await deletePaymentMode(ctx.user.id, parsedInput);
     revalidatePath(routes.invoice());

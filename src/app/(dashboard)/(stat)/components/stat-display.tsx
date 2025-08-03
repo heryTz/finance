@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { EyeIcon } from "lucide-react";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { getStatsQuerySchema } from "../stat-dto";
 import { statDisplayConfig } from "../stat-util";
 import { AppCheckbox } from "@/components/app-checkbox";

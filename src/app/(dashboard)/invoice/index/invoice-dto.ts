@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from "zod/v4";
 import { getCurrency } from "./invoice-util";
 
 export const createInvoiceSchema = z.object({

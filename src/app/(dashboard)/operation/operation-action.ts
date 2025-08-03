@@ -9,10 +9,10 @@ import {
 import { revalidatePath } from "next/cache";
 import { routes } from "@/app/routes";
 import { authActionClient } from "@/lib/safe-action";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const createOperationAction = authActionClient
-  .schema(saveOperationInputSchema)
+  .inputSchema(saveOperationInputSchema)
   .action(async ({ parsedInput, ctx }) => {
     await createOperation(ctx.user.id, parsedInput);
     revalidatePath(routes.operation());
@@ -20,7 +20,7 @@ export const createOperationAction = authActionClient
   });
 
 export const updateOperationAction = authActionClient
-  .schema(saveOperationInputSchema)
+  .inputSchema(saveOperationInputSchema)
   .bindArgsSchemas([z.string()])
   .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
     await updateOperation(ctx.user.id, id, parsedInput);
@@ -29,7 +29,7 @@ export const updateOperationAction = authActionClient
   });
 
 export const deleteOperationAction = authActionClient
-  .schema(z.string())
+  .inputSchema(z.string())
   .action(async ({ parsedInput, ctx }) => {
     await deleteOperation(ctx.user.id, parsedInput);
     revalidatePath(routes.operation());

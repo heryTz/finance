@@ -9,10 +9,10 @@ import {
 import { revalidatePath } from "next/cache";
 import { routes } from "@/app/routes";
 import { authActionClient } from "@/lib/safe-action";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const createProviderAction = authActionClient
-  .schema(saveProviderInputSchema)
+  .inputSchema(saveProviderInputSchema)
   .action(async ({ parsedInput, ctx }) => {
     const provider = await createProvider(ctx.user.id, parsedInput);
     revalidatePath(routes.invoice());
@@ -20,7 +20,7 @@ export const createProviderAction = authActionClient
   });
 
 export const updateProviderAction = authActionClient
-  .schema(saveProviderInputSchema)
+  .inputSchema(saveProviderInputSchema)
   .bindArgsSchemas([z.string()])
   .action(async ({ parsedInput, ctx, bindArgsParsedInputs: [id] }) => {
     const provider = await updateProvider(ctx.user.id, id, parsedInput);
@@ -29,7 +29,7 @@ export const updateProviderAction = authActionClient
   });
 
 export const deleteProviderAction = authActionClient
-  .schema(z.string())
+  .inputSchema(z.string())
   .action(async ({ parsedInput, ctx }) => {
     const provider = await deleteProvider(ctx.user.id, parsedInput);
     revalidatePath(routes.invoice());

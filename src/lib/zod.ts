@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { makeZodI18nMap } from "zod-i18n-map";
+import { z } from "zod/v4";
+import { fr } from "zod/locales";
 
-z.setErrorMap(makeZodI18nMap());
+z.config(fr());
 
 export { z as zd };

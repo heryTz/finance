@@ -59,7 +59,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
   const invoiceParsed = invoice
     ? createInvoiceSchema.parse({ ...invoice, products: invoice.Products })
     : null;
-  const form = useForm<CreateInvoiceInput>({
+  const form = useForm({
     defaultValues: {
       tva: invoiceParsed?.tva ?? 0,
       products: invoiceParsed?.products ?? [],
@@ -68,7 +68,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
       paymentModeId: invoiceParsed?.paymentModeId,
       createdAt: invoiceParsed?.createdAt ?? new Date(),
       providerId: invoiceParsed?.providerId,
-    },
+    } as CreateInvoiceInput,
     resolver: zodResolver(createInvoiceSchema),
   });
   const { errors } = form.formState;
@@ -221,7 +221,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
               <InputField
                 type="number"
                 label="TVA (%)"
-                value={field.value}
+                value={field.value as string}
                 onChange={field.onChange}
               />
             )}
@@ -232,7 +232,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
             render={({ field }) => (
               <CalendarField
                 label="Date de création"
-                value={field.value}
+                value={field.value as Date}
                 onChange={field.onChange}
               />
             )}
@@ -286,6 +286,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
                           type="number"
                           label="Prix unitaire *"
                           {...field}
+                          value={field.value as string}
                         />
                       )}
                     />
@@ -297,6 +298,7 @@ export function InvoiceSave({ products, invoice }: InvoiceSaveFormProps) {
                           type="number"
                           label="Quantité *"
                           {...field}
+                          value={field.value as string}
                         />
                       )}
                     />

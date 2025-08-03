@@ -4,7 +4,7 @@ import { LineChart } from "@/components/line-chart";
 import { GetStats } from "../stat-service";
 import { statData, statDisplayConfig } from "../stat-util";
 import { AppContent } from "@/components/app-content";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { getStatsQuerySchema, getStatsQuerySerializer } from "../stat-dto";
 import { ChartCard } from "@/components/chart-card";
 import { humanAmount, humanFromLastMonth } from "@/lib/humanizer";

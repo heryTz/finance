@@ -67,7 +67,7 @@ export function InvoiceMailing({
         if (
           result?.serverError ||
           result?.validationErrors ||
-          result?.bindArgsValidationErrors
+          result?.validationErrors
         ) {
           toast.error("Une erreur est survenue.");
           return;

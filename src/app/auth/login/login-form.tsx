@@ -21,7 +21,7 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 const schema = zd.object({
-  email: zd.string().email(),
+  email: zd.email(),
 });
 
 type Input = zd.infer<typeof schema>;

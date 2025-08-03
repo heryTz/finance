@@ -5,7 +5,7 @@ import { createClient } from "@/app/(dashboard)/invoice/client/client-service";
 import { createPaymentMode } from "@/app/(dashboard)/invoice/payment-mode/payment-mode-service";
 import { OperationType } from "@/entity/operation";
 import { faker } from "@faker-js/faker";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { getStatsQuerySchema } from "@/app/(dashboard)/(stat)/stat-dto";
 import { createProvider } from "@/app/(dashboard)/invoice/provider/provider-service";
 import { SaveProviderInput } from "@/app/(dashboard)/invoice/provider/provider-dto";
