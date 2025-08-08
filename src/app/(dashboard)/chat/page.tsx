@@ -5,7 +5,7 @@ import { useChat } from "@ai-sdk/react";
 
 export default function ChatPage() {
   const [input, setInput] = useState("");
-  const { messages, sendMessage } = useChat();
+  const { messages, sendMessage, error } = useChat();
 
   return (
     <div>
@@ -20,6 +20,7 @@ export default function ChatPage() {
           })}
         </div>
       ))}
+      {error && <div className="text-destructive">Error: {error.message}</div>}
 
       <form
         onSubmit={(e) => {
