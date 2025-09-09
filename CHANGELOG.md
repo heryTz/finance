@@ -1,5 +1,18 @@
 # Changelog
 
+# [0.5.0](https://github.com/heryTz/finance/compare/v0.4.0...v0.5.0) (2025-09-09)
+
+
+### Bug Fixes
+
+* cannot download invoice ([309cb47](https://github.com/heryTz/finance/commit/309cb4723256686311a06811ed4be22a77907f3c))
+* empty operation create button ([a7c6157](https://github.com/heryTz/finance/commit/a7c6157a7d3551f32e25a54c722cc2828047910b))
+
+
+### Features
+
+* add N° entreprise Id into client ([292a5ba](https://github.com/heryTz/finance/commit/292a5ba8427ea5a002a67cf233d1f6f599d20403))
+
 # [0.4.0](https://github.com/heryTz/finance/compare/v0.3.0...v0.4.0) (2025-04-23)
 
 
