@@ -135,6 +135,13 @@ export function ClientSave({
                 name="ape"
                 render={({ field }) => <InputField label="APE" {...field} />}
               />
+              <FormField
+                control={form.control}
+                name="entrepriseId"
+                render={({ field }) => (
+                  <InputField label="N° de l'entreprise" {...field} />
+                )}
+              />
             </div>
           </div>
         </Form>

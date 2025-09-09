@@ -37,6 +37,7 @@ export function InvoicePreview({
     { label: "NIF", value: invoice.Client.nif },
     { label: "SIREN", value: invoice.Client.siren },
     { label: "APE", value: invoice.Client.ape },
+    { label: "N° entreprise", value: invoice.Client.entrepriseId },
   ];
 
   const products = invoice.Products.map((el) => ({
@@ -158,7 +159,7 @@ function PartenaireShip(props: {
       <div className="grid gap-2">
         {props.data.map((el) => (
           <div key={el.label} className="text-sm">
-            <strong className="w-[70px] inline-block">{el.label}:</strong>{" "}
+            <strong className="w-[100px] inline-block">{el.label}:</strong>{" "}
             {el.value ?? "-"}
           </div>
         ))}

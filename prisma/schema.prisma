@@ -87,20 +87,21 @@ model Tag {
 }
 
 model Client {
-  id        String    @id @default(cuid())
-  ref       String
-  name      String
-  email     String
-  phone     String?
-  address   String
-  siren     String?
-  ape       String?
-  nif       String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  Invoice   Invoice[]
-  Owner     User      @relation(fields: [ownerId], references: [id])
-  ownerId   String
+  id           String    @id @default(cuid())
+  ref          String
+  name         String
+  email        String
+  phone        String?
+  address      String
+  siren        String?
+  ape          String?
+  nif          String?
+  entrepriseId String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
+  Invoice      Invoice[]
+  Owner        User      @relation(fields: [ownerId], references: [id])
+  ownerId      String
 
   @@unique([ref, ownerId])
 }
