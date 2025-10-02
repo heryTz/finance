@@ -165,6 +165,4 @@ model Invoice {
   paymentModeId String
   Provider      Provider    @relation(fields: [providerId], references: [id])
   providerId    String
-
-  @@unique([ref, clientId])
 }
