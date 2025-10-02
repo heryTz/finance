@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/heryTz/finance/compare/v0.5.0...v0.5.1) (2025-10-02)
+
+
+### Bug Fixes
+
+* invoice ref calculation ([0f6d08d](https://github.com/heryTz/finance/commit/0f6d08d5ac6ff4ef42a5061f2e6369e7c299ce94))
+* remove (ref, clientId) unique ([b847227](https://github.com/heryTz/finance/commit/b847227fdcca21c25b6050eb8b019831999e7f16))
+
 # [0.5.0](https://github.com/heryTz/finance/compare/v0.4.0...v0.5.0) (2025-09-09)
 
 
