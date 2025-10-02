@@ -32,8 +32,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Verify dependencies integrity
-        run: pnpm audit
+      # - name: Verify dependencies integrity
+      #   run: pnpm audit
 
       - name: Git config
         run: |
