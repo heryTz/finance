@@ -39,7 +39,7 @@ export type GetInvoiceById = Awaited<ReturnType<typeof getInvoiceById>>;
 export async function createInvoice(userId: string, input: CreateInvoiceInput) {
   const { products, ...data } = input;
   const nbInvoice = await prisma.invoice.count({
-    where: { clientId: data.clientId },
+    where: { clientId: data.clientId, ownerId: userId },
   });
   const client = await prisma.client.findFirstOrThrow({
     where: { id: data.clientId },
