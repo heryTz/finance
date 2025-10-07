@@ -140,6 +140,7 @@ model PaymentMode {
   name        String
   accountName String?
   iban        String?
+  bic         String?
   Owner       User      @relation(fields: [onwerId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt

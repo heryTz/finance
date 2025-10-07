@@ -54,6 +54,7 @@ export function InvoicePreview({
   const payments = [
     { label: "Payable à", value: invoice.Payment.name },
     { label: "IBAN", value: invoice.Payment.iban },
+    { label: "BIC", value: invoice.Payment.bic },
     { label: "Titulaire du compte", value: invoice.Payment.accountName },
   ];
 

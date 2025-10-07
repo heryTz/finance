@@ -113,6 +113,11 @@ export function PaymentModeSave({
               name="iban"
               render={({ field }) => <InputField label="IBAN" {...field} />}
             />
+            <FormField
+              control={form.control}
+              name="bic"
+              render={({ field }) => <InputField label="BIC" {...field} />}
+            />
           </div>
         </Form>
       )}
