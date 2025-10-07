@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.6.0](https://github.com/heryTz/finance/compare/v0.5.1...v0.6.0) (2025-10-07)
+
+
+### Features
+
+* add bic into payment method ([0a8e4f1](https://github.com/heryTz/finance/commit/0a8e4f1d098bc9d57b3f09d41921875789a8cedf))
+
 ## [0.5.1](https://github.com/heryTz/finance/compare/v0.5.0...v0.5.1) (2025-10-02)
 
 
