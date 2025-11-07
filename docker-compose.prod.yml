@@ -13,7 +13,7 @@ services:
     pull_policy: always
 
   db:
-    image: postgres:16.1-alpine
+    image: postgres:16-alpine
     restart: always
     ports:
       - "5433:5432"
