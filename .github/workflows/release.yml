@@ -14,11 +14,27 @@ jobs:
       issues: write
       pull-requests: write
       id-token: write
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: finance_test
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: user
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5433:5432
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Install Node.js
         uses: actions/setup-node@v4
