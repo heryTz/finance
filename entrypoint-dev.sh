@@ -2,6 +2,6 @@
 
 set -ex
 
-npx prisma generate
-npx prisma migrate deploy
+npx prisma@5 generate
+npx prisma@5 migrate deploy
 yarn dev
