@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.6.2 (2025-11-22)
+
 ## 0.6.1 (2025-11-22)
 
 # [0.6.0](https://github.com/heryTz/finance/compare/v0.5.1...v0.6.0) (2025-10-07)
