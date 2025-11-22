@@ -29,31 +29,23 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      # Remove when this issue is resolved: https://github.com/nodejs/corepack/issues/616#issuecomment-2622079955
       - name: Install corepack
         run: npm install -g corepack@latest
-
       - name: Install dependencies
         run: pnpm install
-
       - name: Run tests
         run: pnpm test
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -81,6 +73,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Install corepack
+        run: npm install -g corepack@latest
+      - name: Install dependencies
+        run: pnpm install
       - name: Git config
         run: |
           git config user.name "github-actions[bot]"
