@@ -6,15 +6,9 @@ permissions:
   contents: read
 
 jobs:
-  release:
-    name: Release
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-      id-token: write
-
     services:
       postgres:
         image: postgres
@@ -69,16 +63,30 @@ jobs:
           build-args: |
             BUILD_ID=${{ github.sha }}
 
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [build]
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    setps:
       - name: Git config
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
       - name: Release
         run: npx release-it --verbose --ci
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
       - name: Deploy
         uses: appleboy/ssh-action@v1.2.1
         with:
@@ -91,7 +99,5 @@ jobs:
             git pull origin main
             docker compose -f docker-compose.prod.yml up --build -d
             docker image prune -f
-
       - name: Check health
         run: APP_URL=${{ secrets.APP_URL }} BUILD_ID=${{ github.sha }} node checkhealth.js
-
