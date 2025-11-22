@@ -2,5 +2,5 @@
 
 set -ex
 
-npx prisma migrate deploy
+npx prisma@5 migrate deploy
 node server.js
