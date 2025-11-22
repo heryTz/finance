@@ -72,7 +72,7 @@ jobs:
       issues: write
       pull-requests: write
       id-token: write
-    setps:
+    steps:
       - name: Git config
         run: |
           git config user.name "github-actions[bot]"
