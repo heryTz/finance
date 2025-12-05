@@ -37,7 +37,7 @@ jobs:
           node-version: 20
           cache: pnpm
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Run tests
         run: pnpm test
       - name: Login to Docker Hub
