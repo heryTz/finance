@@ -6,6 +6,7 @@ const path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -13,16 +14,16 @@ const nextConfig = {
     };
     return config;
   },
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        html2canvas: "html2canvas-pro",
-      },
-    },
-  },
+
   generateBuildId() {
     return process.env.BUILD_ID ?? "local";
   },
+
+  turbopack: {
+    resolveAlias: {
+      html2canvas: "html2canvas-pro",
+    }
+  }
 };
 
 module.exports = nextConfig;
