@@ -84,7 +84,7 @@ export async function createOperation(
       input.tags.map((el) =>
         prisma.tag.upsert({
           create: { name: el, userId },
-          update: { name: el, userId },
+          update: {},
           where: { name_userId: { name: el, userId } },
         }),
       ),
@@ -137,25 +137,30 @@ export async function updateOperation(
     throw new NotFoundError();
   }
 
-  const tagToConnect: Tag[] = [];
-  const tagToDisconnect: Tag[] = [];
-
-  for (const tag of operation.tags) {
-    if (input.tags.includes(tag.name)) tagToConnect.push(tag);
-    else tagToDisconnect.push(tag);
+  if (input.tags.length > 0) {
+    await Promise.all(
+      input.tags.map((tagName) =>
+        prisma.tag.upsert({
+          where: { name_userId: { name: tagName, userId } },
+          create: { name: tagName, userId },
+          update: {},
+        }),
+      ),
+    );
   }
 
-  for (const tag of input.tags) {
-    if (!operation.tags.some((el) => el.name === tag)) {
-      const newTag = await prisma.tag.upsert({
-        where: { name_userId: { name: tag, userId } },
-        create: { name: tag, userId },
-        update: {},
-      });
-      tagToConnect.push(newTag);
-    }
-  }
+  const tagsToSet =
+    input.tags.length > 0
+      ? await prisma.tag.findMany({
+          where: {
+            userId,
+            name: { in: input.tags },
+          },
+        })
+      : [];
 
+  // Use 'set' to replace all tag associations at once
+  // This avoids any issues with duplicate connections
   const operationUpdated = await prisma.operation.update({
     where: { id, userId },
     data: {
@@ -164,8 +169,7 @@ export async function updateOperation(
       type: input.type,
       createdAt: input.createdAt,
       tags: {
-        connect: tagToConnect.map((el) => ({ id: el.id })),
-        disconnect: tagToDisconnect.map((el) => ({ id: el.id })),
+        set: tagsToSet.map((tag) => ({ id: tag.id })),
       },
     },
     include: {
