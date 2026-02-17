@@ -341,7 +341,7 @@ describe("stat service", () => {
         }),
       );
     }
-    await Promise.all(data.map((el) => createOperation(user.id, el)));
+    for (const el of data) await createOperation(user.id, el);
 
     const range = {
       from: dayjs().set("month", 0).startOf("month").format("YYYY-MM-DD"),
@@ -401,7 +401,7 @@ describe("stat service", () => {
         }),
       );
     }
-    await Promise.all(data.map((el) => createOperation(user.id, el)));
+    for (const el of data) await createOperation(user.id, el);
 
     const range = {
       from: dayjs().set("month", 0).startOf("month").format("YYYY-MM-DD"),
