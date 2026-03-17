@@ -1,6 +1,4 @@
 "use client";
-import { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { PropsWithChildren } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { setupLang } from "@/lang/config";
@@ -10,14 +8,10 @@ setupLang();
 
 const queryClient = new QueryClient();
 
-export function AppProvider({ children, session }: AppProviderProps) {
+export function AppProvider({ children }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
-      <NuqsAdapter>
-        <SessionProvider session={session}>{children}</SessionProvider>
-      </NuqsAdapter>
+      <NuqsAdapter>{children}</NuqsAdapter>
     </QueryClientProvider>
   );
 }
-
-type AppProviderProps = PropsWithChildren<{ session: Session | null }>;

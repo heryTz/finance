@@ -9,13 +9,13 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
-import { signOut, useSession } from "next-auth/react";
+import { authClient } from "@/lib/auth-client";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export function NavUser() {
   const isMobile = useIsMobile();
-  const session = useSession();
-  const user = session.data?.user;
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
 
   return (
     <SidebarMenu>
@@ -62,7 +62,10 @@ export function NavUser() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2" onClick={() => signOut()}>
+            <DropdownMenuItem
+              className="gap-2"
+              onClick={() => authClient.signOut()}
+            >
               <LogOutIcon className="size-4" />
               Log out
             </DropdownMenuItem>
