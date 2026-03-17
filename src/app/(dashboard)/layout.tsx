@@ -1,11 +1,17 @@
+"use client";
+
 import { AdminGuard } from "@/lib/admin-guard";
 import { PropsWithChildren } from "react";
-import { DashboardWrapper } from "./dashboard-wrapper";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
-export default async function Layout(props: PropsWithChildren) {
+export default function Layout({ children }: PropsWithChildren) {
   return (
     <AdminGuard>
-      <DashboardWrapper {...props} />
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>{children}</SidebarInset>
+      </SidebarProvider>
     </AdminGuard>
   );
 }

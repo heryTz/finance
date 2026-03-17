@@ -1,28 +1,33 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../app/api/auth/[...nextauth]/options";
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { magicLink } from "better-auth/plugins";
 import { prisma } from "./prisma";
+import { sendEmail } from "./mailer";
 import { routes } from "@/app/routes";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  plugins: [
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        await sendEmail({
+          to: email,
+          subject: "Sign in to Finance",
+          content: `<a href="${url}">Click here to sign in</a>`,
+        });
+      },
+    }),
+  ],
+});
+
 export async function fetchSession() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return null;
-  }
-  // Sometimes! session.user is not the full user data
-  const user = await prisma.user.findFirst({
-    where: { email: session.user.email! },
-  });
-  if (!user) {
-    return null;
-  }
-  return { session, user };
+  return auth.api.getSession({ headers: await headers() });
 }
 
 export async function guard() {
   const session = await fetchSession();
-  if (session === null) {
-    redirect(routes.authLogin());
-  }
+  if (!session) redirect(routes.authLogin());
   return session;
 }

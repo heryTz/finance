@@ -2,8 +2,6 @@ import "./globals.css";
 import "./font-setup";
 import type { Metadata } from "next";
 import { AppProvider } from "./app-provider";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/options";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -17,8 +15,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-
   return (
     <html lang="en">
       <head>
@@ -29,7 +25,7 @@ export default async function RootLayout({
       </head>
       <body className={cn("min-h-dvh bg-background font-sans antialiased")}>
         <div vaul-drawer-wrapper="" className="min-h-dvh bg-background">
-          <AppProvider session={session}>{children}</AppProvider>
+          <AppProvider>{children}</AppProvider>
         </div>
         <Toaster />
         <div id="ReactModalPortal" />

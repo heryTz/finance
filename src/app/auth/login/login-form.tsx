@@ -13,11 +13,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Form, FormField } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { zd } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const schema = zd.object({
@@ -27,8 +27,8 @@ const schema = zd.object({
 type Input = zd.infer<typeof schema>;
 
 export function LoginForm() {
-  const params = useSearchParams();
-  const error = params.get("error");
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<Input>({
     resolver: zodResolver(schema),
@@ -41,10 +41,18 @@ export function LoginForm() {
   } = form;
 
   const onSubmit = form.handleSubmit(async (data: Input) => {
-    await signIn("email", {
+    setError(null);
+    const { error } = await authClient.signIn.magicLink({
       email: data.email,
-      callbackUrl: routes.dashboard(),
+      callbackURL: routes.dashboard(),
     });
+
+    if (error) {
+      setError("L'e-mail n'a pas pu être envoyé.");
+      return;
+    }
+
+    router.push(routes.authVerifyRequest());
   });
 
   return (
@@ -53,10 +61,7 @@ export function LoginForm() {
         <Card>
           {!!error && (
             <div className="p-6 pb-0">
-              <Feedback
-                title="Erreur"
-                description="L'e-mail n'a pas pu être envoyé."
-              />
+              <Feedback title="Erreur" description={error} />
             </div>
           )}
           <CardHeader>
