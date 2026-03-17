@@ -19,7 +19,7 @@ export function Autocomplete({
   actions,
 }: AutocompleteProps) {
   const [search, setSearch] = useState(value);
-  const popover = usePopover<HTMLInputElement>();
+  const { open, setOpen, anchor } = usePopover<HTMLInputElement>();
 
   useEffect(() => {
     setSearch(value);
@@ -28,13 +28,13 @@ export function Autocomplete({
   const handleChange = (newValue: string) => {
     onChange(newValue);
     setSearch(newValue);
-    popover.setOpen(false);
+    setOpen(false);
   };
 
   const onClear = () => {
     setSearch("");
     onChange("");
-    popover.setOpen(false);
+    setOpen(false);
   };
 
   const filteredOptions = options.filter(
@@ -46,19 +46,24 @@ export function Autocomplete({
   return (
     <Command>
       <Input
-        ref={popover.anchor}
+        ref={anchor}
         value={search}
-        onFocus={() => popover.setOpen(true)}
+        onFocus={() => setOpen(true)}
         onBlur={() => handleChange(search)}
         onChange={(e) => {
           setSearch(e.target.value);
-          if (!popover.open) popover.setOpen(true);
+          if (!open) setOpen(true);
         }}
         onClear={onClear}
         {...inputProps}
       />
-      {popover.open && filteredOptions.length > 0 && (
-        <PopoverV2 {...popover} className="p-1">
+      {open && filteredOptions.length > 0 && (
+        <PopoverV2
+          open={open}
+          setOpen={setOpen}
+          anchor={anchor}
+          className="p-1"
+        >
           <CommandEmpty>Aucun résultat.</CommandEmpty>
           <CommandList>
             <div className="max-h-[300px] flex flex-col">
