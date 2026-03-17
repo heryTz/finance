@@ -114,4 +114,4 @@ jobs:
             docker compose -f docker-compose.prod.yml up --build -d
             docker image prune -f
       - name: Check health
-        run: APP_URL=${{ secrets.APP_URL }} BUILD_ID=${{ github.sha }} node checkhealth.js
+        run: APP_URL=${{ secrets.APP_URL }} BUILD_ID=${{ github.sha }} node checkhealth.mjs

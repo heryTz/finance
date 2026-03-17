@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require("path");
 
 // html2canvas does not support "oklch" color
@@ -22,8 +23,8 @@ const nextConfig = {
   turbopack: {
     resolveAlias: {
       html2canvas: "html2canvas-pro",
-    }
-  }
+    },
+  },
 };
 
 module.exports = nextConfig;

@@ -38,6 +38,7 @@ export const ReactModal = ({
 
   useEffect(() => {
     if (props.open !== undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(props.open);
     }
   }, [props.open]);

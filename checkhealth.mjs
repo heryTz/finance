@@ -1,5 +1,5 @@
-const httpOnly = require("http");
-const https = require("https");
+import { http as httpOnly } from "node:http";
+import { https } from "node:https";
 
 const URL = `${process.env.APP_URL}/api/checkhealth`;
 const MAX_RETRIES = 20;
