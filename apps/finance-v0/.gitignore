@@ -1,0 +1,11 @@
+# next.js
+.next/
+out/
+build
+
+# next.js generated
+next-env.d.ts
+
+# database
+prisma/*.db
+dev.sql
