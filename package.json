@@ -52,6 +52,8 @@
       "@tailwindcss/oxide",
       "better-sqlite3",
       "core-js",
+      "esbuild",
+      "lightningcss",
       "prisma",
       "sharp",
       "unrs-resolver"
