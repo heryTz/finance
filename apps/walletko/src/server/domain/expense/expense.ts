@@ -1,9 +1,9 @@
-import { PotSnapshot } from "../pot-collection/value-object/pot-snapshot";
+import type { PotSnapshot } from "../pot-collection/value-object/pot-snapshot";
 import { Datetime } from "../shared/value-object/datetime";
 import { Id } from "../shared/value-object/id";
 import { Money } from "../shared/value-object/money";
-import { Name } from "../shared/value-object/name";
-import { Tag } from "../tag/tag";
+import type { Name } from "../shared/value-object/name";
+import type { Tag } from "../tag/tag";
 import { ExpenseAllocation } from "./expense-allocation";
 
 type ExpenseProps = {
@@ -30,6 +30,7 @@ export class Expense {
     selectedPots: { id: Id; amount: Money }[];
     pots: PotSnapshot[];
     userId: Id;
+    createdAt?: Datetime;
   }) {
     if (!params.pots.length) {
       throw new Error("Empty pots provided");
@@ -46,7 +47,7 @@ export class Expense {
     const potInsufficientBalance = params.selectedPots.find((s) => {
       const cur = params.pots.find((p) => p.data.pot.data.id.isEqual(s.id));
       if (!cur) return false;
-      return cur.data.balance.isLessOrEqualThan(s.amount);
+      return cur.data.balance.isLessThan(s.amount);
     });
     if (potInsufficientBalance) {
       throw new Error(
@@ -77,9 +78,16 @@ export class Expense {
       userId: params.userId,
       tags: params.tags,
       allocations,
-      createdAt: Datetime.now(),
+      createdAt: params.createdAt ?? Datetime.now(),
       updatedAt: null,
     });
+  }
+
+  update(params: { name: Name; date: Datetime; tags: Tag[] }): void {
+    this.props.name = params.name;
+    this.props.createdAt = params.date;
+    this.props.tags = params.tags;
+    this.props.updatedAt = Datetime.now();
   }
 
   get data() {

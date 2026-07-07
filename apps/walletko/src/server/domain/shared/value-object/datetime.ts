@@ -3,7 +3,7 @@ export class Datetime {
 
   constructor(input: Date | string) {
     const d = new Date(input);
-    if (isNaN(d.getTime())) {
+    if (Number.isNaN(d.getTime())) {
       throw new Error("Invalid date");
     }
     this.date = d;

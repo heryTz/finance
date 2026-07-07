@@ -1,7 +1,7 @@
-import { Datetime } from "../shared/value-object/datetime";
-import { Id } from "../shared/value-object/id";
-import { Money } from "../shared/value-object/money";
-import { Percentage } from "../shared/value-object/percentage";
+import type { Datetime } from "../shared/value-object/datetime";
+import type { Id } from "../shared/value-object/id";
+import type { Money } from "../shared/value-object/money";
+import type { Percentage } from "../shared/value-object/percentage";
 
 type PotAllocationProps = {
   id: Id;

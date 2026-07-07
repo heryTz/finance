@@ -13,6 +13,7 @@ type PayExpenseCommand = {
   tags: { id: string; name: string }[];
   drawFrom: { potId: string; amount: number }[];
   userId: string;
+  createdAt?: Date;
 };
 
 export class PayExpenseService {
@@ -49,6 +50,7 @@ export class PayExpenseService {
       tags,
       pots,
       userId,
+      createdAt: cmd.createdAt ? new Datetime(cmd.createdAt) : undefined,
     });
     await this.ctx.expenseRepo.save(expense);
     await this.ctx.uow.commit();

@@ -13,6 +13,7 @@ export type ReceiveIncomeCommand = {
   amount: number;
   tags: { id: string; name: string }[];
   userId: string;
+  createdAt?: Date;
 };
 
 export class ReceiveIncomeService {
@@ -43,6 +44,7 @@ export class ReceiveIncomeService {
       tags,
       pots,
       userId,
+      createdAt: cmd.createdAt ? new Datetime(cmd.createdAt) : undefined,
     });
     await this.ctx.incomeRepo.save(income);
     await this.ctx.uow.commit();

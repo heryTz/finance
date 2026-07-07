@@ -1,20 +1,12 @@
+import { and, eq, inArray, isNull, sql, sum } from "drizzle-orm";
+import type { PotWithBalanceDTO } from "src/server/contracts/pot";
+import type { DrizzleDb } from "src/server/infrastructure/db/client";
 import {
   expenseAllocations,
   potAllocations,
   pots,
 } from "src/server/infrastructure/db/schema";
-import type { DrizzleDb } from "src/server/infrastructure/db/client";
-import { eq, inArray, sql, sum } from "drizzle-orm";
-
-export type PotWithBalanceDTO = {
-  id: string;
-  name: string;
-  percentage: number;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  balance: number; // in cents
-};
+export type { PotWithBalanceDTO };
 
 export class DrizzleListPotsQuery {
   constructor(private readonly db: DrizzleDb) {}
@@ -23,7 +15,7 @@ export class DrizzleListPotsQuery {
     const userPotIds = this.db
       .select({ id: pots.id })
       .from(pots)
-      .where(eq(pots.userId, userId));
+      .where(and(eq(pots.userId, userId), isNull(pots.archivedAt)));
 
     const incomeSubquery = this.db
       .select({
@@ -50,9 +42,9 @@ export class DrizzleListPotsQuery {
         id: pots.id,
         name: pots.name,
         percentage: pots.percentage,
-        userId: pots.userId,
+        color: pots.color,
+        isDefault: pots.isDefault,
         createdAt: pots.createdAt,
-        updatedAt: pots.updatedAt,
         balance:
           sql<number>`COALESCE(${incomeSubquery.total}, 0) - COALESCE(${expenseSubquery.total}, 0)`.mapWith(
             Number,
@@ -61,6 +53,6 @@ export class DrizzleListPotsQuery {
       .from(pots)
       .leftJoin(incomeSubquery, eq(incomeSubquery.potId, pots.id))
       .leftJoin(expenseSubquery, eq(expenseSubquery.potId, pots.id))
-      .where(eq(pots.userId, userId));
+      .where(and(eq(pots.userId, userId), isNull(pots.archivedAt)));
   }
 }

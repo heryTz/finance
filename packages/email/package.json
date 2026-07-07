@@ -1,0 +1,32 @@
+{
+  "name": "@walletko/email",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "dev": "email dev -p 3001 --dir src",
+    "check": "biome check",
+    "lint": "biome lint"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "dependencies": {
+    "@react-email/components": "latest",
+    "@react-email/render": "latest"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.5",
+    "@react-email/preview-server": "5.2.10",
+    "@types/react": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "react": "^19.0.0",
+    "react-email": "latest",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  }
+}

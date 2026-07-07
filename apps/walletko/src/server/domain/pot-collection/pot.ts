@@ -1,15 +1,19 @@
+import type { Color } from "../shared/value-object/color";
 import { Datetime } from "../shared/value-object/datetime";
-import { Name } from "../shared/value-object/name";
-import { Percentage } from "../shared/value-object/percentage";
-import { Id } from "../shared/value-object/id";
+import type { Id } from "../shared/value-object/id";
+import type { Name } from "../shared/value-object/name";
+import type { Percentage } from "../shared/value-object/percentage";
 
 type PotProps = {
   id: Id;
   name: Name;
   percentage: Percentage;
+  color: Color;
+  readonly isDefault: boolean;
   userId: Id;
   createdAt: Datetime;
   updatedAt: Datetime | null;
+  archivedAt: Datetime | null;
 };
 
 export class Pot {
@@ -22,6 +26,20 @@ export class Pot {
   adjustPercentage(percentage: Percentage) {
     this.props.percentage = percentage;
     this.props.updatedAt = Datetime.now();
+  }
+
+  changeColor(color: Color) {
+    this.props.color = color;
+    this.props.updatedAt = Datetime.now();
+  }
+
+  changeName(name: Name) {
+    this.props.name = name;
+    this.props.updatedAt = Datetime.now();
+  }
+
+  archive() {
+    this.props.archivedAt = Datetime.now();
   }
 
   get data() {

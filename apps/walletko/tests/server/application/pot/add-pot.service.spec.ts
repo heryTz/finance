@@ -19,10 +19,7 @@ describe("add pot", () => {
       expenseRepository: new InMemoryExpenseRepository(),
     });
     uow = new InMemoryUnitOfWork();
-    addPotService = new AddPotService({
-      potRepo,
-      uow,
-    });
+    addPotService = new AddPotService({ potRepo, uow });
   });
 
   it("store with correct name, balance and percentage", async () => {
@@ -31,17 +28,15 @@ describe("add pot", () => {
     const { id } = await addPotService.execute({
       name: "Pot",
       percentage: 10,
-      otherPots: [
-        {
-          id: defaultPot.data.id.value,
-          percentage: 90,
-        },
-      ],
+      color: "#ff0000",
+      otherPots: [{ id: defaultPot.data.id.value, percentage: 90 }],
       userId,
     });
     const newPot = potRepo.all().find((el) => el.data.id.isEqual(new Id(id)))!;
     expect(newPot.data.name.value).toBe("Pot");
     expect(newPot.data.percentage.value).toBe(10);
+    expect(newPot.data.color.value).toBe("#ff0000");
+    expect(newPot.data.isDefault).toBe(false);
   });
 
   it("commit unit of work", async () => {
@@ -51,6 +46,7 @@ describe("add pot", () => {
     await addPotService.execute({
       name: "Pot",
       percentage: 10,
+      color: "#ff0000",
       otherPots: [{ id: defaultPot.data.id.value, percentage: 90 }],
       userId,
     });

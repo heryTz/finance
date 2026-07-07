@@ -29,3 +29,7 @@ yarn-error.log*
 *.db-journal
 .turbo
 .out
+
+.playwright-mcp
+.superpowers
+.superpowers/

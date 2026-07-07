@@ -1,6 +1,6 @@
 import { Datetime } from "../shared/value-object/datetime";
-import { Name } from "../shared/value-object/name";
-import { Id } from "../shared/value-object/id";
+import type { Id } from "../shared/value-object/id";
+import type { Name } from "../shared/value-object/name";
 
 type TagProps = {
   id: Id;
@@ -15,6 +15,11 @@ export class Tag {
 
   constructor(params: TagProps) {
     this.props = params;
+  }
+
+  rename(newName: Name) {
+    this.props.name = newName;
+    this.props.updatedAt = Datetime.now();
   }
 
   get data() {

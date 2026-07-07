@@ -1,6 +1,6 @@
 // Stripe money system like
 
-import { Percentage } from "./percentage";
+import type { Percentage } from "./percentage";
 
 // Cents system allow us to have deterministic amount, without floating issue
 export class Money {

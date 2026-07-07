@@ -1,0 +1,12 @@
+**/node_modules
+**/.output
+**/dist
+**/.next
+**/.turbo
+**/.tanstack
+**/.nitro
+.git
+**/coverage
+**/*.tsbuildinfo
+.playwright-mcp
+.superpowers

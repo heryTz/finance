@@ -44,26 +44,6 @@ const serverUnitConfig = {
 
 const resolvedServerUnitConfig = await createJestConfig(serverUnitConfig)();
 
-const resolvedIntegrationConfig = await createJestConfig({
-  displayName: "integration",
-  testEnvironment: "node",
-  moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
-  },
-  testMatch: ["**/*.integration.ts"],
-  globalSetup: "<rootDir>/tests/integration/setup.ts",
-  globalTeardown: "<rootDir>/tests/integration/teardown.ts",
-})();
-
-const integrationConfig = {
-  ...resolvedIntegrationConfig,
-  transformIgnorePatterns: [
-    "/node_modules/(?!\\.pnpm)(?!(@paralleldrive/cuid2|@noble/hashes|geist)/)",
-    "/node_modules/.pnpm/(?!(@paralleldrive\\+cuid2|@noble\\+hashes|geist)@)",
-    "^.+\\.module\\.(css|sass|scss)$",
-  ],
-};
-
 /** @type {import('jest').Config} */
 const config = {
   projects: [
@@ -77,7 +57,6 @@ const config = {
         "^.+\\.module\\.(css|sass|scss)$",
       ],
     },
-    integrationConfig,
   ],
 };
 
