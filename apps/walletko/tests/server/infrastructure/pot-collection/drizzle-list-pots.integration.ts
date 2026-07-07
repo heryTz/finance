@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { createTestDb, TestDb } from "tests/integration/helpers/db";
+import { createTestDb, type TestDb } from "tests/integration/helpers/db";
 import { truncateAll } from "tests/integration/helpers/truncate";
 import {
   insertExpenseAllocation,
@@ -124,6 +124,28 @@ describe("DrizzleListPotsQuery", () => {
 
       expect(balanceById[potA.id]).toBe(400);
       expect(balanceById[potB.id]).toBe(900);
+    });
+  });
+
+  describe("archive filtering", () => {
+    it("does not return an archived pot", async () => {
+      const userId = createId();
+      await insertPot(db, { userId, overrides: { archivedAt: new Date() } });
+
+      const results = await query.execute(userId);
+
+      expect(results).toHaveLength(0);
+    });
+
+    it("returns active pots while excluding archived ones", async () => {
+      const userId = createId();
+      const activePot = await insertPot(db, { userId });
+      await insertPot(db, { userId, overrides: { archivedAt: new Date() } });
+
+      const results = await query.execute(userId);
+
+      expect(results).toHaveLength(1);
+      expect(results[0].id).toBe(activePot.id);
     });
   });
 

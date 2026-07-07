@@ -67,4 +67,18 @@ describe("receive income", () => {
     });
     expect(commitSpy).toHaveBeenCalledTimes(1);
   });
+
+  it("stores income with provided createdAt", async () => {
+    await potRepo.save(makePot({ percentage: new Percentage(100) }));
+    const createdAt = new Date("2025-06-01T14:30:00.000Z");
+    await receiveIncome.execute({
+      name: "Mission",
+      amount: 100,
+      tags: [],
+      userId,
+      createdAt,
+    });
+    const stored = incomeRepo.all()[0];
+    expect(stored.data.createdAt.value).toEqual(createdAt);
+  });
 });

@@ -1,6 +1,7 @@
-import { PotCollection } from "src/server/domain/pot-collection/pot-collection";
 import type { PotRepository } from "src/server/domain/pot-collection/pot.repository";
+import { PotCollection } from "src/server/domain/pot-collection/pot-collection";
 import type { UnitOfWork } from "src/server/domain/shared/unit-of-work";
+import { Color } from "src/server/domain/shared/value-object/color";
 import { Id } from "src/server/domain/shared/value-object/id";
 import { Name } from "src/server/domain/shared/value-object/name";
 import { Percentage } from "src/server/domain/shared/value-object/percentage";
@@ -8,6 +9,7 @@ import { Percentage } from "src/server/domain/shared/value-object/percentage";
 type AddPotCommand = {
   name: string;
   percentage: number;
+  color: string;
   otherPots: { id: string; percentage: number }[];
   userId: string;
 };
@@ -27,6 +29,7 @@ export class AddPotService {
     const newPot = potCollection.addPot(
       new Name(cmd.name),
       new Percentage(cmd.percentage),
+      new Color(cmd.color),
       cmd.otherPots.map((p) => ({
         id: new Id(p.id),
         percentage: new Percentage(p.percentage),

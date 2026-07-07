@@ -1,5 +1,5 @@
-import { db } from "src/server/infrastructure/db/client";
 import type { UnitOfWork } from "src/server/domain/shared/unit-of-work";
+import { db } from "src/server/infrastructure/db/client";
 
 export type DrizzleTx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 

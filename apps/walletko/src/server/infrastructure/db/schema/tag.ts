@@ -1,3 +1,4 @@
+import { createId } from "@paralleldrive/cuid2";
 import {
   index,
   pgTable,
@@ -5,7 +6,6 @@ import {
   timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
-import { createId } from "@paralleldrive/cuid2";
 
 export const tags = pgTable(
   "tags",

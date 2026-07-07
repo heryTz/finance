@@ -1,0 +1,40 @@
+name: walletko-dev
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "7101:5432"
+    environment:
+      POSTGRES_DB: walletko-dev
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 7102:8080
+    environment:
+      ADMINER_DESIGN: pepa-linha
+
+  mailpit:
+    image: axllent/mailpit
+    restart: unless-stopped
+    ports:
+      - 7103:8025
+      - 7104:1025
+    volumes:
+      - mailpit:/data
+    environment:
+      MP_MAX_MESSAGES: 1000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+volumes:
+  db:
+  mailpit:

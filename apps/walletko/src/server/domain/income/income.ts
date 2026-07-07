@@ -1,9 +1,9 @@
-import { Pot } from "../pot-collection/pot";
+import type { Pot } from "../pot-collection/pot";
 import { Datetime } from "../shared/value-object/datetime";
 import { Id } from "../shared/value-object/id";
-import { Money } from "../shared/value-object/money";
-import { Name } from "../shared/value-object/name";
-import { Tag } from "../tag/tag";
+import type { Money } from "../shared/value-object/money";
+import type { Name } from "../shared/value-object/name";
+import type { Tag } from "../tag/tag";
 import { PotAllocation } from "./pot-allocation";
 
 type IncomeProps = {
@@ -30,6 +30,7 @@ export class Income {
     tags: Tag[];
     pots: Pot[];
     userId: Id;
+    createdAt?: Datetime;
   }) {
     if (!params.pots.length) {
       throw new Error("Empty pots provided");
@@ -53,9 +54,16 @@ export class Income {
       userId: params.userId,
       tags: params.tags,
       allocations,
-      createdAt: Datetime.now(),
+      createdAt: params.createdAt ?? Datetime.now(),
       updatedAt: null,
     });
+  }
+
+  update(params: { name: Name; date: Datetime; tags: Tag[] }): void {
+    this.props.name = params.name;
+    this.props.createdAt = params.date;
+    this.props.tags = params.tags;
+    this.props.updatedAt = Datetime.now();
   }
 
   get data() {

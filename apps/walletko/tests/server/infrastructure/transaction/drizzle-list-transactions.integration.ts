@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { createTestDb, TestDb } from "tests/integration/helpers/db";
+import { createTestDb, type TestDb } from "tests/integration/helpers/db";
 import { truncateAll } from "tests/integration/helpers/truncate";
 import {
   insertTag,
@@ -68,7 +68,7 @@ describe("DrizzleListTransactionsQuery", () => {
 
       const { results, total } = await query.execute(userId, {
         ...defaultParams,
-        type: "income",
+        types: ["income"],
       });
 
       expect(results).toHaveLength(1);
@@ -83,7 +83,7 @@ describe("DrizzleListTransactionsQuery", () => {
 
       const { results, total } = await query.execute(userId, {
         ...defaultParams,
-        type: "expense",
+        types: ["expense"],
       });
 
       expect(results).toHaveLength(1);

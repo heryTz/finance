@@ -1,5 +1,5 @@
-import { Money } from "../../shared/value-object/money";
-import { Pot } from "../pot";
+import type { Money } from "../../shared/value-object/money";
+import type { Pot } from "../pot";
 
 type PotSnapshotProps = {
   pot: Pot;

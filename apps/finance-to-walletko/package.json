@@ -1,0 +1,25 @@
+{
+  "name": "finance-to-walletko",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/cli.ts",
+    "build": "esbuild src/cli.ts --bundle --platform=node --target=node22 --format=cjs --outfile=dist/cli.cjs --external:pg-native",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@paralleldrive/cuid2": "^3.3.0",
+    "pg": "^8.20.0",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.5.0",
+    "@testcontainers/postgresql": "^11.14.0",
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  }
+}

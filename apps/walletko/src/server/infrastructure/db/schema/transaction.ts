@@ -1,3 +1,4 @@
+import { createId } from "@paralleldrive/cuid2";
 import {
   index,
   integer,
@@ -8,13 +9,17 @@ import {
   timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
-import { createId } from "@paralleldrive/cuid2";
 import { pots } from "./pot";
 import { tags } from "./tag";
 
 export const transactionType = pgEnum("transaction_type", [
   "income",
   "expense",
+  "transfer",
+  "canceled_income",
+  "income_cancellation",
+  "canceled_expense",
+  "expense_cancellation",
 ]);
 
 export const transactions = pgTable(
@@ -34,6 +39,7 @@ export const transactions = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
     userId: text("user_id").notNull(),
+    cancelsTransactionId: text("cancels_transaction_id"),
   },
   (t) => [
     index("transactions_type_created_at_idx").on(t.type, t.createdAt),

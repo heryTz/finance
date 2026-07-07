@@ -1,27 +1,21 @@
+import { and, count, desc, eq, ilike, inArray, notInArray } from "drizzle-orm";
+import type { DrizzleDb } from "src/server/infrastructure/db/client";
 import {
   tags,
-  transactionTags,
   transactions,
+  transactionTags,
 } from "src/server/infrastructure/db/schema";
-import type { DrizzleDb } from "src/server/infrastructure/db/client";
-import { and, count, desc, eq, ilike, inArray } from "drizzle-orm";
 
 export type ListTransactionsParams = {
   page: number;
   pageSize: number;
   name?: string;
   tagIds?: string[];
-  type?: "income" | "expense";
+  types?: string[];
 };
 
-export type TransactionDTO = {
-  id: string;
-  type: "income" | "expense";
-  name: string;
-  amount: number;
-  createdAt: Date;
-  tags: { id: string; name: string }[];
-};
+import type { TransactionDTO } from "src/server/contracts/transaction";
+export type { TransactionDTO };
 
 export type ListTransactionsResult = {
   results: TransactionDTO[];
@@ -35,12 +29,39 @@ export class DrizzleListTransactionsQuery {
     userId: string,
     params: ListTransactionsParams,
   ): Promise<ListTransactionsResult> {
-    const { page, pageSize, name, tagIds, type } = params;
+    const { page, pageSize, name, tagIds, types } = params;
 
     const filters = [eq(transactions.userId, userId)];
 
-    if (type) {
-      filters.push(eq(transactions.type, type));
+    type TransactionTypeValue =
+      | "income"
+      | "expense"
+      | "transfer"
+      | "canceled_income"
+      | "income_cancellation"
+      | "canceled_expense"
+      | "expense_cancellation";
+    const EXPAND: Record<string, TransactionTypeValue[]> = {
+      canceled_income: ["canceled_income", "canceled_expense"],
+      income_cancellation: ["income_cancellation", "expense_cancellation"],
+    };
+    const ALL_CANCELLED_TYPES: TransactionTypeValue[] = [
+      "canceled_income",
+      "canceled_expense",
+      "income_cancellation",
+      "expense_cancellation",
+    ];
+    const effectiveTypes = (types ?? []).flatMap(
+      (t): TransactionTypeValue[] => EXPAND[t] ?? [t as TransactionTypeValue],
+    );
+    if (effectiveTypes.length > 0) {
+      filters.push(inArray(transactions.type, effectiveTypes));
+    }
+    const hidden = ALL_CANCELLED_TYPES.filter(
+      (t) => !effectiveTypes.includes(t),
+    );
+    if (hidden.length > 0) {
+      filters.push(notInArray(transactions.type, hidden));
     }
 
     if (name) {
@@ -88,7 +109,10 @@ export class DrizzleListTransactionsQuery {
               tagName: tags.name,
             })
             .from(transactionTags)
-            .leftJoin(tags, eq(transactionTags.tagId, tags.id))
+            .innerJoin(
+              tags,
+              and(eq(transactionTags.tagId, tags.id), eq(tags.userId, userId)),
+            )
             .where(inArray(transactionTags.transactionId, ids))
         : [];
 
@@ -99,8 +123,8 @@ export class DrizzleListTransactionsQuery {
         tagsByTx.set(row.transactionId, []);
       }
       tagsByTx
-        .get(row.transactionId)!
-        .push({ id: row.tagId, name: row.tagName });
+        .get(row.transactionId)
+        ?.push({ id: row.tagId, name: row.tagName });
     }
 
     return {

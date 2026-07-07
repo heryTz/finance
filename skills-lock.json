@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "ship-branch": {
+      "source": "heryTz/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/ship-branch/SKILL.md",
+      "computedHash": "f6f5282c5a82f08caeb9b700c9a03213d3707a77a986c1320c9d63f932bbcae3"
+    },
+    "tanstack-form": {
+      "source": "heryTz/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/tanstack-form/SKILL.md",
+      "computedHash": "4493f38af271f61b07d93b8ca1e116bfee431abcb6d3c605df92b636285d7cfe"
+    }
+  }
+}

@@ -63,4 +63,19 @@ describe("expense", () => {
       }),
     ).toThrow();
   });
+
+  it("allows spending the exact pot balance", () => {
+    const potSnapshot = makePotSnapshot({ balance: new Money(100) });
+    const expense = Expense.create({
+      name: new Name("Expense"),
+      selectedPots: [
+        { id: potSnapshot.data.pot.data.id, amount: new Money(100) },
+      ],
+      pots: [potSnapshot],
+      tags: [],
+      userId,
+    });
+    expect(expense.data.amount.value).toBe(100);
+    expect(expense.data.allocations[0].data.amount.value).toBe(100);
+  });
 });

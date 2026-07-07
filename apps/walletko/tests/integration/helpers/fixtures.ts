@@ -24,6 +24,8 @@ export async function insertPot(
       id: createId(),
       name: faker.finance.accountName(),
       percentage: faker.number.int({ min: 1, max: 100 }),
+      color: "#4fb8b2",
+      isDefault: false,
       userId,
       ...overrides,
     })
