@@ -13,8 +13,7 @@ import {
 } from "@react-email/components";
 import { render } from "@react-email/render";
 
-const BRAND_URL =
-  process.env.APP_URL ?? "https://walletko.herynirintsoa.com";
+const BRAND_URL = process.env.APP_URL ?? "https://walletko.herynirintsoa.com";
 const LOGO_SRC = `${BRAND_URL}/logo-256.png`;
 
 const fontStack =
@@ -220,7 +219,7 @@ export default function OtpEmail({ otp }: OtpEmailProps) {
               <Link href={BRAND_URL} style={styles.footerLink}>
                 Walletko
               </Link>{" "}
-              — personal finance, simplified
+              — personal budget, simplified
             </Text>
           </Section>
         </Container>

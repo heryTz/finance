@@ -2,6 +2,11 @@
 
 Idempotent one-shot migration of legacy **finance** data into **walletko**.
 
+Finance no longer lives in this repository — it is hosted at
+<https://github.com/heryTz/finance>. This app talks to the finance database
+directly over a connection string, so it needs no finance source code; only a
+reachable finance database.
+
 Maps finance users, tags, and operations into walletko users, tags,
 transactions, and pot/expense allocations. Each user gets one default pot
 (100%) that receives every operation:

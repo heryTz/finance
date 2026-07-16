@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/about")({
   component: AboutPage,
 });
 
-const GITHUB_URL = "https://github.com/heryTz/finance";
+const GITHUB_URL = "https://github.com/heryTz/walletko";
 
 const APP_DESCRIPTION =
   "Walletko helps you organize your money into pots and stay on top of income, expenses, and transfers.";
