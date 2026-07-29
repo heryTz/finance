@@ -6,10 +6,15 @@
 TRUNCATE TABLE "Session", "Account";
 
 -- DropIndex
-DROP INDEX "Account_provider_providerAccountId_key";
+-- These uniques exist as a plain index in migration-built databases but as a
+-- table constraint in databases created another way (db push / restored dump).
+-- Postgres refuses DROP INDEX on a constraint-backed index (2BP01), so handle both.
+ALTER TABLE "Account" DROP CONSTRAINT IF EXISTS "Account_provider_providerAccountId_key";
+DROP INDEX IF EXISTS "Account_provider_providerAccountId_key";
 
 -- DropIndex
-DROP INDEX "Session_sessionToken_key";
+ALTER TABLE "Session" DROP CONSTRAINT IF EXISTS "Session_sessionToken_key";
+DROP INDEX IF EXISTS "Session_sessionToken_key";
 
 -- AlterTable
 ALTER TABLE "Account" DROP COLUMN "access_token",
