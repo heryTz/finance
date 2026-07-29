@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "ship-branch": {
+      "source": "heryTz/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/ship-branch/SKILL.md",
+      "computedHash": "f6f5282c5a82f08caeb9b700c9a03213d3707a77a986c1320c9d63f932bbcae3"
+    }
+  }
+}
