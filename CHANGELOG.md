@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.7 (2026-07-29)
+
+
+### Bug Fixes
+
+* better auth migration c5b3d0e
+
 ## 0.6.6 (2026-07-29)
 
 ## 0.6.5 (2026-02-17)
